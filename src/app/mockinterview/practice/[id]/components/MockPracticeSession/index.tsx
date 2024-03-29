@@ -22,12 +22,12 @@ type Props = {
   questionList: Question[];
   setIsView: (isView: number) => void;
   setResultList: (resultList: PracticeResult[]) => void;
+  session?: Session;
 };
 
 export default function MockPraceticeSession(props: Props) {
-  const { data: session } = useSession();
-  const typedSession = session as Session;
-  const { questionList, setIsView, setResultList } = props;
+
+  const { questionList, setIsView, setResultList,session } = props;
   const [questionIdx, setQuestionIdx] = useState<number>(0);
   const [practiceResultList, setPracticeResultList] = useState<
     PracticeResult[]
@@ -105,7 +105,7 @@ export default function MockPraceticeSession(props: Props) {
               elapsedTimeValue: time,
               filePathValue: null,
             },
-            accessToken: typedSession.user.access_token,
+            accessToken: session.accessToken,
           });
         } else {
           setPracticeResultList((prev: PracticeResult[]) => {

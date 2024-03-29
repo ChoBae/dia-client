@@ -9,11 +9,13 @@ import MockPracticeHeader from "../MockPracticeHeader";
 import ResultSession from "../ResultSession";
 import type { PracticeResult } from "@/types/PracticeResult";
 import type { Question } from "@/types/Question";
+import { Session } from "@/types/Session";
 
 interface Props {
   questionList: Question[];
+  session?: Session
 }
-export default function MockPracticeMain({ questionList }: Props) {
+export default function MockPracticeMain({ questionList,session }: Props) {
   const [isView, setIsView] = useState<number | null>(0); // 0: 안내 페이지, 1: 실전연습 중인 페이지 2: 결과 페이지
   const [resultList, setResultList] = useState<PracticeResult[]>([]);
   const ViewPage = () => {
@@ -26,6 +28,7 @@ export default function MockPracticeMain({ questionList }: Props) {
             questionList={questionList}
             setIsView={setIsView}
             setResultList={setResultList}
+            session={session}
           />
         );
       case 2:
