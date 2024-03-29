@@ -1,16 +1,11 @@
 import mapTagToPurpose from "../../utils/mapTagToPurpose";
+
 export const getQuestionList = async (
   category: string,
-  accessToken?: string
+  accessToken?: string,
+  headers?: HeadersInit
 ) => {
-  const headers = accessToken
-    ? {
-        "Content-Type": "application/json",
-        authorization: accessToken,
-      }
-    : {
-        "Content-Type": "application/json",
-      };
+
   const categoryValues = category
     .split(",")
     .map((tag) => mapTagToPurpose(tag))

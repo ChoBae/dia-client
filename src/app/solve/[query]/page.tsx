@@ -2,6 +2,7 @@ import QuestionMain from "../components/QuestionMain";
 import { Metadata } from "next";
 import { getSession } from "../../../authLib";
 import { headers } from "next/headers";
+import { getQuestionList } from "@/app/api/getQuestionList";
 export const revalidate = 0;
 export const dynamic = "auto";
 export const metadata: Metadata = {
@@ -52,17 +53,29 @@ export default async function Home({ params }: { params: { query: string } }) {
   //   const data = res.json();
   //   return data;
   // });
-  // const questionList = result.data.pageData;
+  // const questionList = await getQuestionList(
+  //   params.query,
+  //   sessionsession.accessToken,
+  //   headersList
+  // );
+  let questionList;
+  if (session) {
+    if (!params.query) return;
+    questionList = await getQuestionList(
+      params.query,
+      session.accessToken,
+      headersList
+    );
+  } else {
+    if (!params.query) return;
+    questionList = await getQuestionList(params.query);
+  }
+
   return (
-    // <QuestionMain
-    //   questionsData={questionList}
-    //   query={params.query}
-    //   session={session}
-    // ></QuestionMain>
-    <div>
-      <h1>Home</h1>
-      <p>session: {session}</p>
-      <p>params: {params.query}</p>
-    </div>
+    <QuestionMain
+      questionsData={questionList}
+      query={params.query}
+      session={session}
+    ></QuestionMain>
   );
 }
