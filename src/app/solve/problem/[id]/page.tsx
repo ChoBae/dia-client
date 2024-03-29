@@ -25,20 +25,22 @@ export default async function Main({ params }: { params: { id: number } }) {
   // } else {
   //   result = await getQuestionDetails({ id: params.id });
   // }
-    const headersList = headers();
-    const userAgentString = headersList.get("user-agent");
+  const headersList = headers();
+  const userAgentString = headersList.get("user-agent");
 
-    const result = await fetch(
-      `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/question/getQuestion/?pkValue=${params.id}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: session.accessToken,
-          "user-agent": userAgentString as string,
-        },
-      }
-    ).then((res) => res.json());
+  const result = await fetch(
+    `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/question/getQuestion/?pkValue=${params.id}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...(session && session.accessToken
+          ? { authorization: session.accessToken }
+          : {}),
+        "user-agent": userAgentString as string,
+      },
+    }
+  ).then((res) => res.json());
   return (
     <main className="flex flex-col mx-auto px-4 sm:px-6 pt-20 pb-8 h-[100dvh] sm:max-h-[800px] sm:w-1/2 2xl:w-1/3 no-scrollbar overflow-y-hidden">
       <QuestionMain questionData={result} session={session}></QuestionMain>

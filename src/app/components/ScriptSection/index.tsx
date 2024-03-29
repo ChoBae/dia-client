@@ -50,24 +50,31 @@ export default function ScriptSection({
     //   }
     // };
     const fetchData = async () => {
-      await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/api/question/getScript/?pkValue=${id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: session?.accessToken as string,
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (!data) {
-            console.error(
-              "Failed to fetch question script. Status: ",
-              data.status
-            );
-            return;
+      if (session) {
+        await fetch(
+          `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/question/getScript/?pkValue=${id}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              authorization: session.accessToken,
+            },
           }
-          setScript(data as Script);
-        });
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            if (!data) {
+              return;
+            }
+            setScript(data as Script);
+          });
+      } else {
+        const savedScriptString = localStorage.getItem(`script=${id}`);
+        const savedScriptObj = savedScriptString
+          ? JSON.parse(savedScriptString)
+          : { contentValue: "" };
+        setScript(savedScriptObj);
+      }
     };
     fetchData();
     setIsLoading(false);
