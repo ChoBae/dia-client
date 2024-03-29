@@ -10,21 +10,13 @@ import GithubIcon from "@/app/ui/icons/GithubIcon";
 import Logo from "@/app/ui/Logo";
 import { useRouter } from "next/navigation";
 import AuthCodeLoginPage from "../AuthCodeLoginPage";
-
+import Link from "next/link";
 interface LoginProps {
   providers?: Record<string, ClientSafeProvider>;
   prevPath: string;
 }
 
 export default function LoginMain({ prevPath }: LoginProps) {
-  const [providers, setProviders] = useState<ClientSafeProvider | null>(null);
-  const [isLogin, setIsLogin] = useState(false);
-  useEffect(() => {
-    (async () => {
-      const res = await getProviders();
-      setProviders(res as any);
-    })();
-  }, []);
   return (
     <main className="flex h-screen w-full bg-gradient-to-r from-purple-300 via-pink-200 to-red-200  justify-center items-center no-scrollbar overflow-hidden">
       <div className="flex flex-col sm:flex-row justify-center items-center px-10 py-24 rounded-lg gap-4">
@@ -41,22 +33,23 @@ export default function LoginMain({ prevPath }: LoginProps) {
           <p className="text-xs text-[#616161] sm:text-md mb-2 sm:mb-4">
             자체적인 회원가입은 정책상 지원하지 않습니다 🛠️
           </p>
-          <a
+
+          {/* <a
             onClick={() => setIsLogin(true)}
             className="bg-[#333] text-white flex items-center justify-center gap-2 px-4 sm:px-8 py-1 sm:py-2 rounded hover:opacity-90"
             // href={`https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_ID}&redirect_uri=${process.env.NEXT_PUBLIC_CLIENT_URL}/api/v0/auth/oauth/github/callback`}
           >
             <GithubIcon className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
             Login with GitHub
-          </a>
-          {isLogin && <AuthCodeLoginPage />}
-          {/* <a
+          </a> */}
+          {/* {isLogin && <AuthCodeLoginPage />} */}
+          <Link
             className="bg-[#333] text-white flex items-center justify-center gap-2 px-4 sm:px-8 py-1 sm:py-2 rounded hover:opacity-90"
-            href={`https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_ID}&redirect_uri=${process.env.NEXT_PUBLIC_CLIENT_URL}/api/v0/auth/oauth/github/callback`}
+            href={`https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_ID}&redirect_uri=http://localhost:3000/signIn/github&response_type=code`}
           >
             <GithubIcon className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
             Login with GitHub
-          </a> */}
+          </Link>
         </div>
       </div>
     </main>

@@ -1,28 +1,31 @@
 "use client";
 import { getAccesstoken } from "@/app/api/getAccesstoken";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { getUser } from "@/app/api/getUser";
+// import { login } from "../../../../authLib";
 // import Cookies from "js-cookie";
 const CallBackPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    (async () => {
-      const code = searchParams.get("code");
-      console.log(code);
-      if (code) {
-        try {
-          const resp = await getAccesstoken(code);
-          console.log({ resp });
-          const access_token = resp.accessTokenValue;
-          localStorage.setItem("access_token", access_token);
+    getAccessToken();
+  }, []);
 
-          router.push("/");
-        } catch (err) {}
-      }
-    })();
-  }, [router]);
+  const getAccessToken = useCallback(async () => {
+    const code = searchParams.get("code");
+    console.log(code);
+    console.log("콜백페이지");
+    if (code) {
+      try {
+        const resp = await getAccesstoken(code);
+        const token = resp.accessTokenValue;
+        // await login(token);
+        router.push("/");
+      } catch (err) {}
+    }
+  }, [searchParams, router]);
 
   return <div>Loading...</div>;
 };

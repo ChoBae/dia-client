@@ -10,11 +10,13 @@ import { saveQuestionScript } from "@/app/api/saveQuestionScript";
 import { twMerge } from "tailwind-merge";
 import type { Session } from "@/types/Session";
 import type { Script } from "@/types/Script";
+
 export interface Props {
   id: number;
   className?: string;
   placeholder?: string;
   writeScript?: boolean;
+  session?: Session;
 }
 
 const maxCharacterCount = 3000;
@@ -24,9 +26,8 @@ export default function ScriptSection({
   className,
   placeholder,
   writeScript = true,
+  session,
 }: Props) {
-  const { data: session, status } = useSession();
-  const typedSession = session as Session;
   const [script, setScript] = useState<Script | undefined>(undefined);
   const [prevScript, setPrevScript] = useState<Script | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -34,25 +35,40 @@ export default function ScriptSection({
   const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
+    // const fetchData = async () => {
+    //   if (session) {
+    //     const getScript = await getQuestionScript(
+    //       id,
+    //       typedSession?.user.access_token
+    //     );
+    //     if (getScript) setScript(getScript);
+    //   } else {
+    //     const savedScriptString = localStorage.getItem(`script=${id}`);
+    //     const savedScriptObj = savedScriptString
+    //       ? JSON.parse(savedScriptString)
+    //       : { contentValue: "" };
+    //     setScript(savedScriptObj);
+    //   }
+    // };
     const fetchData = async () => {
-      if (session) {
-        const getScript = await getQuestionScript(
-          id,
-          typedSession?.user.access_token
-        );
-        if (getScript) setScript(getScript);
-      } else {
-        const savedScriptString = localStorage.getItem(`script=${id}`);
-        const savedScriptObj = savedScriptString
-          ? JSON.parse(savedScriptString)
-          : { contentValue: "" };
-        setScript(savedScriptObj);
-      }
+      await fetch(`/api/question/getScript/?pkValue=${id}`, {
+        method: "GET",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status !== 200) {
+            console.error(
+              "Failed to fetch question script. Status: ",
+              data.status
+            );
+            return;
+          }
+          setScript(data.data);
+        });
     };
-
     fetchData();
     setIsLoading(false);
-  }, [id, typedSession, session]);
+  }, [id]);
   useEffect(() => {
     if (isEditing) {
       textAreaRef.current?.focus();
@@ -64,13 +80,13 @@ export default function ScriptSection({
         await editQuestionScript({
           scriptPkValue: id,
           contentValue: script?.contentValue as string,
-          accessToken: typedSession?.user.access_token,
+          accessToken: session?.accessToken,
         });
       } else {
         await saveQuestionScript({
           questionPkValue: id,
           contentValue: script?.contentValue as string,
-          accessToken: typedSession?.user.access_token,
+          accessToken: session?.accessToken,
         });
       }
     } else {
@@ -90,7 +106,9 @@ export default function ScriptSection({
     <div
       className={twMerge(
         `flex flex-col relative bg-[#FAFAFA] rounded-[5px] w-full ${
-          (!isEditing || !script?.contentValue) && writeScript ? "cursor-pointer" : ""
+          (!isEditing || !script?.contentValue) && writeScript
+            ? "cursor-pointer"
+            : ""
         }`,
         className
       )}

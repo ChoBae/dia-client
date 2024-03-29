@@ -7,12 +7,13 @@ import { usePathname } from "next/navigation";
 import { SessionProvider } from "next-auth/react";
 export interface LayoutProviderProps {
   children: React.ReactNode;
-  session: any;
+  session?: any;
+
 }
 
-export const LayoutProvider = ({ children, session }: LayoutProviderProps) => {
+export const LayoutProvider = ({ children, session}: LayoutProviderProps) => {
   const pathname = usePathname();
-  const headerNotAllowedPath = ["/signIn/", "/mockinterview/","/settings/"];
+  const headerNotAllowedPath = ["/signIn/", "/mockinterview/", "/settings/"];
   const naviNotAllowedPath = [
     "/signIn/",
     "/mockinterview/",
@@ -27,12 +28,12 @@ export const LayoutProvider = ({ children, session }: LayoutProviderProps) => {
   const naviIsNotAllowed = naviNotAllowedPath.some((path) =>
     pathname.startsWith(path)
   );
-
+  
   return (
-    <SessionProvider session={session}>
-      {!headerIsNotAllowed && <Header session={session} />}
+    <>
+      {!headerIsNotAllowed && <Header/>}
       {children}
       {!naviIsNotAllowed && <NavigationBar></NavigationBar>}
-    </SessionProvider>
+    </>
   );
 };

@@ -33,10 +33,11 @@ const dummyhistorys = [
 
 export default function QuestionMain({
   questionData,
+  session
 }: // session,
 Props) {
-  const { data: session, status } = useSession();
-  const typedSession = session as Session;
+  // const { data: session, status } = useSession();
+  // const typedSession = session as Session;
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [animationClass, setAnimationClass] = useState<string>("");
@@ -49,14 +50,14 @@ Props) {
       if (session) {
         const getHistory = await getQuestionHistory(
           questionData.pkValue,
-          typedSession?.user.access_token
+          session.accessToken
         );
         if (getHistory) setHistoryList(getHistory);
       }
     };
 
     fetchData();
-  }, [questionData, typedSession, session]);
+  }, [questionData,  session]);
 
   const solveQuestion = () => {
     router.push(`/mockinterview/${questionData.pkValue}`);
@@ -74,7 +75,7 @@ Props) {
       setIsModalOpen(true);
     }
   };
-
+  console.log('중간다리 체크', session)
   return (
     <section className="flex flex-col w-full h-full max-h-[1000px]">
       <div className="flex items-center mb-[32px] pl-2">
@@ -91,8 +92,8 @@ Props) {
       <div className="flex flex-col flex-grow gap-y-3 mb-4 h-3/5">
         <Question
           question={questionData}
-          session={typedSession}
-          isBookmarkOn={typedSession ? true : false}
+          session={session}
+          isBookmarkOn={session ? true : false}
         >
           <Question.SubTitle className="text-primary-600">
             개별연습
@@ -103,6 +104,7 @@ Props) {
           id={questionData.pkValue}
           className={historyList.length > 0 ? "h-2/5" : "h-full"}
           placeholder="모의연습 전 스크립트를 먼저 작성해보세요.이후 음성 답변과 스크립트를 비교할 수 있습니다."
+          session={session}
         ></ScriptSection>
 
         <div className="flex flex-col h-3/5">
@@ -124,7 +126,7 @@ Props) {
                 <HistorySection
                   key={index}
                   history={history}
-                  session={typedSession}
+                  session={session}
                   className="min-w-[90%] sm:min-w-[50%]"
                 ></HistorySection>
               ))}

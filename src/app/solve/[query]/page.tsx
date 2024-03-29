@@ -3,8 +3,8 @@ import { getQuestionList } from "@/app/api/getQuestionList";
 import QuestionMain from "../components/QuestionMain";
 import { Metadata } from "next";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { Session } from "@/types/Session";
+import { getSession } from "../../../../authLib";
 export const revalidate = 0;
 export const dynamic = "auto";
 export const metadata: Metadata = {
@@ -13,23 +13,36 @@ export const metadata: Metadata = {
 };
 
 export default async function Home({ params }: { params: { query: string } }) {
-  const session = await getServerSession(authOptions);
-  const typedSession = session as Session;
+  const session = await getSession();
+  console.log("home", session);
   let questionList: Question[] = [];
   if (session) {
     if (!params.query) return;
     questionList = await getQuestionList(
       params.query,
-      typedSession.user.access_token
+      session.accessToken
     );
   } else {
     if (!params.query) return;
     questionList = await getQuestionList(params.query);
   }
+
+  // const questionList = await fetch(
+  //   `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/question/getList/?query=${params.query}`,
+  //   {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       authorization: session.accessToken,
+  //     },
+  //   }
+  // ).then((res) => res.json());
   return (
     <QuestionMain
       questionsData={questionList}
       query={params.query}
+      session={session}
     ></QuestionMain>
+    // <></>
   );
 }

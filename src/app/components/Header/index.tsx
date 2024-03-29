@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { User } from "@/types/User";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import LoginButton from "./Components/LoginButton";
@@ -11,16 +11,15 @@ import ToggleMenu from "./Components/ToggleMenu";
 import Logo from "@/app/ui/Logo";
 import MobileMenu from "./Components/MobileMenu";
 import DesktopMenu from "./Components/DesktopMenu";
-interface HeaderProps {
-  session: any;
-}
+interface HeaderProps {}
 
-export default function Header({ session }: HeaderProps) {
+export default function Header({}: HeaderProps) {
   const router = useRouter();
   const pathname = usePathname();
   const [isProfileToolbarOpen, setIsProfileToolbarOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [animationClass, setAnimationClass] = useState("");
+  const [session, setSession] = useState<any>();
   const handleLogoClick = () => {
     if (pathname === "/") {
       location.reload(); // Reload the current page if already on the main page
@@ -42,6 +41,16 @@ export default function Header({ session }: HeaderProps) {
     await new Promise((r) => setTimeout(r, 600));
     setIsMenuOpen(false);
   };
+  const getSession = async () => {
+    const session = await fetch("/api/auth/getSession");
+    const data = await session.json();
+    if (!data.session) return;
+    setSession(data.session);
+  };
+
+  useEffect(() => {
+    getSession();
+  }, []);
 
   return (
     <header className="fixed z-40 bg-white w-full sm:mx-auto ">
@@ -64,7 +73,9 @@ export default function Header({ session }: HeaderProps) {
                   className="h-6 w-6 sm:h-8 sm:w-8 rounded-full mx-auto my-auto cursor-pointer hover:opacity-80"
                   width={20}
                   height={20}
-                  src={session.user?.image_url || "/images/default-profile.png"}
+                  src={
+                    session.user?.imageUrlValue || "/images/default-profile.png"
+                  }
                   alt=""
                   onClick={() => setIsProfileToolbarOpen(!isProfileToolbarOpen)}
                 />

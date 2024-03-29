@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import CategoryButton from "./components/CategoryButton";
 import type { Question as QuestionType } from "@/types/Question";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { ToolTips } from "../ToolTips";
 import { Question } from "@/app/components/Question";
@@ -11,13 +10,13 @@ import { TagBar } from "./components/TagBar";
 interface Props {
   questionsData: QuestionType[];
   query: string;
+  session: any
 }
-export default function QuestionMain({ questionsData, query }: Props) {
-  const { data: session, status } = useSession();
-  const typedSession = session as Session;
+export default function QuestionMain({ questionsData, query, session }: Props) {
   const [currentTag, setCurrentTag] = useState(query);
   const [firstCheck, setFirstCheck] = useState<boolean>(false);
   const [questionList, setQuestionList] = useState<QuestionType[]>([]);
+  // const [session, setSession] = useState<Session | null>(null);
 
   useEffect(() => {
     if (!session) {
@@ -50,7 +49,7 @@ export default function QuestionMain({ questionsData, query }: Props) {
         </div>
         <TagBar
           currentTag={currentTag}
-          session={typedSession}
+          session={session}
           setQuestionList={setQuestionList}
         />
       </div>
@@ -64,7 +63,7 @@ export default function QuestionMain({ questionsData, query }: Props) {
               question={question}
               key={index}
               isDetail={true}
-              session={typedSession}
+              session={session}
             >
               <Question.SubTitle className="text-primary-600">개별연습</Question.SubTitle>
               <Question.Title>{question.korTitleValue}</Question.Title>

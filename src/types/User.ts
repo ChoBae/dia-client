@@ -1,6 +1,8 @@
 export interface User {
-  nickname?: string | null | undefined;
+  nicknameValue?: string | null | undefined;
   email?: string | null | undefined;
-  image_url?: string | null | undefined;
-  pk?: string | number | null | undefined;
+  imageUrlValue?: string | null | undefined;
+  pkValue?: string | number | null | undefined;
+  oauthIdValue?: string | null | undefined;
+  oauthProviderValue?: string | null | undefined;
 }

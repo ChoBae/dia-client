@@ -7,7 +7,7 @@ export const saveQuestionScript = async (params: Params): Promise<void> => {
   const { questionPkValue, contentValue, accessToken } = params;
   const apiUrl = `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/v0/interview/scripts`;
   // const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v0/interview/scripts`;
-
+  console.log("saveQuestionScript", questionPkValue, contentValue, accessToken);
   const requestOptions: RequestInit = {
     method: "POST",
     headers: {

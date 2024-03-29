@@ -50,8 +50,11 @@ const nextConfig = {
   trailingSlash: true,
   experimental: {
     scrollRestoration: true,
+    serverActions:true,
   },
   // swcMinify: true, # nextjs 13 to default
   poweredByHeader: false,
+  reactStrictMode: false,
+  
 };
 module.exports = nextConfig;

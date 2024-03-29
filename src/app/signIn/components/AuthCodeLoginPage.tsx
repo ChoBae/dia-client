@@ -16,8 +16,7 @@ const AuthCodeLoginPage = () => {
       response_type,
       //   scope,
     })}`;
-
-    window.location.href = AUTHORIZE_URI;
+    // window.location.href = AUTHORIZE_URI;
   }, []);
 
   return <div>loading...</div>;

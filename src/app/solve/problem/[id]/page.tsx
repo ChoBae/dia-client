@@ -1,8 +1,7 @@
 import { getQuestionDetails } from "@/app/api/getQuestionDetails";
 import QuestionMain from "./components/QuestionMain";
 import { Metadata } from "next";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { getSession } from "../../../../../authLib";
 export const revalidate = 0;
 // export const dynamic = "auto";
 // export const revalidate = 0;
@@ -15,19 +14,19 @@ export const generateMetadata = async ({ params }: any): Promise<Metadata> => {
 };
 
 export default async function Main({ params }: { params: { id: number } }) {
-  const session = await getServerSession(authOptions);
+  const session = await getSession();
   let result;
   if (session) {
     result = await getQuestionDetails({
       id: params.id,
-      accessToken: session.user.access_token,
+      accessToken: session.accessToken,
     });
   } else {
     result = await getQuestionDetails({ id: params.id });
   }
   return (
     <main className="flex flex-col mx-auto px-4 sm:px-6 pt-20 pb-8 h-[100dvh] sm:max-h-[800px] sm:w-1/2 2xl:w-1/3 no-scrollbar overflow-y-hidden">
-      <QuestionMain questionData={result.data}></QuestionMain>
+      <QuestionMain questionData={result.data} session={session}></QuestionMain>
     </main>
   );
 }
