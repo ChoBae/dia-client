@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/solid";
 import Spinner from "@/app/components/Spinner";
 import EditIcon from "@/app/ui/icons/EditIcon";
-import { useSession } from "next-auth/react";
 import { getQuestionScript } from "@/app/api/getQuestionScript";
 import { editQuestionScript } from "@/app/api/editQuestionScript";
 import { saveQuestionScript } from "@/app/api/saveQuestionScript";

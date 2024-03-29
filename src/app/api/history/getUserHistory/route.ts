@@ -1,13 +1,8 @@
 import { NextResponse } from "next/server";
-import { Session } from "@/types/Session";
-import { getSession } from "../../../../../authLib";
-import { cookies } from "next/headers";
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const pkValue = searchParams.get("pkValue");
 
   const result = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v0/interview/practice/histories?questionPkValue=${pkValue}`,
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v0/interview/practice/histories`,
     {
       headers: request.headers as HeadersInit,
       next: {

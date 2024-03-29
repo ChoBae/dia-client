@@ -9,19 +9,18 @@ import { getTags } from "@/utils/getTags";
 import { getQuestionList } from "@/app/api/getQuestionList";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { Session } from "@/types/Session";
 interface Props {
   practiceList: any[];
   query: string;
   practiceClick: (id: number) => void;
+  session? : Session
 }
 export default function PracticeList({
   practiceList,
   query,
   practiceClick,
 }: Props) {
-  const tags = getTags();
-  const { data: session, status } = useSession();
-  const [currentTag, setCurrentTag] = useState(query);
   return (
     <section className="grid gap-3">
       {practiceList.map((question: QuestionType, index: number) => (

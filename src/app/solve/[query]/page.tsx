@@ -1,11 +1,7 @@
-import { Question } from "@/types/Question";
-import { getQuestionList } from "@/app/api/getQuestionList";
+
 import QuestionMain from "../components/QuestionMain";
 import { Metadata } from "next";
-import { getServerSession } from "next-auth";
-import { Session } from "@/types/Session";
 import { getSession } from "../../../../authLib";
-import { headers } from "next/headers";
 export const revalidate = 0;
 export const dynamic = "auto";
 export const metadata: Metadata = {
@@ -32,7 +28,6 @@ export default async function Home({ params }: { params: { query: string } }) {
       method: "GET",
     }
   ).then((res) => res.json());
-  console.log('questionList', questionList);
   return (
     <QuestionMain
       questionsData={questionList}

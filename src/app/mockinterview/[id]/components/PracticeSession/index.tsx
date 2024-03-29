@@ -5,7 +5,6 @@ import type { PracticeResult } from "@/types/PracticeResult";
 import type { HistoryType } from "@/types/History";
 import { savePractice } from "@/app/api/savePractice";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
 import type { Session } from "@/types/Session";
 import { Modal } from "@/app/components/Modal";
 import TTSPlayer from "@/app/mockinterview/components/TTSPlayer";
@@ -18,17 +17,15 @@ import LayerLogoIcon from "@/app/ui/icons/LayerLogoIcon";
 import { MicroCircleIcon } from "@/app/ui/icons/MicroCircleIcon";
 import Typed from "typed.js";
 import { getSession } from "../../../../../../authLib";
-import { headers } from "next/headers";
 type Props = {
   question: Question;
   setIsView: (isView: number) => void;
+  session?: Session;
 };
 
 export default function PraceticeSession(props: Props) {
-  const { question, setIsView } = props;
+  const { question, setIsView, session } = props;
   const router = useRouter();
-  const { data: session } = useSession();
-  const typedSession = session as Session;
   const [duration, setDuration] = useState<number>(0);
   const [isStart, setIsStart] = useState<boolean>(true);
   const [isCancel, setIsCancel] = useState<boolean>(false);
@@ -84,7 +81,7 @@ export default function PraceticeSession(props: Props) {
             elapsedTimeValue: time,
             filePathValue: null,
           },
-          accessToken: typedSession.user.access_token,
+          accessToken: session.accessToken as string,
         });
       } else {
         const practiceResult: HistoryType = {

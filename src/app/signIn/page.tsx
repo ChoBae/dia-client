@@ -1,4 +1,3 @@
-import { getProviders } from "next-auth/react";
 import LoginMain from "./components/LoginMain";
 import { Metadata } from "next";
 

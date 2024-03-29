@@ -8,9 +8,7 @@ import type { Question as QuestionType } from "@/types/Question";
 import { Modal } from "@/app/components/Modal";
 import Button from "@/app/components/Button";
 import ShareIcon from "@/app/ui/icons/ShareIcon";
-import { useSession } from "next-auth/react";
 import copyToClipboard from "@/utils/copyToClipBoard";
-import type { Session } from "@/types/Session";
 
 interface Props {
   practice: any;
@@ -21,10 +19,9 @@ interface Props {
 export default function QuestionListMain({
   questionList,
   practice,
+  session
 }: // session,
 Props) {
-  const { data: session, status } = useSession();
-  const typedSession = session as Session;
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [animationClass, setAnimationClass] = useState<string>("");
@@ -61,8 +58,8 @@ Props) {
       </div>
       <Question
         question={practice}
-        session={typedSession}
-        isBookmarkOn={typedSession ? true : false}
+        session={session}
+        isBookmarkOn={session ? true : false}
       >
         <Question.SubTitle className="text-[#FEEB89]">
           실전연습

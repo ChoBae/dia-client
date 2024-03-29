@@ -15,11 +15,11 @@ import CheckOnIcon from "@/app/ui/icons/CheckOnIcon";
 type Props = {
   question: QuestionType;
   historyList: HistoryType[];
+  session? : Session
 };
 
-export default function HistoryResult({ question, historyList }: Props) {
-  const { data: session } = useSession();
-  const typedSession = session as Session;
+export default function HistoryResult({ question, historyList, session }: Props) {
+
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
   return (
     <>
@@ -52,7 +52,7 @@ export default function HistoryResult({ question, historyList }: Props) {
                 <HistorySection
                   key={index}
                   history={history}
-                  session={typedSession}
+                  session={session}
                   className="min-w-[90%] sm:min-w-[50%]"
                 ></HistorySection>
               ))}

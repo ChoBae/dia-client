@@ -3,7 +3,6 @@ export const getQuestionList = async (
   category: string,
   accessToken?: string
 ) => {
-  console.log("getQuestionList", category, accessToken);
   const headers = accessToken
     ? {
         "Content-Type": "application/json",
@@ -26,6 +25,5 @@ export const getQuestionList = async (
     }
   );
   const data = await res.json();
-  console.log("data", data);
   return data.data.pageData;
 };

@@ -13,7 +13,6 @@ export default function Home({
   const code = searchParams.code;
   const headersList = headers();
   const userAgentString = headersList.get("user-agent");
-  console.log("code", userAgentString);
   // console.log("header", headersList);
   async function createSession() {
     "use server";

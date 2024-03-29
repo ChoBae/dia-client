@@ -2,14 +2,15 @@ import { NextResponse } from "next/server";
 import { Session } from "@/types/Session";
 import { getSession } from "../../../../../authLib";
 import { cookies } from "next/headers";
+import { headers } from "next/headers";
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const pkValue = searchParams.get("pkValue");
-
+  const id = searchParams.get("query");
+  const headersList = headers()
   const result = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v0/interview/practice/histories?questionPkValue=${pkValue}`,
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v0/interview/questions?categoryValues=${id}`,
     {
-      headers: request.headers as HeadersInit,
+      headers: headersList as HeadersInit,
       next: {
         revalidate: 0,
       },
@@ -18,7 +19,7 @@ export async function GET(request: Request) {
   const data = await result.json();
   try {
     if (data.status === 200) {
-      return NextResponse.json(data.data.scrollData, { status: result.status });
+      return NextResponse.json(data.data.pageData, { status: result.status });
     }
     return NextResponse.json(
       {

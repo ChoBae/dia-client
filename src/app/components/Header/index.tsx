@@ -102,6 +102,7 @@ export default function Header({}: HeaderProps) {
             isToggleMenuOpen={isMenuOpen}
             animationClass={animationClass}
             onClick={hideMenu}
+            session={session}
           ></ToggleMenu>
         )}
         <ProfileToolbar

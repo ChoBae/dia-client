@@ -1,6 +1,4 @@
 "use client";
-import { useEffect, useState } from "react";
-import { signOut } from "next-auth/react";
 import Image from "next/image";
 import type { User } from "@/types/User";
 import Link from "next/link";
@@ -11,7 +9,6 @@ interface ProfileToolbarProps {
   // loginHandler: () => void;
 }
 export default function ProfileToolbar({ isOpen, user }: ProfileToolbarProps) {
-  // console.log("헤더테스트", getCookie("session"));
   const router = useRouter();
 
   const deleteSession = async () => {

@@ -1,16 +1,10 @@
-// import QuestionList from "./components/QuestionList";
-import { useEffect } from "react";
 import { Metadata } from "next";
-import { getQuestionDetails } from "@/app/api/getQuestionDetails";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { getQuestionScript } from "@/app/api/getQuestionScript";
-import { getSingleHistory } from "@/app/api/getSingleHistory";
-import { Session } from "@/types/Session";
 import HistoryResult from "./components/HistoryResult";
 import { Question } from "@/types/Question";
 import { HistoryType } from "@/types/History";
 import { redirect } from "next/navigation";
+import { getSession } from "../../../../authLib";
+import { headers } from "next/headers";
 export const dynamic = "force-dynamic";
 
 export const generateMetadata = async ({ params }: any): Promise<Metadata> => {
@@ -22,21 +16,28 @@ export const generateMetadata = async ({ params }: any): Promise<Metadata> => {
 };
 
 export default async function Home({ params }: { params: { id: number } }) {
-  const session = await getServerSession(authOptions);
+  const session = await getSession();
+  const headersList = headers();
   let result;
   if (!session) {
     redirect("/signIn");
   }
   if (session) {
-    result = await getSingleHistory({
-      practiceHistoryPkValue: params.id,
-      accessToken: session!.user!.access_token,
-    });
+        result = await fetch(
+          `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/history/getSingleHistory/?pkValue=${params.id}`,
+          {
+            method: "GET",
+            headers: headersList,
+          }
+        ).then((res) => res.json());
   }
-
   return (
     <main className="flex flex-col mx-auto py-20 h-full max-w-[500px] max-h-[1000px] overflow-y-hidden bg-white no-scrollbar">
-      <HistoryResult question={result?.question as Question} history={result as HistoryType}  ></HistoryResult>
+      <HistoryResult
+        question={result?.question as Question}
+        history={result as HistoryType}
+        session={session}
+      ></HistoryResult>
     </main>
   );
 }

@@ -1,15 +1,22 @@
 import Link from "next/link";
-import { useSession } from "next-auth/react";
-import { signOut } from "next-auth/react";
 
 type ToggleMenuProps = {
   isToggleMenuOpen: boolean;
   animationClass: string;
   onClick: () => void;
+  session: any;
 };
 
 export default function ToggleMenu(props: ToggleMenuProps) {
-  const { data: session, status } = useSession();
+   const deleteSession = async () => {
+     await fetch("/api/auth/deleteSession", {
+       method: "DELETE",
+     });
+
+     // router.refresh();
+     window.location.reload();
+   };
+
   return (
     <div
       className={`absolute right-1 w-2/3 h-96 z-50 bg-white shadow-lg rounded-md p-6 block md:hidden  ${props.animationClass}`}
@@ -32,10 +39,10 @@ export default function ToggleMenu(props: ToggleMenuProps) {
         >
           모든 문제
         </Link>
-        {session ? (
+        {props.session ? (
           <p
             className="flex w-full items-center py-2 text-lg font-semibold text-slate-600 cursor-pointer"
-            onClick={() => signOut()}
+            onClick={() => deleteSession()}
           >
             로그아웃
           </p>

@@ -1,8 +1,5 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { Session } from "@/types/Session";
-import { getSession } from "../../../../../authLib";
-import { userAgent } from "next/server";
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const accessToken = searchParams.get("accessToken");
@@ -21,7 +18,6 @@ export async function GET(request: Request) {
   };
   const result = await fetch(apiUrl, requestOptions);
   const data = await result.json();
-  console.log("data", data);
   return NextResponse.json(data.data, { status: result.status });
   //   return NextResponse.json({ data });
   // try {

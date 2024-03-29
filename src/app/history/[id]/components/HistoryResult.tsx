@@ -4,7 +4,6 @@ import ResultSession from "@/app/result/[id]/components/ResultSession";
 import { Question } from "@/app/components/Question";
 import { Question as QuestionType } from "@/types/Question";
 import { HistoryType } from "@/types/History";
-import { useSession } from "next-auth/react";
 import type { Session } from "@/types/Session";
 import ScriptSection from "@/app/components/ScriptSection";
 import HistorySection from "@/app/components/HistorySection";
@@ -12,11 +11,11 @@ import { getQuestionHistory } from "@/app/api/getQuestionHistory";
 type Props = {
   question: QuestionType;
   history: HistoryType;
+  session?: Session;
 };
 
-export default function HistoryResult({ question, history }: Props) {
-  const { data: session } = useSession();
-  const typedSession = session as Session;
+export default function HistoryResult({ question, history,session }: Props) {
+
   return (
     <section className="flex flex-col gap-3 h-full px-4">
       {question && (
@@ -36,7 +35,7 @@ export default function HistoryResult({ question, history }: Props) {
           id={history.pkValue}
           history={history as HistoryType}
           className="flex-grow h-0"
-          session={typedSession}
+          session={session}
         ></HistorySection>
       )}
     </section>

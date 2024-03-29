@@ -26,7 +26,6 @@ export async function decrypt(input: string): Promise<any> {
 export async function login(accessToken: string) {
   const headersList = headers();
   const userAgentString = headersList.get("user-agent");
-  console.log("여긴 authlib", userAgentString);
   const user = await fetch(
     `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/auth/getUser/?accessToken=${accessToken}`,
     {

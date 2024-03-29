@@ -8,8 +8,6 @@ import {
 } from "next-auth/react";
 import GithubIcon from "@/app/ui/icons/GithubIcon";
 import Logo from "@/app/ui/Logo";
-import { useRouter } from "next/navigation";
-import AuthCodeLoginPage from "../AuthCodeLoginPage";
 import Link from "next/link";
 interface LoginProps {
   providers?: Record<string, ClientSafeProvider>;

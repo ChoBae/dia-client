@@ -1,6 +1,4 @@
 "use client";
-import { signIn } from "next-auth/react";
-import { UserCircleIcon } from "@heroicons/react/24/solid";
 import UserIcon from "@/app/ui/icons/UserIcon";
 type Props = {
   onClick: () => void;
