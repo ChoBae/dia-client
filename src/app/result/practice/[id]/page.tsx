@@ -4,7 +4,7 @@ import { getQuestionList } from "@/app/api/getQuestionList";
 import PracticeResultMain from "./components/PracticeResultMain";
 import { Session } from "@/types/Session";
 import { Question } from "@/types/Question";
-import { getSession } from "../../../../../authLib";
+import { getSession } from "../../../../authLib";
 import { headers } from "next/headers";
 
 export const dynamic = "force-dynamic";

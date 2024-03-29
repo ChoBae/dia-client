@@ -4,7 +4,7 @@ import { getQuestionDetails } from "@/app/api/getQuestionDetails";
 import HistoryResult from "./components/HistoryResult";
 import { Question } from "@/types/Question";
 import { HistoryType } from "@/types/History";
-import { getSession } from "../../../../../../authLib";
+import { getSession } from "../../../../../authLib";
 import { headers } from "next/headers";
 export const dynamic = "force-dynamic";
 

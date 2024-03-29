@@ -2,10 +2,10 @@ import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse, userAgent } from "next/server";
 import { getUser } from "@/app/api/getUser";
-import { mapExpiresAt } from "./lib/adapter/pgAdapter";
+import { mapExpiresAt } from "../lib/adapter/pgAdapter";
 import { headers } from "next/headers";
 
-const secretKey = process.env.GITHUB_SECRET;
+const secretKey = process.env.NEXT_PUBLIC_SECRETKEY;
 const key = new TextEncoder().encode(secretKey);
 
 export async function encrypt(payload: any) {

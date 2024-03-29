@@ -1,6 +1,6 @@
 import QuestionMain from "../components/QuestionMain";
 import { Metadata } from "next";
-import { getSession } from "../../../../authLib";
+import { getSession } from "../../../authLib";
 import { headers } from "next/headers";
 export const revalidate = 0;
 export const dynamic = "auto";

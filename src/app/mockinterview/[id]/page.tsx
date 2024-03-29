@@ -1,6 +1,6 @@
 import PracticeMain from "./components/PracticeMain";
 import { getQuestionDetails } from "@/app/api/getQuestionDetails";
-import { getSession } from "../../../../authLib";
+import { getSession } from "../../../authLib";
 // export async function generateStaticParams() {
 //   // const lists = await getPracticeDetails();
 //   // const questionList = await getQuestionList();

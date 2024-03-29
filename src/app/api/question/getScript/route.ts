@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getSession } from "../../../../../authLib";
+import { getSession } from "../../../../authLib";
 import { Script } from "@/types/Script";
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);

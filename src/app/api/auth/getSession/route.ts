@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
-import { Session } from '@/types/Session';
-import { getSession } from '../../../../../authLib';
+import { NextResponse } from "next/server";
+import { Session } from "@/types/Session";
+import { getSession } from "../../../../authLib";
 export async function GET(request: Request) {
   const session = await getSession();
   //   return NextResponse.json({ data });
@@ -20,4 +20,3 @@ export async function GET(request: Request) {
   //   return NextResponse.json({ error: '서버내부오류 발생' }, { status: 500 });
   // }
 }
-

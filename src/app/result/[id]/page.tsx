@@ -4,7 +4,7 @@ import ResultMain from "./components/ResultMain";
 import { HistoryType } from "@/types/History";
 import ResultMainGuest from "./components/ResultMainGuest";
 import Header from "@/app/mockinterview/[id]/components/Header";
-import { getSession } from "../../../../authLib";
+import { getSession } from "../../../authLib";
 import { headers } from "next/headers";
 export const dynamic = "force-dynamic";
 

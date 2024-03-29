@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { HistoryMain } from "./components/HistoryMain";
 import { getUserHistorys } from "../api/getUserHistorys";
 import { HistoryType } from "@/types/History";
-import { getSession } from "../../../authLib";
+import { getSession } from "../../authLib";
 import { headers } from "next/headers";
 export const metadata: Metadata = {
   title: "나의 히스토리",
@@ -14,14 +14,13 @@ export default async function Home() {
   const headersList = headers();
   let result;
   if (session) {
-        result = await fetch(
-          `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/history/getUserHistory`,
-          {
-            method: "GET",
-            headers: headersList
-
-          }
-        ).then((res) => res.json());
+    result = await fetch(
+      `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/history/getUserHistory`,
+      {
+        method: "GET",
+        headers: headersList,
+      }
+    ).then((res) => res.json());
   }
   return <HistoryMain historyList={result as HistoryType[]}></HistoryMain>;
 }

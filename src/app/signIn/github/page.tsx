@@ -1,6 +1,6 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import CallBackPage from "./CallbackPage";
-import { login } from "../../../../authLib";
+import { login } from "../../../authLib";
 import { getAccesstoken } from "@/app/api/getAccesstoken";
 import { redirect } from "next/navigation";
 import LoginAction from "./LoginAction";

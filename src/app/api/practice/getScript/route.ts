@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getSession } from "../../../../../authLib";
+import { getSession } from "../../../../authLib";
 import { Script } from "@/types/Script";
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -22,12 +22,12 @@ export async function GET(request: Request) {
     }
     return NextResponse.json(
       {
-        message: 'DB에서 에러를 리턴',
+        message: "DB에서 에러를 리턴",
         error: result.statusText,
       },
       { status: result.status }
     );
   } catch (e) {
-    return NextResponse.json({ error: '서버내부오류 발생' }, { status: 500 });
+    return NextResponse.json({ error: "서버내부오류 발생" }, { status: 500 });
   }
 }

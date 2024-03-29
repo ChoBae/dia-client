@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { Session } from "@/types/Session";
-import { getSession } from "../../../../../authLib";
+import { getSession } from "../../../../authLib";
 import { cookies } from "next/headers";
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);

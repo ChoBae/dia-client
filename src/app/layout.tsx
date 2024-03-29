@@ -5,7 +5,7 @@ import Header from "./components/Header";
 
 import { LayoutProvider } from "../utils/LayoutProvider";
 import Footer from "./components/Footer";
-import { getSession, logout } from "../../authLib";
+import { getSession, logout } from "../authLib";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -45,7 +45,7 @@ export default async function RootLayout({
       /> */}
       <body className="font-Pretendard no-scrollbar">
         {/* <AuthSession> */}
-        <LayoutProvider >{children}</LayoutProvider>
+        <LayoutProvider>{children}</LayoutProvider>
         {/* <Header session={session} /> */}
         {/* </AuthSession> */}
         {/* <Footer /> */}

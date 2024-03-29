@@ -1,5 +1,5 @@
 import Intro from "./components/Intro";
-import { getSession } from "../../authLib";
+import { getSession } from "../authLib";
 import { headers } from "next/headers";
 export default async function Home() {
   // const session = await getSession();

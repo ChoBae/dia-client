@@ -3,7 +3,7 @@ import MockPracticeMain from "./components/MockPracticeMain";
 import { getPracticeDetails } from "@/app/api/getPracticeDetails";
 import { getQuestionList } from "@/app/api/getQuestionList";
 import { Question } from "@/types/Question";
-import { getSession } from "../../../../../authLib";
+import { getSession } from "../../../../authLib";
 // export async function generateStaticParams() {
 //   // const lists = await getPracticeDetails();
 //   // const questionList = await getQuestionList();
@@ -20,5 +20,10 @@ export default async function Main({ params }: { params: { id: string } }) {
   const result = await getQuestionList("backend");
   const questionList = result.slice(0, 2);
   // 여기서 문제 리스트를 가져와서 result에 추가해야함
-  return <MockPracticeMain questionList={questionList} session={session}></MockPracticeMain>;
+  return (
+    <MockPracticeMain
+      questionList={questionList}
+      session={session}
+    ></MockPracticeMain>
+  );
 }

@@ -3,7 +3,7 @@ import QuestionListMain from "./components/QuestionListMain";
 import { Metadata } from "next";
 import { Question } from "@/types/Question";
 import { getQuestionList } from "@/app/api/getQuestionList";
-import { getSession } from "../../../../../authLib";
+import { getSession } from "../../../../authLib";
 import { headers } from "next/headers";
 export const revalidate = 0;
 
@@ -49,7 +49,11 @@ export default async function Main({ params }: { params: { id: number } }) {
   const sliceList = questionList.slice(0, 3);
   return (
     <main className="flex flex-col mx-auto px-4 sm:px-6 pt-20 pb-8 h-[100dvh] sm:max-h-[800px] sm:w-1/2 2xl:w-1/3 no-scrollbar overflow-y-hidden">
-      <QuestionListMain practice={dummyPractice} questionList={sliceList} session={session} />
+      <QuestionListMain
+        practice={dummyPractice}
+        questionList={sliceList}
+        session={session}
+      />
     </main>
   );
 }
