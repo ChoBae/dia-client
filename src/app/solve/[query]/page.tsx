@@ -55,10 +55,19 @@ export default async function Home({ params }: { params: { query: string } }) {
   });
   const questionList = result.data.pageData;
   return (
-    <QuestionMain
-      questionsData={questionList}
-      query={params.query}
-      session={session}
-    ></QuestionMain>
+    // <QuestionMain
+    //   questionsData={questionList}
+    //   query={params.query}
+    //   session={session}
+    // ></QuestionMain>
+    <div>
+      {
+        questionList.map((question: any, index: number) => (
+          <div key={index}>
+            <h1>{question.title}</h1>
+          </div>
+        ))
+      }
+    </div>
   );
 }
