@@ -68,7 +68,7 @@ export default async function Home({ params }: { params: { query: string } }) {
     );
   } else {
     if (!params.query) return;
-    questionList = await getQuestionList(params.query);
+    questionList = await getQuestionList('backend');
   }
 
   return (
