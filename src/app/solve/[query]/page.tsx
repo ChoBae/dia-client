@@ -10,7 +10,8 @@ export const metadata: Metadata = {
 };
 
 export default async function Home({ params }: { params: { query: string } }) {
-  const session = await getSession();
+  // const session = await getSession();
+  let session = null;
   // console.log('session', session.accessToken)
   // let questionList: Question[] = [];
   // if (session) {
