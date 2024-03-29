@@ -1,9 +1,7 @@
-import { Question } from "@/types/Question";
-import { getQuestionList } from "@/app/api/getQuestionList";
-import QuestionList from "../components/PracticeList";
+
 import { Metadata } from "next";
 import { PracticeMain } from "../components/PracticeMain";
-
+import { getSession } from "../../../../authLib";
 export const metadata: Metadata = {
   title: "실전 연습",
   description: "현직 개발자가 엄선한 문제 세트를 확인해보세요!",
@@ -27,5 +25,6 @@ const dummyList = [
   // },
 ];
 export default async function Home({ params }: { params: { query: string } }) {
-  return <PracticeMain practiceList={dummyList} query={params.query}></PracticeMain>;
+  const session = await getSession();
+  return <PracticeMain practiceList={dummyList} query={params.query} session={session}></PracticeMain>;
 }

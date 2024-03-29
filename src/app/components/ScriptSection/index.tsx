@@ -3,18 +3,19 @@ import React, { useState, useEffect } from "react";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/solid";
 import Spinner from "@/app/components/Spinner";
 import EditIcon from "@/app/ui/icons/EditIcon";
-import { useSession } from "next-auth/react";
 import { getQuestionScript } from "@/app/api/getQuestionScript";
 import { editQuestionScript } from "@/app/api/editQuestionScript";
 import { saveQuestionScript } from "@/app/api/saveQuestionScript";
 import { twMerge } from "tailwind-merge";
 import type { Session } from "@/types/Session";
 import type { Script } from "@/types/Script";
+
 export interface Props {
   id: number;
   className?: string;
   placeholder?: string;
   writeScript?: boolean;
+  session?: Session;
 }
 
 const maxCharacterCount = 3000;
@@ -24,9 +25,8 @@ export default function ScriptSection({
   className,
   placeholder,
   writeScript = true,
+  session,
 }: Props) {
-  const { data: session, status } = useSession();
-  const typedSession = session as Session;
   const [script, setScript] = useState<Script | undefined>(undefined);
   const [prevScript, setPrevScript] = useState<Script | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -34,25 +34,44 @@ export default function ScriptSection({
   const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
+    // const fetchData = async () => {
+    //   if (session) {
+    //     const getScript = await getQuestionScript(
+    //       id,
+    //       typedSession?.user.access_token
+    //     );
+    //     if (getScript) setScript(getScript);
+    //   } else {
+    //     const savedScriptString = localStorage.getItem(`script=${id}`);
+    //     const savedScriptObj = savedScriptString
+    //       ? JSON.parse(savedScriptString)
+    //       : { contentValue: "" };
+    //     setScript(savedScriptObj);
+    //   }
+    // };
     const fetchData = async () => {
-      if (session) {
-        const getScript = await getQuestionScript(
-          id,
-          typedSession?.user.access_token
-        );
-        if (getScript) setScript(getScript);
-      } else {
-        const savedScriptString = localStorage.getItem(`script=${id}`);
-        const savedScriptObj = savedScriptString
-          ? JSON.parse(savedScriptString)
-          : { contentValue: "" };
-        setScript(savedScriptObj);
-      }
+      await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/api/question/getScript/?pkValue=${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: session?.accessToken as string,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (!data) {
+            console.error(
+              "Failed to fetch question script. Status: ",
+              data.status
+            );
+            return;
+          }
+          setScript(data as Script);
+        });
     };
-
     fetchData();
     setIsLoading(false);
-  }, [id, typedSession, session]);
+  }, [id]);
   useEffect(() => {
     if (isEditing) {
       textAreaRef.current?.focus();
@@ -64,13 +83,13 @@ export default function ScriptSection({
         await editQuestionScript({
           scriptPkValue: id,
           contentValue: script?.contentValue as string,
-          accessToken: typedSession?.user.access_token,
+          accessToken: session?.accessToken,
         });
       } else {
         await saveQuestionScript({
           questionPkValue: id,
           contentValue: script?.contentValue as string,
-          accessToken: typedSession?.user.access_token,
+          accessToken: session?.accessToken,
         });
       }
     } else {
@@ -90,7 +109,9 @@ export default function ScriptSection({
     <div
       className={twMerge(
         `flex flex-col relative bg-[#FAFAFA] rounded-[5px] w-full ${
-          (!isEditing || !script?.contentValue) && writeScript ? "cursor-pointer" : ""
+          (!isEditing || !script?.contentValue) && writeScript
+            ? "cursor-pointer"
+            : ""
         }`,
         className
       )}

@@ -2,11 +2,10 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
-import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]/route";
-import AuthSession from "./api/auth/AuthSession";
+
 import { LayoutProvider } from "../utils/LayoutProvider";
 import Footer from "./components/Footer";
+import { getSession, logout } from "../../authLib";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -19,8 +18,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  let session = await getServerSession(authOptions);
-
   return (
     <html lang="ko">
       {/* <link
@@ -47,10 +44,10 @@ export default async function RootLayout({
         color="#5bbad5"
       /> */}
       <body className="font-Pretendard no-scrollbar">
-        <AuthSession>
-          <LayoutProvider session={session}>{children}</LayoutProvider>
-          {/* <Header session={session} /> */}
-        </AuthSession>
+        {/* <AuthSession> */}
+        <LayoutProvider >{children}</LayoutProvider>
+        {/* <Header session={session} /> */}
+        {/* </AuthSession> */}
         {/* <Footer /> */}
         {/* createPortal to Modal */}
         <div id="modal-root"></div>

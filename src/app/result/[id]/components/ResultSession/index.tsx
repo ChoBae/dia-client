@@ -5,7 +5,6 @@ import HistorySection from "@/app/components/HistorySection";
 import { Question } from "@/app/components/Question";
 import type { HistoryType } from "@/types/History";
 import type { Question as QuestionType } from "@/types/Question";
-import { useSession } from "next-auth/react";
 import type { Session } from "@/types/Session";
 import Button from "@/app/components/Button";
 import { useRouter } from "next/navigation";
@@ -13,12 +12,11 @@ type Props = {
   pkValue: number;
   latestHistory: HistoryType;
   question: QuestionType;
+  session? : Session
 };
 
 export default function ResultSession(props: Props) {
-  const { pkValue, latestHistory, question } = props;
-  const { data: session } = useSession();
-  const typedSession = session as Session;
+  const { pkValue, latestHistory, question, session } = props;
   const router = useRouter();
   return (
     <section className="flex flex-col gap-3 h-full px-4">
@@ -36,7 +34,7 @@ export default function ResultSession(props: Props) {
         id={pkValue}
         history={latestHistory}
         className="flex-grow h-0"
-        session={typedSession}
+        session={session}
       ></HistorySection>
       <div className="flex flex-row gap-3">
         <Button

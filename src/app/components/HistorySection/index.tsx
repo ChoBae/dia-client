@@ -14,7 +14,7 @@ export interface HistorySectionProps {
   id?: number;
   className?: string;
   history: HistoryType;
-  session: Session;
+  session?: Session;
   theme?: "single" | "multi";
 }
 
@@ -30,7 +30,7 @@ export default function HistorySection({
       try {
         await deleteHistory({
           practiceHistoryPkValue: history.pkValue as number,
-          accessToken: session?.user.access_token,
+          accessToken: session?.accessToken,
         });
       } catch (e) {
         console.error("Delete operation failed", e);

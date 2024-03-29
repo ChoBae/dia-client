@@ -29,7 +29,7 @@ export const QuestionMain = ({
     if (!session) alert("로그인 후 이용하실 수 있습니다");
     await addBookmarkQuestion({
       pkValue: question.pkValue,
-      accessToken: session?.user.access_token as string,
+      accessToken: session?.accessToken as string,
     });
     router.refresh();
   };
@@ -38,10 +38,11 @@ export const QuestionMain = ({
 
     await deleteBookmarkQuestion({
       pkValue: question.pkValue,
-      accessToken: session?.user.access_token as string,
+      accessToken: session?.accessToken as string,
     });
     router.refresh();
   };
+  // console.log(question)
   return (
     <div className="flex relative flex-col bg-primary-gray-50 rounded-[5px] px-4 py-[18px]">
       {isBookmarkOn && (

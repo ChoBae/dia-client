@@ -4,7 +4,6 @@ type Props = {
 };
 
 export default function LayerLogoIcon({className, color = "#591FD9"}: Props) {
-  console.log('color', color)
   return (
     <svg
       width="204"

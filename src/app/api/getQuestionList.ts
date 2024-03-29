@@ -11,7 +11,6 @@ export const getQuestionList = async (
     : {
         "Content-Type": "application/json",
       };
-
   const categoryValues = category
     .split(",")
     .map((tag) => mapTagToPurpose(tag))

@@ -15,8 +15,8 @@ export default function PlusIcon(props: Props) {
       onClick={props.onClick}
     >
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M7.25006 8.75L7.25006 13H8.75006L8.75006 8.75H13V7.25H8.75006L8.75006 3H7.25006L7.25006 7.25H3V8.75H7.25006Z"
         fill="#757575"
       />

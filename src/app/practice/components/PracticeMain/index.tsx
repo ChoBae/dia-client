@@ -4,9 +4,11 @@ import PracticeList from "../PracticeList";
 import { Modal } from "@/app/components/Modal";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Session } from "@/types/Session";
 type Props = {
   practiceList: any[];
   query: string;
+  session?: Session
 };
 
 export const PracticeMain = (props: Props) => {
@@ -26,6 +28,7 @@ export const PracticeMain = (props: Props) => {
         practiceList={props.practiceList}
         query={props.query}
         practiceClick={handleClick}
+        session={props.session}
       ></PracticeList>
     </main>
   );
