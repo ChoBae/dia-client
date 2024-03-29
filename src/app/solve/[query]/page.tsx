@@ -23,21 +23,21 @@ export default async function Home({ params }: { params: { query: string } }) {
   //   if (!params.query) return;
   //   questionList = await getQuestionList(params.query);
   // }
-  // const headersList = headers();
-  // const userAgentString = headersList.get("user-agent");
-  // const questionList = await fetch(
-  //   `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/question/getList/?query=${params.query}`,
-  //   {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       ...(session && session.accessToken
-  //         ? { authorization: session.accessToken }
-  //         : {}),
-  //       "user-agent": userAgentString as string,
-  //     },
-  //   }
-  // ).then((res) => res.json());
+  const headersList = headers();
+  const userAgentString = headersList.get("user-agent");
+  const questionList = await fetch(
+    `api/question/getList/?query=${params.query}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...(session && session.accessToken
+          ? { authorization: session.accessToken }
+          : {}),
+        "user-agent": userAgentString as string,
+      },
+    }
+  ).then((res) => res.json());
   // const result = await fetch(
   //   `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/v0/interview/questions?categoryValues=${params.query}`,
   //   {
@@ -59,18 +59,18 @@ export default async function Home({ params }: { params: { query: string } }) {
   //   sessionsession.accessToken,
   //   headersList
   // );
-  let questionList;
-  if (session) {
-    if (!params.query) return;
-    questionList = await getQuestionList(
-      params.query,
-      session.accessToken,
-      // headersList
-    );
-  } else {
-    if (!params.query) return;
-    questionList = await getQuestionList("backend");
-  }
+  // let questionList;
+  // if (session) {
+  //   if (!params.query) return;
+  //   questionList = await getQuestionList(
+  //     params.query,
+  //     session.accessToken,
+  //     // headersList
+  //   );
+  // } else {
+  //   if (!params.query) return;
+  //   questionList = await getQuestionList("backend");
+  // }
 
   return (
     // <QuestionMain
