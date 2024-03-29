@@ -4,6 +4,7 @@ import { getSession } from "../../../authLib";
 import { headers } from "next/headers";
 import { getQuestionList } from "@/app/api/getQuestionList";
 import { Question } from "@/types/Question";
+import axios from "axios";
 export const revalidate = 0;
 export const dynamic = "auto";
 export const metadata: Metadata = {
@@ -25,10 +26,21 @@ export default async function Home({ params }: { params: { query: string } }) {
   // }
   const headersList = headers();
   const userAgentString = headersList.get("user-agent");
-  const questionList = await fetch(
-    `api/question/getList/?query=${params.query}`,
+  // const questionList = await fetch(
+  //   `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/question/getList/?query=${params.query}`,
+  //   {
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       ...(session && session.accessToken
+  //         ? { authorization: session.accessToken }
+  //         : {}),
+  //       "user-agent": userAgentString as string,
+  //     },
+  //   }
+  // ).then((res) => res.json());
+  const questionList = await axios.get(
+    `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/question/getList/?query=${params.query}`,
     {
-      method: "GET",
       headers: {
         "Content-Type": "application/json",
         ...(session && session.accessToken
@@ -37,7 +49,8 @@ export default async function Home({ params }: { params: { query: string } }) {
         "user-agent": userAgentString as string,
       },
     }
-  ).then((res) => res.json());
+  );
+  console.log("questionList", questionList.data);
   // const result = await fetch(
   //   `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/v0/interview/questions?categoryValues=${params.query}`,
   //   {
@@ -79,7 +92,7 @@ export default async function Home({ params }: { params: { query: string } }) {
     //   session={session}
     // ></QuestionMain>
     <div>
-      {questionList.map((question: Question) => (
+      {questionList.data.map((question: Question) => (
         <div key={question.pkValue}>{question.korTitleValue}</div>
       ))}
     </div>
