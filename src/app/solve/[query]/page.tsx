@@ -42,9 +42,9 @@ export default async function Home({ params }: { params: { query: string } }) {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        ...(session && session.accessToken
-          ? { authorization: session.accessToken }
-          : {}),
+        // ...(session && session.accessToken
+        //   ? { authorization: session.accessToken }
+        //   : {}),
         "user-agent": userAgentString as string,
       },
     }
