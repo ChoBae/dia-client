@@ -17,6 +17,8 @@ import RetryIcon from "@/app/ui/icons/RetryCircleIcon";
 import LayerLogoIcon from "@/app/ui/icons/LayerLogoIcon";
 import { MicroCircleIcon } from "@/app/ui/icons/MicroCircleIcon";
 import Typed from "typed.js";
+import { getSession } from "../../../../../../authLib";
+import { headers } from "next/headers";
 type Props = {
   question: Question;
   setIsView: (isView: number) => void;

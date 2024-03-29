@@ -75,7 +75,6 @@ Props) {
       setIsModalOpen(true);
     }
   };
-  console.log('중간다리 체크', session)
   return (
     <section className="flex flex-col w-full h-full max-h-[1000px]">
       <div className="flex items-center mb-[32px] pl-2">

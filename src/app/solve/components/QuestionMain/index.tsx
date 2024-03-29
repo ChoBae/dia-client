@@ -10,14 +10,14 @@ import { TagBar } from "./components/TagBar";
 interface Props {
   questionsData: QuestionType[];
   query: string;
-  session: any
+  session: any;
 }
 export default function QuestionMain({ questionsData, query, session }: Props) {
   const [currentTag, setCurrentTag] = useState(query);
   const [firstCheck, setFirstCheck] = useState<boolean>(false);
   const [questionList, setQuestionList] = useState<QuestionType[]>([]);
   // const [session, setSession] = useState<Session | null>(null);
-
+  // console.log('여기서 확인', questionList)
   useEffect(() => {
     if (!session) {
       handleFirstCheck();
@@ -26,7 +26,7 @@ export default function QuestionMain({ questionsData, query, session }: Props) {
 
   useEffect(() => {
     setQuestionList(questionsData);
-  }, [questionsData]);
+  }, [questionsData, query]);
   const handleFirstCheck = async () => {
     // 로컬스트리지에서 처음 접속했는지에 대한 정보를 찾아본다
     const firstCheck = localStorage.getItem("firstCheck");
@@ -65,7 +65,9 @@ export default function QuestionMain({ questionsData, query, session }: Props) {
               isDetail={true}
               session={session}
             >
-              <Question.SubTitle className="text-primary-600">개별연습</Question.SubTitle>
+              <Question.SubTitle className="text-primary-600">
+                개별연습
+              </Question.SubTitle>
               <Question.Title>{question.korTitleValue}</Question.Title>
             </Question>
           </Link>

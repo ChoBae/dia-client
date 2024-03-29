@@ -1,8 +1,9 @@
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, userAgent } from "next/server";
 import { getUser } from "@/app/api/getUser";
 import { mapExpiresAt } from "./lib/adapter/pgAdapter";
+import { headers } from "next/headers";
 
 const secretKey = process.env.GITHUB_SECRET;
 const key = new TextEncoder().encode(secretKey);
@@ -23,7 +24,18 @@ export async function decrypt(input: string): Promise<any> {
 }
 
 export async function login(accessToken: string) {
-  const user = await getUser(accessToken);
+  const headersList = headers();
+  const userAgentString = headersList.get("user-agent");
+  console.log("여긴 authlib", userAgentString);
+  const user = await fetch(
+    `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/auth/getUser/?accessToken=${accessToken}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "user-agent": userAgentString as string,
+      },
+    }
+  ).then((res) => res.json());
   // Create the session
   const oneWeek = 7 * 24 * 60 * 60 * 1000;
   const expires = new Date(Date.now() + oneWeek);

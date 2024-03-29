@@ -4,17 +4,30 @@ import { login } from "../../../../authLib";
 import { getAccesstoken } from "@/app/api/getAccesstoken";
 import { redirect } from "next/navigation";
 import LoginAction from "./LoginAction";
+import { headers } from "next/headers";
 export default function Home({
   searchParams,
 }: {
   searchParams: { code: string };
 }) {
-  // return <CallBackPage />;
+  const code = searchParams.code;
+  const headersList = headers();
+  const userAgentString = headersList.get("user-agent");
+  console.log("code", userAgentString);
+  // console.log("header", headersList);
   async function createSession() {
     "use server";
-    const code = searchParams.code;
-    const token = await getAccesstoken(code);
-    await login(token.accessTokenValue);
+    const token = await fetch(
+      `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/auth/getAccesstoken?code=${code}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "user-agent": userAgentString as string,
+        },
+      }
+    );
+    const { accessTokenValue } = await token.json(); // Access the accessTokenValue property
+    await login(accessTokenValue);
     redirect("/");
   }
   return <LoginAction createSession={createSession} />;

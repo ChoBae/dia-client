@@ -5,8 +5,9 @@ import { cookies } from "next/headers";
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const pkValue = searchParams.get("pkValue");
+
   const result = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v0/interview/questions/${pkValue}`,
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v0/interview/practice/histories?questionPkValue=${pkValue}`,
     {
       headers: request.headers as HeadersInit,
       next: {
@@ -15,9 +16,10 @@ export async function GET(request: Request) {
     }
   );
   const data = await result.json();
+  console.log("data", data);
   try {
     if (data.status === 200) {
-      return NextResponse.json(data.data, { status: result.status });
+      return NextResponse.json(data.data.pageData, { status: result.status });
     }
     return NextResponse.json(
       {

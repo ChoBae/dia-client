@@ -24,7 +24,7 @@ export const TagBar = ({ currentTag, session, setQuestionList }: Props) => {
       if (!bookmarkOn) {
         const questionList = await getQuestionList(
           currentTag,
-          session?.user.access_token as string
+          session?.accessToken as string
         ); // 여기서 적절한 함수를 호출하여 원래 리스트를 가져와야 합니다.
         setQuestionList(questionList);
       }
@@ -39,7 +39,7 @@ export const TagBar = ({ currentTag, session, setQuestionList }: Props) => {
     } else {
       const questionList = await getBookmarkList(
         currentTag,
-        session?.user.access_token as string
+        session?.accessToken as string
       );
       setQuestionList(questionList);
     }

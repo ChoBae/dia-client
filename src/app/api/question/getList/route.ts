@@ -2,30 +2,21 @@ import { NextResponse } from "next/server";
 import { Session } from "@/types/Session";
 import { getSession } from "../../../../../authLib";
 import { cookies } from "next/headers";
+import { headers } from "next/headers";
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("query");
-  // con
-  // const headers = session
-  //   ? {
-  //       "Content-Type": "application/json",
-  //       authorization: session.accessToken,
-  //     }
-  //   : {
-  //       "Content-Type": "application/json",
-  //     };
+  const headersList = headers()
   const result = await fetch(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v0/interview/questions?categoryValues=${id}`,
     {
-      //   method: 'GET',
-      headers: request.headers as HeadersInit,
+      headers: headersList as HeadersInit,
       next: {
         revalidate: 0,
       },
     }
   );
   const data = await result.json();
-
   try {
     if (data.status === 200) {
       return NextResponse.json(data.data.pageData, { status: result.status });

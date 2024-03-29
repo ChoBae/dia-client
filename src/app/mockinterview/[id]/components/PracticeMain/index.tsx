@@ -6,6 +6,8 @@ import type { Question } from "@/types/Question";
 import GuidanceSession from "@/app/mockinterview/practice/[id]/components/GuidanceSession";
 import { Modal } from "@/app/components/Modal";
 import dynamic from "next/dynamic";
+import { headers } from "next/headers";
+
 const PraceticeSession = dynamic(() => import("../PracticeSession"), {
   ssr: false,
 });

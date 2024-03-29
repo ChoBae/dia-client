@@ -51,19 +51,23 @@ export default function ScriptSection({
     //   }
     // };
     const fetchData = async () => {
-      await fetch(`/api/question/getScript/?pkValue=${id}`, {
+      await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/api/question/getScript/?pkValue=${id}`, {
         method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: session?.accessToken as string,
+        },
       })
         .then((res) => res.json())
         .then((data) => {
-          if (data.status !== 200) {
+          if (!data) {
             console.error(
               "Failed to fetch question script. Status: ",
               data.status
             );
             return;
           }
-          setScript(data.data);
+          setScript(data as Script);
         });
     };
     fetchData();

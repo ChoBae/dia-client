@@ -3,6 +3,7 @@ import Link from "next/link";
 import ServiceIntro from "./components/ServiceIntro";
 import Tag from "../Tag";
 export default function Intro() {
+
   return (
     <>
       <section className="flex flex-col items-center justify-center py-24 w-screen bg-gray-100 ">

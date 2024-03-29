@@ -1,35 +1,24 @@
 import { NextResponse } from "next/server";
 import { getSession } from "../../../../../authLib";
+import { Script } from "@/types/Script";
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const pkValue = searchParams.get("pkValue");
-  const session = await getSession();
-  const headers = session
-    ? {
-        'Content-Type': 'application/json',
-        authorization: session.accessToken,
-      }
-    : {
-        'Content-Type': 'application/json',
-      };
-
   const result = await fetch(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v0/interview/scripts?questionPkValue=${pkValue}`,
     {
       //   method: 'GET',
-      headers: headers as HeadersInit,
+      headers: request.headers as HeadersInit,
       next: {
         revalidate: 0,
       },
     }
   );
   const data = await result.json();
-  console.log('여기사람있어요',data);
-  //   return data
-  //   return NextResponse.json({ data });
+
   try {
     if (data.status === 200) {
-      return NextResponse.json(data.data, { status: result.status });
+      return NextResponse.json(data.data as Script, { status: result.status });
     }
     return NextResponse.json(
       {
