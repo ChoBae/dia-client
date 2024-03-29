@@ -10,8 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Home({ params }: { params: { query: string } }) {
-  // const session = await getSession();
-  let session = null;
+  const session = await getSession();
   // console.log('session', session.accessToken)
   // let questionList: Question[] = [];
   // if (session) {
@@ -37,23 +36,23 @@ export default async function Home({ params }: { params: { query: string } }) {
   //     },
   //   }
   // ).then((res) => res.json());
-  const result = await fetch(
-    `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/v0/interview/questions?categoryValues=${params.query}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        // ...(session && session.accessToken
-        //   ? { authorization: session.accessToken }
-        //   : {}),
-        "user-agent": userAgentString as string,
-      },
-    }
-  ).then((res) => {
-    const data = res.json();
-    return data;
-  });
-  const questionList = result.data.pageData;
+  // const result = await fetch(
+  //   `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/v0/interview/questions?categoryValues=${params.query}`,
+  //   {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       // ...(session && session.accessToken
+  //       //   ? { authorization: session.accessToken }
+  //       //   : {}),
+  //       "user-agent": userAgentString as string,
+  //     },
+  //   }
+  // ).then((res) => {
+  //   const data = res.json();
+  //   return data;
+  // });
+  // const questionList = result.data.pageData;
   return (
     // <QuestionMain
     //   questionsData={questionList}
@@ -61,13 +60,9 @@ export default async function Home({ params }: { params: { query: string } }) {
     //   session={session}
     // ></QuestionMain>
     <div>
-      {
-        questionList.map((question: any, index: number) => (
-          <div key={index}>
-            <h1>{question.title}</h1>
-          </div>
-        ))
-      }
+      <h1>Home</h1>
+      <p>session: {session}</p>
+      <p>params: {params.query}</p>
     </div>
   );
 }
