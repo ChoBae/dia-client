@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import { getSession } from "../../../authLib";
 import { headers } from "next/headers";
 import { getQuestionList } from "@/app/api/getQuestionList";
+import { Question } from "@/types/Question";
 export const revalidate = 0;
 export const dynamic = "auto";
 export const metadata: Metadata = {
@@ -22,8 +23,8 @@ export default async function Home({ params }: { params: { query: string } }) {
   //   if (!params.query) return;
   //   questionList = await getQuestionList(params.query);
   // }
-  const headersList = headers();
-  const userAgentString = headersList.get("user-agent");
+  // const headersList = headers();
+  // const userAgentString = headersList.get("user-agent");
   // const questionList = await fetch(
   //   `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/question/getList/?query=${params.query}`,
   //   {
@@ -64,18 +65,23 @@ export default async function Home({ params }: { params: { query: string } }) {
     questionList = await getQuestionList(
       params.query,
       session.accessToken,
-      headersList
+      // headersList
     );
   } else {
     if (!params.query) return;
-    questionList = await getQuestionList('backend');
+    questionList = await getQuestionList("backend");
   }
 
   return (
-    <QuestionMain
-      questionsData={questionList}
-      query={params.query}
-      session={session}
-    ></QuestionMain>
+    // <QuestionMain
+    //   questionsData={questionList}
+    //   query={params.query}
+    //   session={session}
+    // ></QuestionMain>
+    <div>
+      {questionList.map((question: Question) => (
+        <div key={question.pkValue}>{question.korTitleValue}</div>
+      ))}
+    </div>
   );
 }

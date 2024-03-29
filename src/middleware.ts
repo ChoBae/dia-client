@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse, userAgent } from "next/server";
-import { updateSession, getSession } from "./src/authLib";
+import { updateSession, getSession } from "./authLib";
 import { cookies } from "next/headers";
 
 export async function middleware(request: NextRequest) {
