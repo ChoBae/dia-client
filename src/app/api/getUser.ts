@@ -7,7 +7,8 @@ export const getUser = async (accessToken: string , headers: any): Promise<any> 
     throw new Error("accessToken is required");
   }
 
-  const apiUrl = `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/v0/members/me`;
+  const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v0/members/me`;
+  // const apiUrl = `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/v0/members/me`;
   const requestOptions: RequestInit = {
     method: "GET",
     headers: {

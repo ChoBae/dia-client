@@ -7,16 +7,17 @@ export const getAccesstoken = async (code: string, headers: any): Promise<any> =
     throw new Error("code is required");
   }
 
-  const apiUrl = `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/v0/auth/oauth/github`;
+  const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v0/auth/oauth/github`;
   const requestOptions: RequestInit = {
     method: "POST",
     headers: headers,
     body: JSON.stringify({ code: code }),
   };
-
+  // console.log('api url', apiUrl,headers)
   try {
     const response = await fetch(apiUrl, requestOptions);
     const data = await response.json();
+    // console.log('test', data)
     if (data.status !== 200) {
       switch (response.status) {
         case 401:
