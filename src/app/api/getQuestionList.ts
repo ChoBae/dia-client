@@ -15,7 +15,12 @@ export const getQuestionList = async (
     `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v0/interview/questions?categoryValues=${categoryValues}`,
     {
       method: "GET",
-      headers: headers as HeadersInit,
+      headers: {
+        "Content-Type": "application/json",
+        ...(accessToken ? { authorization: accessToken } : {}),
+        ...headers,
+      
+      } as HeadersInit,
       cache: "no-cache",
     }
   );

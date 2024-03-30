@@ -49,16 +49,13 @@ export default async function Home({ params }: { params: { query: string } }) {
   let questionList;
   if (session) {
     if (!params.query) return;
-    questionList = await getQuestionList(
-      params.query,
-      session.accessToken
-      // headersList
-    );
+    questionList = await getQuestionList(params.query, session.accessToken, {
+      "user-agent": userAgentString as string,
+    });
   } else {
     if (!params.query) return;
     questionList = await getQuestionList(params.query);
   }
-
   return (
     <QuestionMain
       questionsData={questionList}

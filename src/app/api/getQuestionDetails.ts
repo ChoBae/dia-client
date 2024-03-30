@@ -1,24 +1,21 @@
 type Params = {
   id: number;
   accessToken?: string;
+  headers?: HeadersInit;
 };
 export const getQuestionDetails = async (params: Params) => {
   const { id, accessToken } = params;
-  const headers = accessToken
-    ? {
-        "Content-Type": "application/json",
-        authorization: accessToken,
-      }
-    : {
-        "Content-Type": "application/json",
-      };
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/v0/interview/questions/${id}`,
-    // `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v0/interview/questions/${id}`,
+    // `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/v0/interview/questions/${id}`,
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v0/interview/questions/${id}`,
     {
       method: "GET",
-      headers: headers as HeadersInit,
+      headers: {
+        "Content-Type": "application/json",
+        ...params.headers,
+        ...(accessToken ? { authorization: accessToken } : {}),
+      } as HeadersInit,
       cache: "no-cache",
     }
   );
