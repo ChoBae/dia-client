@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  assetPrefix : process.env.NEXT_PUBLIC_CLOUDFRONT_URL,
   async headers() {
     return [
       {
