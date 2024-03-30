@@ -12,7 +12,7 @@ export default function ProfileToolbar({ isOpen, user }: ProfileToolbarProps) {
   const router = useRouter();
 
   const deleteSession = async () => {
-    await fetch("/api/auth/deleteSession", {
+    await fetch("/auth/deleteSession", {
       method: "DELETE",
     });
 

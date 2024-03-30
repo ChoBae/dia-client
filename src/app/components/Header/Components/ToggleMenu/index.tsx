@@ -9,7 +9,7 @@ type ToggleMenuProps = {
 
 export default function ToggleMenu(props: ToggleMenuProps) {
    const deleteSession = async () => {
-     await fetch("/api/auth/deleteSession", {
+     await fetch("/auth/deleteSession", {
        method: "DELETE",
      });
 
