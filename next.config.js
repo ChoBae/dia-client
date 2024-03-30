@@ -22,12 +22,14 @@ const nextConfig = {
     ];
   },
   async rewrites() {
-    return [
-      {
-        source: "/proxy/:path*",
-        destination: `${process.env.NEXT_PUBLIC_SERVER_URL}/api/:path*`,
-      },
-    ];
+    return {
+      fallback: [
+        {
+          source: "/proxy/:path*",
+          destination: `${process.env.NEXT_PUBLIC_SERVER_URL}/api/:path*`,
+        },
+      ],
+    };
   },
   images: {
     remotePatterns: [
