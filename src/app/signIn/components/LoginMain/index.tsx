@@ -43,7 +43,7 @@ export default function LoginMain({ prevPath }: LoginProps) {
           {/* {isLogin && <AuthCodeLoginPage />} */}
           <Link
             className="bg-[#333] text-white flex items-center justify-center gap-2 px-4 sm:px-8 py-1 sm:py-2 rounded hover:opacity-90"
-            href={`https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_ID}&redirect_uri=${process.env.NEXT_PUBLIC_GITHUB_REDIRECT_URI}`}
+            href={`https://github.com/login/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_GITHUB_ID}&redirect_uri=${process.env.NEXT_PUBLIC_GITHUB_REDIRECT_URI}`}
           >
             <GithubIcon className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
             Login with GitHub
