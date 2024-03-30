@@ -15,15 +15,7 @@ export default function Home({
   // console.log("header", headersList);
   async function createSession() {
     "use server";
-    const token = await fetch(
-      `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/auth/getAccesstoken?code=${code}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          "user-agent": userAgentString as string,
-        },
-      }
-    );
+    const token = await getAccesstoken(code, headersList);
     const { accessTokenValue } = await token.json(); // Access the accessTokenValue property
     await login(accessTokenValue);
     redirect("/");

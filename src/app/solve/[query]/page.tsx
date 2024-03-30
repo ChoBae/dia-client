@@ -16,18 +16,18 @@ export default async function Home({ params }: { params: { query: string } }) {
   const session = await getSession();
   const headersList = headers();
   const userAgentString = headersList.get("user-agent");
-  const questionList = await fetch(
-    `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/question/getList/?query=${params.query}`,
-    {
-      headers: {
-        "Content-Type": "application/json",
-        ...(session && session.accessToken
-          ? { authorization: session.accessToken }
-          : {}),
-        "user-agent": userAgentString as string,
-      },
-    }
-  ).then((res) => res.json());
+  // const questionList = await fetch(
+  //   `@/api/question/getList/?query=${params.query}`,
+  //   {
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       ...(session && session.accessToken
+  //         ? { authorization: session.accessToken }
+  //         : {}),
+  //       "user-agent": userAgentString as string,
+  //     },
+  //   }
+  // ).then((res) => res.json());
 
   // const result = await fetch(
   //   `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/v0/interview/questions?categoryValues=${params.query}`,
@@ -46,18 +46,18 @@ export default async function Home({ params }: { params: { query: string } }) {
   //   return data;
   // });
   // const questionList = result.data.pageData;
-  // let questionList;
-  // if (session) {
-  //   if (!params.query) return;
-  //   questionList = await getQuestionList(
-  //     params.query,
-  //     session.accessToken
-  //     // headersList
-  //   );
-  // } else {
-  //   if (!params.query) return;
-  //   questionList = await getQuestionList(params.query);
-  // }
+  let questionList;
+  if (session) {
+    if (!params.query) return;
+    questionList = await getQuestionList(
+      params.query,
+      session.accessToken
+      // headersList
+    );
+  } else {
+    if (!params.query) return;
+    questionList = await getQuestionList(params.query);
+  }
 
   return (
     <QuestionMain

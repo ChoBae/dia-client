@@ -2,7 +2,7 @@ type Params = {
   id: number | null | undefined;
   accessToken: string | undefined;
 };
-export const getAccesstoken = async (code: string): Promise<any> => {
+export const getAccesstoken = async (code: string, headers: any): Promise<any> => {
   if (!code) {
     throw new Error("code is required");
   }
@@ -10,9 +10,7 @@ export const getAccesstoken = async (code: string): Promise<any> => {
   const apiUrl = `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/v0/auth/oauth/github`;
   const requestOptions: RequestInit = {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: headers,
     body: JSON.stringify({ code: code }),
   };
 
