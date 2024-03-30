@@ -29,34 +29,35 @@ export default async function Home({ params }: { params: { query: string } }) {
   //   }
   // ).then((res) => res.json());
 
-  // const result = await fetch(
-  //   `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/v0/interview/questions?categoryValues=${params.query}`,
-  //   {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       // ...(session && session.accessToken
-  //       //   ? { authorization: session.accessToken }
-  //       //   : {}),
-  //       "user-agent": userAgentString as string,
-  //     },
-  //   }
-  // ).then((res) => {
-  //   const data = res.json();
-  //   return data;
-  // });
-  let questionList;
-  if (session) {
-    if (!params.query) return;
-    questionList = await getQuestionList(
-      params.query,
-      session.accessToken
-      // headersList
-    );
-  } else {
-    if (!params.query) return;
-    questionList = await getQuestionList(params.query);
-  }
+  const result = await fetch(
+    `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/v0/interview/questions?categoryValues=${params.query}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        // ...(session && session.accessToken
+        //   ? { authorization: session.accessToken }
+        //   : {}),
+        "user-agent": userAgentString as string,
+      },
+    }
+  ).then((res) => {
+    const data = res.json();
+    return data;
+  });
+  const questionList = result.data.pageData;
+  // let questionList;
+  // if (session) {
+  //   if (!params.query) return;
+  //   questionList = await getQuestionList(
+  //     params.query,
+  //     session.accessToken
+  //     // headersList
+  //   );
+  // } else {
+  //   if (!params.query) return;
+  //   questionList = await getQuestionList(params.query);
+  // }
 
   return (
     <QuestionMain
