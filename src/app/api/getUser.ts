@@ -2,7 +2,7 @@ type Params = {
   id: number | null | undefined;
   accessToken: string | undefined;
 };
-export const getUser = async (accessToken: string): Promise<any> => {
+export const getUser = async (accessToken: string , headers: any): Promise<any> => {
   if (!accessToken) {
     throw new Error("accessToken is required");
   }
@@ -11,7 +11,7 @@ export const getUser = async (accessToken: string): Promise<any> => {
   const requestOptions: RequestInit = {
     method: "GET",
     headers: {
-      "Content-Type": "application/json",
+      ...headers,
       authorization: accessToken,
     },
   };
