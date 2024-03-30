@@ -35,7 +35,10 @@ export async function login(accessToken: string) {
   //     },
   //   }
   // ).then((res) => res.json());
-  const user = await getUser(accessToken , headersList);
+  const user = await getUser(accessToken, {
+    "Content-Type": "application/json",
+    "user-agent": userAgentString as string,
+  });
   // Create the session
   const oneWeek = 7 * 24 * 60 * 60 * 1000;
   const expires = new Date(Date.now() + oneWeek);

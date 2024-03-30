@@ -15,9 +15,13 @@ export default function Home({
   // console.log("header", headersList);
   async function createSession() {
     "use server";
-    const token = await getAccesstoken(code, headersList);
-    const { accessTokenValue } = await token.json(); // Access the accessTokenValue property
-    await login(accessTokenValue);
+    const token = await getAccesstoken(code, {
+      "Content-Type": "application/json",
+      "user-agent": userAgentString as string,
+    }).then((res) => {
+      return res.accessTokenValue;
+    });
+    await login(token);
     redirect("/");
   }
   return <LoginAction createSession={createSession} />;

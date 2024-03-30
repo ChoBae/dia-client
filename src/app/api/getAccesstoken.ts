@@ -2,7 +2,10 @@ type Params = {
   id: number | null | undefined;
   accessToken: string | undefined;
 };
-export const getAccesstoken = async (code: string, headers: any): Promise<any> => {
+export const getAccesstoken = async (
+  code: string,
+  headers: any
+): Promise<any> => {
   if (!code) {
     throw new Error("code is required");
   }
@@ -17,7 +20,6 @@ export const getAccesstoken = async (code: string, headers: any): Promise<any> =
   try {
     const response = await fetch(apiUrl, requestOptions);
     const data = await response.json();
-    // console.log('test', data)
     if (data.status !== 200) {
       switch (response.status) {
         case 401:
