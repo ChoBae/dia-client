@@ -42,7 +42,9 @@ export default function Header({}: HeaderProps) {
     setIsMenuOpen(false);
   };
   const getSession = async () => {
-    const session = await fetch("/api/auth/getSession");
+    const session = await fetch(
+      `/auth/getSession`
+    );
     const data = await session.json();
     if (!data.session) return;
     setSession(data.session);

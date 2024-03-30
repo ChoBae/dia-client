@@ -21,28 +21,14 @@ const nextConfig = {
       },
     ];
   },
-  // async rewrites() {
-  //   return {
-  //     beforeFiles: [
-  //       {
-  //         source: "/api/v0/:path*",
-  //         destination: `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v0/:path*`,
-  //       },
-  //     ],
-  //     afterFiles: [
-  //       {
-  //         source: "/api/v0/:path*",
-  //         destination: `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v0/:path*`,
-  //       },
-  //     ],
-  //     fallback: [
-  //       {
-  //         source: "/:path*",
-  //         destination: `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v0/:path*`,
-  //       },
-  //     ],
-  //   };
-  // },
+  async rewrites() {
+    return [
+      {
+        source: '/api/v0/:path*',
+        destination: `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v0/:path*`,
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {
