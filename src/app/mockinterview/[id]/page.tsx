@@ -1,10 +1,6 @@
-import Header from "./components/Header";
 import PracticeMain from "./components/PracticeMain";
 import { getQuestionDetails } from "@/app/api/getQuestionDetails";
-import { getPracticeDetails } from "@/app/api/getPracticeDetails";
-import { getQuestionList } from "@/app/api/getQuestionList";
-import { Question } from "@/types/Question";
-
+import { getSession } from "../../../authLib";
 // export async function generateStaticParams() {
 //   // const lists = await getPracticeDetails();
 //   // const questionList = await getQuestionList();
@@ -16,11 +12,11 @@ import { Question } from "@/types/Question";
 //   return [{ id: "1" }, { id: "2" }, { id: "3" }];
 // }
 export default async function Main({ params }: { params: { id: number } }) {
+  const session = await getSession();
   const result = await getQuestionDetails({ id: params.id });
   return (
-    <main className="flex flex-col mx-auto py-12 w-screen h-[94vh] sm:max-h-[800px] sm:w-1/4 bg-[#F9F5FF] 2xl:w-1/3 no-scrollbar overflow-y-hidden">
-      {/* <main className="flex flex-col mx-auto py-20 h-full max-w-[450px] max-h-[1000px] overflow-y-hidden bg-[#E2D7FF] no-scrollbar"> */}
-      <PracticeMain question={result.data}></PracticeMain>
+    <main className="flex flex-col mx-auto pt-20 pb-8 w-screen h-[100dvh] sm:max-h-[1000px] sm:w-1/4 2xl:w-1/3  bg-[#F9F5FF]  no-scrollbar overflow-y-hidden">
+      <PracticeMain question={result.data} session={session}></PracticeMain>
     </main>
   );
 }

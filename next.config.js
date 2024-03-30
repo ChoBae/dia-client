@@ -22,12 +22,14 @@ const nextConfig = {
     ];
   },
   async rewrites() {
-    return [
-      {
-        source: "/api/v0/:path*",
-        destination: `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v0/:path*`,
-      },
-    ];
+    return {
+      fallback: [
+        {
+          source: "/proxy/:path*",
+          destination: `${process.env.NEXT_PUBLIC_SERVER_URL}/api/:path*`,
+        },
+      ],
+    };
   },
   images: {
     remotePatterns: [
@@ -39,19 +41,20 @@ const nextConfig = {
     ],
   },
   env: {
-    GITHUB_ID: process.env.GITHUB_ID,
-    GITHUB_SECRET: process.env.GITHUB_SECRET,
-    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+    NEXT_PUBLIC_GITHUB_ID: process.env.NEXT_PUBLIC_GITHUB_ID,
+    NEXT_PUBLIC_SECRETKEY: process.env.NEXT_PUBLIC_SECRETKEY,
     AWS_RDS_URI: process.env.AWS_RDS_URI,
     NEXT_PUBLIC_SERVER_URL: process.env.NEXT_PUBLIC_SERVER_URL,
+    NEXT_PUBLIC_CLIENT_URL: process.env.NEXT_PUBLIC_CLIENT_URL,
     NEXT_PUBLIC_CLOUDFRONT_URL: process.env.NEXT_PUBLIC_CLOUDFRONT_URL,
   },
   trailingSlash: true,
   experimental: {
     scrollRestoration: true,
+    serverActions: true,
   },
   // swcMinify: true, # nextjs 13 to default
   poweredByHeader: false,
+  reactStrictMode: false,
 };
 module.exports = nextConfig;

@@ -1,10 +1,10 @@
-import { Question } from "@/types/Question";
-import { getQuestionList } from "@/app/api/getQuestionList";
 import QuestionMain from "../components/QuestionMain";
 import { Metadata } from "next";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { Session } from "@/types/Session";
+import { getSession } from "../../../authLib";
+import { headers } from "next/headers";
+import { getQuestionList } from "@/app/api/getQuestionList";
+import { Question } from "@/types/Question";
+import axios from "axios";
 export const revalidate = 0;
 export const dynamic = "auto";
 export const metadata: Metadata = {
@@ -13,21 +13,54 @@ export const metadata: Metadata = {
 };
 
 export default async function Home({ params }: { params: { query: string } }) {
-  const session = await getServerSession(authOptions);
-  const typedSession = session as Session;
-  let questionList: Question[] = [];
+  const session = await getSession();
+  const headersList = headers();
+  const userAgentString = headersList.get("user-agent");
+  // const questionList = await fetch(
+  //   `@/api/question/getList/?query=${params.query}`,
+  //   {
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       ...(session && session.accessToken
+  //         ? { authorization: session.accessToken }
+  //         : {}),
+  //       "user-agent": userAgentString as string,
+  //     },
+  //   }
+  // ).then((res) => res.json());
+
+  // const result = await fetch(
+  //   `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/v0/interview/questions?categoryValues=${params.query}`,
+  //   {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       // ...(session && session.accessToken
+  //       //   ? { authorization: session.accessToken }
+  //       //   : {}),
+  //       "user-agent": userAgentString as string,
+  //     },
+  //   }
+  // ).then((res) => {
+  //   const data = res.json();
+  //   return data;
+  // });
+  // const questionList = result.data.pageData;
+  let questionList;
   if (session) {
-    questionList = await getQuestionList(
-      params.query,
-      typedSession.user.access_token
-    );
+    if (!params.query) return;
+    questionList = await getQuestionList(params.query, session.accessToken, {
+      "user-agent": userAgentString as string,
+    });
   } else {
+    if (!params.query) return;
     questionList = await getQuestionList(params.query);
   }
   return (
     <QuestionMain
       questionsData={questionList}
       query={params.query}
+      session={session}
     ></QuestionMain>
   );
 }

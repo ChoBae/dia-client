@@ -8,27 +8,29 @@ import { deleteHistory } from "@/app/api/deleteHistory";
 import type { Session } from "@/types/Session";
 import formatDateString from "@/utils/formatDateString";
 import convertToHourMinute from "@/utils/convertToHourMinute";
+import DeleteCircleIcon from "@/app/ui/icons/DeleteCircleIcon";
 
 export interface HistorySectionProps {
   id?: number;
   className?: string;
   history: HistoryType;
-  session: Session;
+  session?: Session;
+  theme?: "single" | "multi";
 }
-// const maxCharacterCount = 500;
 
 export default function HistorySection({
   id,
   className,
   history,
   session,
+  theme = "single",
 }: HistorySectionProps) {
   const handleDelete = async () => {
     if (session) {
       try {
         await deleteHistory({
           practiceHistoryPkValue: history.pkValue as number,
-          accessToken: session?.user.access_token,
+          accessToken: session?.accessToken,
         });
       } catch (e) {
         console.error("Delete operation failed", e);
@@ -38,11 +40,29 @@ export default function HistorySection({
   return (
     <div
       className={twMerge(
-        `flex relative px-5 py-[45px] bg-[#E2D7FF] rounded-[10px] h-full`,
+        `flex flex-col relative px-5 py-3 rounded-[10px] h-full ${
+          theme === "single" ? "bg-primary-100" : "bg-[#FFFEE5]"
+        }`,
         className
       )}
     >
-      <div className="whitespace-pre-wrap flex">
+      <div className="flex flex-row gap-1">
+        <p
+          className={`text-xs leading-[14.4px] font-semibold  ${
+            theme === "single" ? "text-primary-600" : "text-[#FDDA23]"
+          }`}
+        >
+          {history ? formatDateString(history.createdTimeValue) : ""}
+        </p>
+        {history ? (
+          <div className="flex justify-center items-center bg-white  rounded-[100px] px-[6px] py-[3px] cursor-pointer hover:opacity-70">
+            <p className="text-primary-gray-600 text-[8px] leading-[9.6px] font-semibold">
+              🎙️{" " + convertToHourMinute(history.elapsedTimeValue)}
+            </p>
+          </div>
+        ) : null}
+      </div>
+      <div className="whitespace-pre-wrap flex overflow-y-auto no-scrollbar my-3">
         {history ? (
           <p className="text-[14px] text-[#424242] leading-[22px] sm:text-lg font-medium">
             {history.contentValue}
@@ -53,24 +73,12 @@ export default function HistorySection({
           </p>
         )}
       </div>
-      <div className="absolute top-4 left-4">
-        <p className="text-xs leading-[14.4px] font-semibold text-primary-600">
-          {history ? formatDateString(history.createdTimeValue) : ""}
-        </p>
-      </div>
       {/* TODO: 추후 로그인후 저장 버튼이나 자동으로 저장되는 기능을 구현해야함 */}
       {session ? (
-        <DeleteIcon
+        <DeleteCircleIcon
           className="absolute bottom-2 left-3 hover:opacity-70"
           onClick={handleDelete}
-        ></DeleteIcon>
-      ) : null}
-      {history ? (
-        <div className="absolute top-2.5 right-3 flex bg-[#EEEEEE] rounded-[100px] px-[7px] py-[3px] cursor-pointer hover:opacity-70">
-          <p className="text-[#616161] text-[10px] leading-3">
-            🎙️{convertToHourMinute(history.elapsedTimeValue)}
-          </p>
-        </div>
+        ></DeleteCircleIcon>
       ) : null}
     </div>
   );

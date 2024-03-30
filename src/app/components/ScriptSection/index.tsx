@@ -3,37 +3,71 @@ import React, { useState, useEffect } from "react";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/solid";
 import Spinner from "@/app/components/Spinner";
 import EditIcon from "@/app/ui/icons/EditIcon";
-import { useSession } from "next-auth/react";
 import { getQuestionScript } from "@/app/api/getQuestionScript";
 import { editQuestionScript } from "@/app/api/editQuestionScript";
 import { saveQuestionScript } from "@/app/api/saveQuestionScript";
 import { twMerge } from "tailwind-merge";
 import type { Session } from "@/types/Session";
 import type { Script } from "@/types/Script";
+
 export interface Props {
   id: number;
   className?: string;
   placeholder?: string;
+  writeScript?: boolean;
+  session?: Session;
 }
 
 const maxCharacterCount = 3000;
 
-export default function ScriptSection({ id, className, placeholder }: Props) {
-  const { data: session, status } = useSession();
-  const typedSession = session as Session;
+export default function ScriptSection({
+  id,
+  className,
+  placeholder,
+  writeScript = true,
+  session,
+}: Props) {
   const [script, setScript] = useState<Script | undefined>(undefined);
   const [prevScript, setPrevScript] = useState<Script | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
+    // const fetchData = async () => {
+    //   if (session) {
+    //     const getScript = await getQuestionScript(
+    //       id,
+    //       typedSession?.user.access_token
+    //     );
+    //     if (getScript) setScript(getScript);
+    //   } else {
+    //     const savedScriptString = localStorage.getItem(`script=${id}`);
+    //     const savedScriptObj = savedScriptString
+    //       ? JSON.parse(savedScriptString)
+    //       : { contentValue: "" };
+    //     setScript(savedScriptObj);
+    //   }
+    // };
     const fetchData = async () => {
       if (session) {
-        const getScript = await getQuestionScript(
-          id,
-          typedSession?.user.access_token
-        );
-        if (getScript) setScript(getScript);
+        await fetch(
+          `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/question/getScript/?pkValue=${id}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              authorization: session.accessToken,
+            },
+          }
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            if (!data) {
+              return;
+            }
+            setScript(data as Script);
+          });
       } else {
         const savedScriptString = localStorage.getItem(`script=${id}`);
         const savedScriptObj = savedScriptString
@@ -42,24 +76,27 @@ export default function ScriptSection({ id, className, placeholder }: Props) {
         setScript(savedScriptObj);
       }
     };
-
     fetchData();
     setIsLoading(false);
-  }, [id, typedSession, session]);
-
+  }, [id]);
+  useEffect(() => {
+    if (isEditing) {
+      textAreaRef.current?.focus();
+    }
+  }, [isEditing]);
   const handleSaveScript = async () => {
     if (session && session.user) {
       if (prevScript) {
         await editQuestionScript({
           scriptPkValue: id,
           contentValue: script?.contentValue as string,
-          accessToken: typedSession?.user.access_token,
+          accessToken: session?.accessToken,
         });
       } else {
         await saveQuestionScript({
           questionPkValue: id,
           contentValue: script?.contentValue as string,
-          accessToken: typedSession?.user.access_token,
+          accessToken: session?.accessToken,
         });
       }
     } else {
@@ -72,14 +109,16 @@ export default function ScriptSection({ id, className, placeholder }: Props) {
 
   const handleSectionClick = () => {
     // console.log(isEditing, script);
-    if (isEditing || script?.contentValue) return;
+    if (isEditing || script?.contentValue || !writeScript) return;
     setIsEditing(true);
   };
   return (
     <div
       className={twMerge(
         `flex flex-col relative bg-[#FAFAFA] rounded-[5px] w-full ${
-          !isEditing || !script?.contentValue ? "cursor-pointer" : ""
+          (!isEditing || !script?.contentValue) && writeScript
+            ? "cursor-pointer"
+            : ""
         }`,
         className
       )}
@@ -91,6 +130,7 @@ export default function ScriptSection({ id, className, placeholder }: Props) {
         ) : isEditing ? (
           <>
             <textarea
+              ref={textAreaRef}
               value={script?.contentValue}
               placeholder={
                 placeholder
@@ -106,7 +146,7 @@ export default function ScriptSection({ id, className, placeholder }: Props) {
                     } as Script)
                 )
               }
-              className="w-full h-40 p-2 rounded-md bg-[#FAFAFA] focus:ring-blue-500"
+              className="w-full h-40 rounded-md bg-[#FAFAFA] text-[14px] focus:ring-blue-500"
             />
             <div className="absolute bottom-4 left-4 flex items-center">
               <XCircleIcon
@@ -147,7 +187,7 @@ export default function ScriptSection({ id, className, placeholder }: Props) {
           </p>
         </div>
       )}
-      {!isEditing && (
+      {!isEditing && writeScript && (
         <div
           className="absolute bottom-3 left-3 bg-white w-8 h-8 rounded-full px-[7px] py-[7px] mx-auto my-auto mt-2 cursor-pointer hover:opacity-70"
           onClick={() => {

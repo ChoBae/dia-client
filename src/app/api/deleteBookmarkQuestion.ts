@@ -5,9 +5,8 @@ type Params = {
 };
 export const deleteBookmarkQuestion = async (params: Params): Promise<void> => {
   const { pkValue, accessToken } = params;
-  // console.log('삭제 api', pkValue, accessToken)
-  const apiUrl = `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/v0/interview/questions/${pkValue}/bookmark`;
-  // const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v0/interview/questions/${pkValue}/bookmark`;
+  // const apiUrl = `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/v0/interview/questions/${pkValue}/bookmark`;
+  const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v0/interview/questions/${pkValue}/bookmark`;
 
   const requestOptions: RequestInit = {
     method: "DELETE",

@@ -9,7 +9,7 @@ import HomeIcon from "@/app/ui/icons/HomeIcon";
 import SolveIcon from "@/app/ui/icons/SolveIcon";
 import HistoryIcon from "@/app/ui/icons/HistoryIcon";
 import HomeFillIcon from "@/app/ui/icons/HomeFillIcon";
-import SolveFillIcon from "@/app/ui/icons/SolveFillIcon ";
+import SolveFillIcon from "@/app/ui/icons/SolveFillIcon";
 import HistoryFillIcon from "@/app/ui/icons/HistoryFillIcon";
 interface NavigationBarProps {
   // session: any;

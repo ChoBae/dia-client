@@ -2,23 +2,22 @@
 import React, { useState, useEffect } from "react";
 import CategoryButton from "./components/CategoryButton";
 import type { Question as QuestionType } from "@/types/Question";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { ToolTips } from "../ToolTips";
-import Question from "@/app/components/Question";
+import { Question } from "@/app/components/Question";
 import { Session } from "@/types/Session";
 import { TagBar } from "./components/TagBar";
 interface Props {
   questionsData: QuestionType[];
   query: string;
+  session: any;
 }
-export default function QuestionMain({ questionsData, query }: Props) {
-  const { data: session, status } = useSession();
-  const typedSession = session as Session;
+export default function QuestionMain({ questionsData, query, session }: Props) {
   const [currentTag, setCurrentTag] = useState(query);
   const [firstCheck, setFirstCheck] = useState<boolean>(false);
   const [questionList, setQuestionList] = useState<QuestionType[]>([]);
-
+  // const [session, setSession] = useState<Session | null>(null);
+  // console.log('여기서 확인', questionList)
   useEffect(() => {
     if (!session) {
       handleFirstCheck();
@@ -27,7 +26,7 @@ export default function QuestionMain({ questionsData, query }: Props) {
 
   useEffect(() => {
     setQuestionList(questionsData);
-  }, [questionsData]);
+  }, [questionsData, query]);
   const handleFirstCheck = async () => {
     // 로컬스트리지에서 처음 접속했는지에 대한 정보를 찾아본다
     const firstCheck = localStorage.getItem("firstCheck");
@@ -38,7 +37,7 @@ export default function QuestionMain({ questionsData, query }: Props) {
     }
   };
   return (
-    <main className="flex flex-col mx-auto w-full px-5 sm:px-6 py-16 sm:w-1/2 max-w-3xl no-scrollbar relative">
+    <main className="flex flex-col mx-auto w-full px-4 sm:px-6 py-16 sm:w-1/2 max-w-3xl no-scrollbar relative">
       <div className="sticky top-16 bg-white z-10">
         <div className="flex flex-row w-full mb-3 border-b-[1px] border-[#F5F5F5]">
           <Link href={`/solve/${currentTag}`} className="flex-1">
@@ -50,7 +49,7 @@ export default function QuestionMain({ questionsData, query }: Props) {
         </div>
         <TagBar
           currentTag={currentTag}
-          session={typedSession}
+          session={session}
           setQuestionList={setQuestionList}
         />
       </div>
@@ -64,9 +63,13 @@ export default function QuestionMain({ questionsData, query }: Props) {
               question={question}
               key={index}
               isDetail={true}
-              session={typedSession}
-            
-            />
+              session={session}
+            >
+              <Question.SubTitle className="text-primary-600">
+                개별연습
+              </Question.SubTitle>
+              <Question.Title>{question.korTitleValue}</Question.Title>
+            </Question>
           </Link>
         ))}
       </section>

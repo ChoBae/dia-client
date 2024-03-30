@@ -1,11 +1,11 @@
 export type Session = {
-  expires: string;
   user: {
-    pk: number;
-    nickname: string;
-    email: string;
-    access_token: string;
-    github_id: string;
-    image_url: string;
-  }
+    pkValue: number;
+    nicknameValue: string;
+    oauthIdValue: string;
+    oauthProviderValue: string;
+    imageUrlValue: string;
+  };
+  expires: string;
+  accessToken: string;
 };

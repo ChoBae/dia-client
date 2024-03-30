@@ -1,15 +1,25 @@
 "use client";
-import { useState } from "react";
-import { signOut } from "next-auth/react";
 import Image from "next/image";
 import type { User } from "@/types/User";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 interface ProfileToolbarProps {
   isOpen: boolean;
   user?: User;
   // loginHandler: () => void;
 }
 export default function ProfileToolbar({ isOpen, user }: ProfileToolbarProps) {
+  const router = useRouter();
+
+  const deleteSession = async () => {
+    await fetch("/auth/deleteSession", {
+      method: "DELETE",
+    });
+
+    // router.refresh();
+    window.location.reload();
+  };
+
   return (
     <div className={`flex relative transition-transform transform `}>
       {isOpen && (
@@ -22,10 +32,10 @@ export default function ProfileToolbar({ isOpen, user }: ProfileToolbarProps) {
                   className="mt-5 h-10 w-10 rounded-full justify-items-center items-center itmes-self-center"
                   width={30}
                   height={30}
-                  src={user.image_url || "/default-user.png"}
+                  src={user.imageUrlValue || "/default-user.png"}
                   alt="user Image"
                 />
-                <p className="font-semibold ">{user.nickname}</p>
+                <p className="font-semibold ">{user.nicknameValue}</p>
               </>
             ) : (
               <p className="font-semibold text-primary-600">
@@ -41,7 +51,7 @@ export default function ProfileToolbar({ isOpen, user }: ProfileToolbarProps) {
             {user ? (
               <li
                 className="p-1 text-sm font-medium px-4 py-2 cursor-pointer hover:bg-gray-200"
-                onClick={() => signOut()}
+                onClick={deleteSession}
               >
                 로그아웃
               </li>
