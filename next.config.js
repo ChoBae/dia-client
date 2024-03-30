@@ -26,7 +26,7 @@ const nextConfig = {
       fallback: [
         {
           source: "/proxy/:path*",
-          destination: `https://staging.api.d-i-a.run/api/:path*`,
+          destination: `${process.env.NEXT_PUBLIC_SERVER_URL}/api/:path*`,
         },
       ],
     };
