@@ -5,7 +5,6 @@ export const getQuestionList = async (
   accessToken?: string,
   headers?: HeadersInit
 ) => {
-
   const categoryValues = category
     .split(",")
     .map((tag) => mapTagToPurpose(tag))
@@ -19,7 +18,6 @@ export const getQuestionList = async (
         "Content-Type": "application/json",
         ...(accessToken ? { authorization: accessToken } : {}),
         ...headers,
-      
       } as HeadersInit,
       cache: "no-cache",
     }
