@@ -14,16 +14,6 @@ export const metadata: Metadata = {
 
 export default async function Home({ params }: { params: { query: string } }) {
   const session = await getSession();
-  // console.log('session', session.accessToken)
-  // let questionList: Question[] = [];
-  // if (session) {
-  //   if (!params.query) return;
-  //   questionList = await getQuestionList(params.query, session.accessToken,
-  //   );
-  // } else {
-  //   if (!params.query) return;
-  //   questionList = await getQuestionList(params.query);
-  // }
   const headersList = headers();
   const userAgentString = headersList.get("user-agent");
   // const questionList = await fetch(
@@ -38,19 +28,7 @@ export default async function Home({ params }: { params: { query: string } }) {
   //     },
   //   }
   // ).then((res) => res.json());
-  const questionList = await axios.get(
-    `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/question/getList/?query=${params.query}`,
-    {
-      headers: {
-        "Content-Type": "application/json",
-        ...(session && session.accessToken
-          ? { authorization: session.accessToken }
-          : {}),
-        "user-agent": userAgentString as string,
-      },
-    }
-  );
-  console.log("questionList", questionList.data);
+
   // const result = await fetch(
   //   `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/v0/interview/questions?categoryValues=${params.query}`,
   //   {
@@ -67,34 +45,24 @@ export default async function Home({ params }: { params: { query: string } }) {
   //   const data = res.json();
   //   return data;
   // });
-  // const questionList = await getQuestionList(
-  //   params.query,
-  //   sessionsession.accessToken,
-  //   headersList
-  // );
-  // let questionList;
-  // if (session) {
-  //   if (!params.query) return;
-  //   questionList = await getQuestionList(
-  //     params.query,
-  //     session.accessToken,
-  //     // headersList
-  //   );
-  // } else {
-  //   if (!params.query) return;
-  //   questionList = await getQuestionList("backend");
-  // }
+  let questionList;
+  if (session) {
+    if (!params.query) return;
+    questionList = await getQuestionList(
+      params.query,
+      session.accessToken
+      // headersList
+    );
+  } else {
+    if (!params.query) return;
+    questionList = await getQuestionList(params.query);
+  }
 
   return (
-    // <QuestionMain
-    //   questionsData={questionList}
-    //   query={params.query}
-    //   session={session}
-    // ></QuestionMain>
-    <div>
-      {questionList.data.map((question: Question) => (
-        <div key={question.pkValue}>{question.korTitleValue}</div>
-      ))}
-    </div>
+    <QuestionMain
+      questionsData={questionList}
+      query={params.query}
+      session={session}
+    ></QuestionMain>
   );
 }
