@@ -110,6 +110,7 @@ export default function Header({}: HeaderProps) {
         <ProfileToolbar
           isOpen={isProfileToolbarOpen}
           user={session?.user}
+          setIsProfileToolbarOpen={setIsProfileToolbarOpen}
           // loginHandler={() =>
           //   router.push(`/signIn/${window.document.location.href}`)
           // }
