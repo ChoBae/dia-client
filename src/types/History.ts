@@ -8,5 +8,5 @@ export interface HistoryType {
   contentValue: string;
   filePathValue: string | null;
   createdTimeValue: string;
-  starValue: boolean;
+  starValue?: boolean;
 }
