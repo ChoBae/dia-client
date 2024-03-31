@@ -9,6 +9,10 @@ import type { Session } from "@/types/Session";
 import formatDateString from "@/utils/formatDateString";
 import convertToHourMinute from "@/utils/convertToHourMinute";
 import DeleteCircleIcon from "@/app/ui/icons/DeleteCircleIcon";
+import StarFillIcon from "@/app/ui/icons/StarFillIcon";
+import StarIcon from "@/app/ui/icons/StarIcon";
+import { addBookmarkHistory } from "@/app/api/addBookmarkHistory";
+import { deleteBookmarkHistory } from "@/app/api/deleteBookmarkHistory";
 
 export interface HistorySectionProps {
   id?: number;
@@ -30,6 +34,30 @@ export default function HistorySection({
       try {
         await deleteHistory({
           practiceHistoryPkValue: history.pkValue as number,
+          accessToken: session?.accessToken,
+        });
+      } catch (e) {
+        console.error("Delete operation failed", e);
+      }
+    }
+  };
+  const handleAddBookmark = async () => {
+    if (session) {
+      try {
+        await addBookmarkHistory({
+          pkValue: history.pkValue as number,
+          accessToken: session?.accessToken,
+        });
+      } catch (e) {
+        console.error("Bookmark operation failed", e);
+      }
+    }
+  };
+  const handleRemoveBookmark = async () => {
+    if (session) {
+      try {
+        await deleteBookmarkHistory({
+          pkValue: history.pkValue as number,
           accessToken: session?.accessToken,
         });
       } catch (e) {
@@ -73,13 +101,25 @@ export default function HistorySection({
           </p>
         )}
       </div>
-      {/* TODO: 추후 로그인후 저장 버튼이나 자동으로 저장되는 기능을 구현해야함 */}
+      {/* {session && (
+        <>
+          <DeleteCircleIcon
+            className="absolute bottom-2 left-3 hover:opacity-70"
+            onClick={handleDelete}
+          ></DeleteCircleIcon>
+        </>
+      )}
       {session ? (
-        <DeleteCircleIcon
-          className="absolute bottom-2 left-3 hover:opacity-70"
-          onClick={handleDelete}
-        ></DeleteCircleIcon>
-      ) : null}
+        <StarFillIcon
+          className="absolute top-1 right-1"
+          onClick={handleRemoveBookmark}
+        />
+      ) : (
+        <StarIcon
+          className="absolute top-1 right-1"
+          onClick={handleAddBookmark}
+        />
+      )} */}
     </div>
   );
 }

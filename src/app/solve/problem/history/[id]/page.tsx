@@ -48,6 +48,7 @@ export default async function Home({ params }: { params: { id: number } }) {
   } else {
     result = await getQuestionDetails({ id: params.id });
   }
+  console.log('히스토리', result)
   return (
     <main className="flex flex-col mx-auto py-20 h-[100dvh] max-w-[500px] max-h-[1000px] overflow-y-hidden bg-white no-scrollbar">
       <HistoryResult
