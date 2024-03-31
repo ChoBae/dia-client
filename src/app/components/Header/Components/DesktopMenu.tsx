@@ -1,7 +1,13 @@
+import { Session } from "@/types/Session";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-
-export default function DesktopMenu() {
+import LoginButton from "./LoginButton";
+import Image from "next/image";
+type Props = {
+  session?: Session;
+  handleProfileOnClick : () => void;
+};
+export default function DesktopMenu({ session,handleProfileOnClick }: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const handleLogoClick = () => {
@@ -20,6 +26,20 @@ export default function DesktopMenu() {
         >
           문제 풀기
         </Link>
+        {session && session.user ? (
+          <>
+            <Image
+              className="h-6 w-6 sm:h-8 sm:w-8 rounded-full mx-auto my-auto cursor-pointer hover:opacity-80"
+              width={20}
+              height={20}
+              src={session.user?.imageUrlValue || "/images/default-profile.png"}
+              alt=""
+              onClick={handleProfileOnClick}
+            />
+          </>
+        ) : (
+          <LoginButton onClick={handleProfileOnClick}></LoginButton>
+        )}
       </div>
     </div>
   );

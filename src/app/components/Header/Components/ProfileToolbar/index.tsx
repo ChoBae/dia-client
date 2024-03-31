@@ -27,7 +27,7 @@ export default function ProfileToolbar({
   };
 
   return (
-    <OverlayClickHandler onClick={() => setIsProfileToolbarOpen(false)}>
+    // <OverlayClickHandler onClick={() => setIsProfileToolbarOpen(false)}>
       <div className={`flex relative transition-transform transform `}>
         {isOpen && (
           <div className="w-72 divide-y divide-gray-100 absolute top-1 right-2 bg-white border rounded-lg shadow-md ">
@@ -78,6 +78,6 @@ export default function ProfileToolbar({
           </div>
         )}
       </div>
-    </OverlayClickHandler>
+    // </OverlayClickHandler>
   );
 }
