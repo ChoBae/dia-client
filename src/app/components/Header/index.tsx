@@ -36,7 +36,7 @@ export default function Header({}: HeaderProps) {
     }
   };
   const handleDesktopMenuClick = () => {
-    console.log('desktop', isProfileToolbarOpen)
+  
     setIsProfileToolbarOpen((prev) => !prev);
   };
 
