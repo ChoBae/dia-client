@@ -112,12 +112,12 @@ export default function HistorySection({
       {session ? (
         history.starValue ? (
           <StarFillIcon
-            className="absolute top-1 right-1"
+            className="absolute top-1 right-1 cursor-pointer"
             onClick={handleRemoveBookmark}
           />
         ) : (
           <StarIcon
-            className="absolute top-1 right-1"
+            className="absolute top-1 right-1 cursor-pointer"
             onClick={handleAddBookmark}
           />
         )

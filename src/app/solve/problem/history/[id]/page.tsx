@@ -6,6 +6,7 @@ import { Question } from "@/types/Question";
 import { HistoryType } from "@/types/History";
 import { getSession } from "../../../../../authLib";
 import { headers } from "next/headers";
+import { getQuestionHistory } from "@/app/api/getQuestionHistory";
 export const dynamic = "force-dynamic";
 
 export const generateMetadata = async ({ params }: any): Promise<Metadata> => {
@@ -23,32 +24,26 @@ export default async function Home({ params }: { params: { id: number } }) {
   let result;
   let question;
   if (session) {
-    question = await fetch(
-      `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/question/getQuestion/?pkValue=${params.id}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: session.accessToken,
-          "user-agent": userAgentString as string,
-        },
-      }
-    ).then((res) => res.json());
-    result = await await fetch(
-      `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/question/getHistoryList/?pkValue=${params.id}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: session.accessToken,
-          "user-agent": userAgentString as string,
-        },
-      }
-    ).then((res) => res.json());
+    question = await getQuestionDetails({
+      id: params.id,
+      accessToken: session?.accessToken,
+      headers: {
+        "user-agent": userAgentString as string,
+        ...(session && session.accessToken
+          ? { authorization: session.accessToken }
+          : {}),
+      },
+    });
+    result = await getQuestionHistory(params.id, session.accessToken, {
+      "user-agent": userAgentString as string,
+      ...(session && session.accessToken
+        ? { authorization: session.accessToken }
+        : {}),
+    });
   } else {
     result = await getQuestionDetails({ id: params.id });
   }
-  
+
   return (
     <main className="flex flex-col mx-auto py-20 h-[100dvh] max-w-[500px] max-h-[1000px] overflow-y-hidden bg-white no-scrollbar">
       <HistoryResult

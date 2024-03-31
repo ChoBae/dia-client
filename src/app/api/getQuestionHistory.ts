@@ -2,10 +2,12 @@ import type { HistoryType } from "@/types/History";
 type Params = {
   id: number | null | undefined;
   accessToken: string | undefined;
+  headers?: HeadersInit;
 };
 export const getQuestionHistory = async (
   id: number,
-  accessToken: string
+  accessToken: string,
+  headers?: HeadersInit
 ): Promise<HistoryType[] | null> => {
   if (!id) {
     throw new Error("id is required");
@@ -14,13 +16,12 @@ export const getQuestionHistory = async (
     return null;
   }
 
-  // const apiUrl = `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/v0/interview/practice/histories?questionPkValue=${id}`;
   const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v0/interview/practice/histories?questionPkValue=${id}`;
   const requestOptions: RequestInit = {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      authorization: `${accessToken}`,
+      ...headers,
     },
   };
 
