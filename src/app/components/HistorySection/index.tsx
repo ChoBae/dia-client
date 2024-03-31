@@ -13,7 +13,7 @@ import StarFillIcon from "@/app/ui/icons/StarFillIcon";
 import StarIcon from "@/app/ui/icons/StarIcon";
 import { addBookmarkHistory } from "@/app/api/addBookmarkHistory";
 import { deleteBookmarkHistory } from "@/app/api/deleteBookmarkHistory";
-
+import { useRouter } from "next/navigation";
 export interface HistorySectionProps {
   id?: number;
   className?: string;
@@ -29,6 +29,7 @@ export default function HistorySection({
   session,
   theme = "single",
 }: HistorySectionProps) {
+  const router = useRouter();
   const handleDelete = async () => {
     if (session) {
       try {
@@ -36,6 +37,7 @@ export default function HistorySection({
           practiceHistoryPkValue: history.pkValue as number,
           accessToken: session?.accessToken,
         });
+        router.refresh();
       } catch (e) {
         console.error("Delete operation failed", e);
       }
@@ -48,6 +50,7 @@ export default function HistorySection({
           pkValue: history.pkValue as number,
           accessToken: session?.accessToken,
         });
+        router.refresh();
       } catch (e) {
         console.error("Bookmark operation failed", e);
       }
@@ -60,6 +63,7 @@ export default function HistorySection({
           pkValue: history.pkValue as number,
           accessToken: session?.accessToken,
         });
+        router.refresh();
       } catch (e) {
         console.error("Delete operation failed", e);
       }

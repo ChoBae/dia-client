@@ -29,25 +29,18 @@ export default async function Home({ params }: { params: { id: number } }) {
       accessToken: session?.accessToken,
       headers: {
         "user-agent": userAgentString as string,
-        ...(session && session.accessToken
-          ? { authorization: session.accessToken }
-          : {}),
       },
     });
     result = await getQuestionHistory(params.id, session.accessToken, {
       "user-agent": userAgentString as string,
-      ...(session && session.accessToken
-        ? { authorization: session.accessToken }
-        : {}),
     });
   } else {
     result = await getQuestionDetails({ id: params.id });
   }
-
   return (
     <main className="flex flex-col mx-auto py-20 h-[100dvh] max-w-[500px] max-h-[1000px] overflow-y-hidden bg-white no-scrollbar">
       <HistoryResult
-        question={question as Question}
+        question={question.data as Question}
         historyList={result as HistoryType[]}
         session={session}
       ></HistoryResult>

@@ -31,17 +31,9 @@ export default async function Main({ params }: { params: { id: number } }) {
   let questionList: Question[] = [];
   if (session) {
     if (!params.id) return;
-    questionList = await fetch(
-      `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/question/getList/?query=backend`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: session.accessToken,
-          "user-agent": userAgentString as string,
-        },
-      }
-    ).then((res) => res.json());
+    questionList = await getQuestionList("backend", session.accessToken, {
+      "user-agent": userAgentString as string,
+    });
   } else {
     if (!params.id) return;
     questionList = await getQuestionList("backend");

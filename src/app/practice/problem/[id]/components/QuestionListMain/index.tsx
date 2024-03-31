@@ -9,6 +9,8 @@ import { Modal } from "@/app/components/Modal";
 import Button from "@/app/components/Button";
 import ShareIcon from "@/app/ui/icons/ShareIcon";
 import copyToClipboard from "@/utils/copyToClipBoard";
+import PolygonIcon from "@/app/ui/icons/PolygonIcon";
+import QuestionDropdown from "../QuestionDropdown";
 
 interface Props {
   practice: any;
@@ -19,7 +21,7 @@ interface Props {
 export default function QuestionListMain({
   questionList,
   practice,
-  session
+  session,
 }: // session,
 Props) {
   const router = useRouter();
@@ -67,30 +69,19 @@ Props) {
         <Question.Title>{practice.korTitleValue}</Question.Title>
       </Question>
       <div className="relative flex flex-col flex-grow h-3/5 mt-5 py-2">
-        <div className="flex flex-row gap-[9px] mb-2 pl-4">
-          <div className="bg-primary-600 h-[6px] w-[6px] rounded-full mt-1" />
-          <h3 className="text-primary-gray-500 text-[14px] leading-[16.8px] font-normal">
-            각 문제를 클릭 후 스크립트를 미리 확인해보세요
+        <div className="flex flex-row gap-1 mb-2 pl-4">
+          <PolygonIcon className="mt-1" />
+          <h3 className="text-primary-gray-600 text-[14px] leading-[16.8px] font-normal">
+            아래의 문제들이 랜덤으로 출제됩니다.
           </h3>
         </div>
-        <div className="absolute top-3 left-4 ml-0.5 bg-[#E0E0E0] h-3 w-[1px]" />
         <div className="flex flex-col h-full relative gap-3 overflow-y-auto no-scrollbar">
           {questionList.map((question: QuestionType, index: number) => (
-            <Question
+            <QuestionDropdown
               question={question}
-              key={index}
-              isBookmarkOn={session ? true : false}
-            >
-              <Question.SubTitle className="text-primary-600">
-                개별연습
-              </Question.SubTitle>
-              <Question.Title>{question.korTitleValue}</Question.Title>
-              {index === questionList.length - 1 ? (
-                ""
-              ) : (
-                <div className="absolute -bottom-3 left-4 ml-0.5 bg-[#E0E0E0] h-3 w-[1px]" />
-              )}
-            </Question>
+              session={session}
+              key={question.pkValue}
+            ></QuestionDropdown>
           ))}
         </div>
       </div>

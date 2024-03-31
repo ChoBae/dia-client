@@ -24,5 +24,10 @@ export default function Home({
     await login(token);
     redirect("/");
   }
-  return <LoginAction createSession={createSession} />;
+  return (
+    <div>
+      <LoginAction createSession={createSession} />
+      Loading...
+    </div>
+  );
 }

@@ -21,6 +21,7 @@ export const getQuestionHistory = async (
     method: "GET",
     headers: {
       "Content-Type": "application/json",
+      authorization: `${accessToken}`,
       ...headers,
     },
   };
