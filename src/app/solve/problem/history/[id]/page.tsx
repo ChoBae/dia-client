@@ -15,27 +15,6 @@ export const generateMetadata = async ({ params }: any): Promise<Metadata> => {
     // description: data.description,
   };
 };
-const dummyResults = [
-  {
-    pkValue: 1,
-    typeValue: "SINGLE",
-    elapsedTimeValue: 30,
-    contentValue: "첫번째 대답",
-    createdTimeValue: "2021-10-10T00:00:00",
-  },
-  {
-    pkValue: 2,
-    typeValue: "SINGLE",
-    elapsedTimeValue: 60,
-    contentValue: "2번째 대답",
-    createdTimeValue: "2021-10-10T00:00:00",
-  },
-];
-
-const dummyQuestion = {
-  pkValue: 1,
-  korTitleValue: "테스트 질문",
-};
 
 export default async function Home({ params }: { params: { id: number } }) {
   const session = await getSession();
@@ -74,6 +53,7 @@ export default async function Home({ params }: { params: { id: number } }) {
       <HistoryResult
         question={question as Question}
         historyList={result as HistoryType[]}
+        session={session}
       ></HistoryResult>
     </main>
   );

@@ -37,6 +37,7 @@ export default function HistoryResult({ question, historyList, session }: Props)
               id={question.pkValue}
               className={historyList.length > 0 ? "h-2/5" : "h-full"}
               writeScript={false}
+              session={session}
             ></ScriptSection>
             <div
               onClick={() => setIsFavorite(!isFavorite)}

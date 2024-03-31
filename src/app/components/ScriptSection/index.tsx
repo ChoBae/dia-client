@@ -181,8 +181,8 @@ export default function ScriptSection({
 
       {script && (
         <div className="absolute bottom-2 right-4 ">
-          <p className="text-xs leading-7 font-medium text-[#D1C4E9]">
-            <span className="text-[#E2D7FF]">{script.contentValue.length}</span>
+          <p className="text-xs leading-7 font-medium text-primary-gray-400">
+            <span className="text-primary-gray-600">{script.contentValue.length}</span>
             {` / ${maxCharacterCount}`}
           </p>
         </div>
