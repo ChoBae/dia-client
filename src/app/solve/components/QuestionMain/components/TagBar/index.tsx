@@ -19,22 +19,22 @@ export const TagBar = ({ currentTag, session, setQuestionList }: Props) => {
   const tags = getTags();
   const router = useRouter();
   const [bookmarkOn, setBookmarkOn] = useState<boolean>(false);
-  useEffect(() => {
-    const fetchQuestionList = async () => {
-      if (!bookmarkOn) {
-        const questionList = await getQuestionList(
-          currentTag,
-          session?.accessToken as string
-        ); // 여기서 적절한 함수를 호출하여 원래 리스트를 가져와야 합니다.
-        setQuestionList(questionList);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchQuestionList = async () => {
+  //     if (bookmarkOn) {
+  //       const questionList = await getQuestionList(
+  //         currentTag,
+  //         session?.accessToken as string
+  //       );
+  //       console.log('북마크된 리스트', questionList)
+  //       setQuestionList(questionList);
+  //     }
+  //   };
 
-    fetchQuestionList();
-  }, [bookmarkOn, currentTag, setQuestionList]);
+  //   fetchQuestionList();
+  // }, [bookmarkOn, currentTag, setQuestionList, session]);
   const handleBookmark = async () => {
     if (bookmarkOn) {
-      // setBookmarkOn(false);
       router.refresh();
     } else {
       const questionList = await getBookmarkList(
