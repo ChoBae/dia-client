@@ -101,7 +101,7 @@ export default function HistorySection({
           </p>
         )}
       </div>
-      {/* {session && (
+      {session && (
         <>
           <DeleteCircleIcon
             className="absolute bottom-2 left-3 hover:opacity-70"
@@ -110,16 +110,18 @@ export default function HistorySection({
         </>
       )}
       {session ? (
-        <StarFillIcon
-          className="absolute top-1 right-1"
-          onClick={handleRemoveBookmark}
-        />
-      ) : (
-        <StarIcon
-          className="absolute top-1 right-1"
-          onClick={handleAddBookmark}
-        />
-      )} */}
+        history.starValue ? (
+          <StarFillIcon
+            className="absolute top-1 right-1"
+            onClick={handleRemoveBookmark}
+          />
+        ) : (
+          <StarIcon
+            className="absolute top-1 right-1"
+            onClick={handleAddBookmark}
+          />
+        )
+      ) : null}
     </div>
   );
 }
