@@ -10,12 +10,13 @@ import ResultSession from "../ResultSession";
 import type { PracticeResult } from "@/types/PracticeResult";
 import type { Question } from "@/types/Question";
 import { Session } from "@/types/Session";
+import { PracticeDetail } from "@/types/Practice";
 
 interface Props {
-  questionList: Question[];
+  practice: PracticeDetail;
   session?: Session
 }
-export default function MockPracticeMain({ questionList,session }: Props) {
+export default function MockPracticeMain({ practice,session }: Props) {
   const [isView, setIsView] = useState<number | null>(0); // 0: 안내 페이지, 1: 실전연습 중인 페이지 2: 결과 페이지
   const [resultList, setResultList] = useState<PracticeResult[]>([]);
   const ViewPage = () => {
@@ -25,7 +26,7 @@ export default function MockPracticeMain({ questionList,session }: Props) {
       case 1:
         return (
           <MockPracticeSession
-            questionList={questionList}
+            questionList={practice.questionAndScripts}
             setIsView={setIsView}
             setResultList={setResultList}
             session={session}
@@ -39,13 +40,7 @@ export default function MockPracticeMain({ questionList,session }: Props) {
   };
   return (
     <main className="flex flex-col pt-20 pb-8 h-[100dvh] overflow-y-auto no-scrollbar w-full mx-auto sm:w-1/4 sm:h-[1000px]">
-      {/* <MockPracticeHeader isView={isView} /> */}
       <ViewPage />
-      {/* <MockPracticeSession
-        questionList={questionList}
-        setIsView={setIsView}
-        setResultList={setResultList}
-      /> */}
     </main>
   );
 }

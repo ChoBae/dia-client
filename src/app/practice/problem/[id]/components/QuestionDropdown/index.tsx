@@ -9,22 +9,18 @@ import UpIcon from "@/app/ui/icons/UpIcon";
 type Props = {
   question: QuestionType;
   session?: Session;
+  script?: Script;
 };
 const maxCharacterCount = 3000;
-export default function QuestionDropdown({ question, session }: Props) {
+export default function QuestionDropdown({ question, session, script }: Props) {
   const [isToggle, setIsToggle] = useState<boolean>(false);
-  const [script, setScript] = useState<Script | undefined>(undefined);
+  const [isScript, setIsScript] = useState<Script | undefined>(script);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   useEffect(() => {
     if (isToggle && question.pkValue && script === undefined) {
       const fetchScript = async () => {
         if (session) {
-          setIsLoading(true);
-          const result = await getQuestionScript(
-            question.pkValue,
-            session?.accessToken as string
-          );
-          if (result) setScript(result);
+          setIsScript(script)
         } else {
           const savedScriptString = localStorage.getItem(
             `script=${question.pkValue}`
@@ -32,12 +28,12 @@ export default function QuestionDropdown({ question, session }: Props) {
           const savedScriptObj = savedScriptString
             ? JSON.parse(savedScriptString)
             : { contentValue: "" };
-          setScript(savedScriptObj);
+          setIsScript(savedScriptObj);
         }
       };
       fetchScript();
-      setIsLoading(false);
     }
+    setIsLoading(false);
   }, [isToggle]);
   return (
     <>
@@ -77,9 +73,9 @@ export default function QuestionDropdown({ question, session }: Props) {
               <Spinner />
             ) : (
               <div className="whitespace-pre-wrap flex w-full">
-                {script && script.contentValue ? (
+                {isScript && isScript.contentValue ? (
                   <p className="text-[14px] text-primary-gray-800  leading-[22px] sm:text-lg font-normal">
-                    {script.contentValue}
+                    {isScript.contentValue}
                   </p>
                 ) : (
                   <p className="text-[14px] text-primary-gray-400 leading-[22px] sm:text-lg font-medium">
@@ -90,14 +86,14 @@ export default function QuestionDropdown({ question, session }: Props) {
             )}
           </div>
 
-            <div className="absolute bottom-2 right-4 ">
-              <p className="text-xs leading-7 font-medium text-primary-gray-400">
-                <span className="text-primary-gray-600">
-                  {script ? script.contentValue.length : '0'}
-                </span>
-                {` / ${maxCharacterCount}`}
-              </p>
-            </div>
+          <div className="absolute bottom-2 right-4 ">
+            <p className="text-xs leading-7 font-medium text-primary-gray-400">
+              <span className="text-primary-gray-600">
+                {isScript?.contentValue ? isScript.contentValue.length : "0"}
+              </span>
+              {` / ${maxCharacterCount}`}
+            </p>
+          </div>
         </div>
       )}
     </>

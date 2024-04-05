@@ -33,7 +33,7 @@ const dummyhistorys = [
 
 export default function QuestionMain({
   questionData,
-  session
+  session,
 }: // session,
 Props) {
   // const { data: session, status } = useSession();
@@ -57,7 +57,7 @@ Props) {
     };
 
     fetchData();
-  }, [questionData,  session]);
+  }, [questionData, session]);
 
   const solveQuestion = () => {
     router.push(`/mockinterview/${questionData.pkValue}`);

@@ -11,15 +11,15 @@ import ShareIcon from "@/app/ui/icons/ShareIcon";
 import copyToClipboard from "@/utils/copyToClipBoard";
 import PolygonIcon from "@/app/ui/icons/PolygonIcon";
 import QuestionDropdown from "../QuestionDropdown";
+import { PracticeDetail } from "@/types/Practice";
+import { Script } from "@/types/Script";
 
 interface Props {
-  practice: any;
-  questionList: QuestionType[];
+  practice: PracticeDetail;
   session?: any;
 }
 
 export default function QuestionListMain({
-  questionList,
   practice,
   session,
 }: // session,
@@ -58,15 +58,11 @@ Props) {
           <ShareIcon />
         </div>
       </div>
-      <Question
-        question={practice}
-        session={session}
-        isBookmarkOn={session ? true : false}
-      >
+      <Question session={session} isBookmarkOn={false}>
         <Question.SubTitle className="text-[#FEEB89]">
           실전연습
         </Question.SubTitle>
-        <Question.Title>{practice.korTitleValue}</Question.Title>
+        <Question.Title>{practice.titleValue}</Question.Title>
       </Question>
       <div className="relative flex flex-col flex-grow h-3/5 mt-5 py-2">
         <div className="flex flex-row gap-1 mb-2 pl-4">
@@ -76,13 +72,25 @@ Props) {
           </h3>
         </div>
         <div className="flex flex-col h-full relative gap-3 overflow-y-auto no-scrollbar">
-          {questionList.map((question: QuestionType, index: number) => (
-            <QuestionDropdown
-              question={question}
-              session={session}
-              key={question.pkValue}
-            ></QuestionDropdown>
-          ))}
+          {practice.questionAndScripts.map(
+            (questionAndScripts, index: number) => (
+              <QuestionDropdown
+                question={questionAndScripts.question}
+                session={session}
+                key={questionAndScripts.question.pkValue}
+                script={
+                  {
+                    contentValue: questionAndScripts.script?.content,
+                    pkValue: questionAndScripts.script?.pk,
+                    createdTimeValue: questionAndScripts.script?.createdTime,
+                    lastModifiedTimeValue:
+                      questionAndScripts.script?.lastModifiedTime,
+                    lastReadTimeValue: questionAndScripts.script?.lastReadTime,
+                  } as Script
+                }
+              ></QuestionDropdown>
+            )
+          )}
         </div>
       </div>
       <Button onClick={handleClick}>실전연습 시작하기</Button>

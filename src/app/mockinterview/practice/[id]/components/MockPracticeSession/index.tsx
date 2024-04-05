@@ -18,8 +18,9 @@ import { MicroCircleIcon } from "@/app/ui/icons/MicroCircleIcon";
 import LayerLogoYellowIcon from "@/app/ui/icons/LayerLogoYellowIcon";
 import Header from "@/app/mockinterview/[id]/components/Header";
 import Typed from "typed.js";
+import type { QuestionAndScript } from "@/types/Practice";
 type Props = {
-  questionList: Question[];
+  questionList: QuestionAndScript[];
   setIsView: (isView: number) => void;
   setResultList: (resultList: PracticeResult[]) => void;
   session?: Session;
@@ -99,7 +100,7 @@ export default function MockPraceticeSession(props: Props) {
           await savePractice({
             practiceResult: {
               interviewQuestionPkValue: questionList[questionIdx]
-                .pkValue as number,
+                .question.pkValue as number,
               contentValue: interimResult as string,
               typeValue: "MULTI",
               elapsedTimeValue: time,
@@ -113,7 +114,7 @@ export default function MockPraceticeSession(props: Props) {
               ...prev,
               {
                 interviewQuestionPkValue: questionList[questionIdx]
-                  .pkValue as number,
+                  .question.pkValue as number,
                 contentValue: interimResult as string,
                 typeValue: "MULTI",
                 elapsedTimeValue: time,
@@ -222,7 +223,7 @@ export default function MockPraceticeSession(props: Props) {
         {questionList && questionIdx !== null && questionIdx !== undefined && (
           <TTSPlayer
             isStart={isStart}
-            voice={questionList[questionIdx].voices[0] as VoiceType}
+            voice={questionList[questionIdx].question.voices[0] as VoiceType}
             handleStop={handleStop}
             setDuration={setDuration}
             isEnd={isModalOpen}
