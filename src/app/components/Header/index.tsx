@@ -27,13 +27,17 @@ export default function Header({}: HeaderProps) {
       router.push("/"); // Navigate to the main page if on a different page
     }
   };
-  const handleMenuClick = () => {
+  const handleMobileMenuClick = async () => {
     if (isMenuOpen) {
-      hideMenu();
+      await hideMenu();
     } else {
       setAnimationClass("animate-fadeInRight");
       setIsMenuOpen(true);
     }
+  };
+  const handleDesktopMenuClick = () => {
+  
+    setIsProfileToolbarOpen((prev) => !prev);
   };
 
   const hideMenu = async () => {
@@ -42,9 +46,7 @@ export default function Header({}: HeaderProps) {
     setIsMenuOpen(false);
   };
   const getSession = async () => {
-    const session = await fetch(
-      `/auth/getSession`
-    );
+    const session = await fetch(`/auth/getSession`);
     const data = await session.json();
     if (!data.session) return;
     setSession(data.session);
@@ -67,36 +69,15 @@ export default function Header({}: HeaderProps) {
           </div>
           {/* 메뉴 */}
           <div className="ml-10 flex justify-items-end justify-self-end  space-x-3">
-            <DesktopMenu />
-            <MobileMenu onClick={handleMenuClick}></MobileMenu>
-            {session && session.user ? (
-              <>
-                <Image
-                  className="h-6 w-6 sm:h-8 sm:w-8 rounded-full mx-auto my-auto cursor-pointer hover:opacity-80"
-                  width={20}
-                  height={20}
-                  src={
-                    session.user?.imageUrlValue || "/images/default-profile.png"
-                  }
-                  alt=""
-                  onClick={() => setIsProfileToolbarOpen(!isProfileToolbarOpen)}
-                />
-                {/* <ProfileToolbar
-                  isOpen={isProfileToolbarOpen}
-                  user={session.user}
-                  loginHandler={() => router.push("/signIn")}
-                ></ProfileToolbar> */}
-              </>
-            ) : (
-              <LoginButton
-                onClick={() => setIsProfileToolbarOpen(!isProfileToolbarOpen)}
-              ></LoginButton>
-            )}
+            <DesktopMenu
+              session={session}
+              handleProfileOnClick={handleDesktopMenuClick}
+            />
+            <MobileMenu
+              onClick={handleMobileMenuClick}
+              session={session}
+            ></MobileMenu>
           </div>
-          {/* <ToggleButton
-            onClick={handleMenuClick}
-            toggleState={animationClass}
-          ></ToggleButton> */}
         </div>
         {/* 모바일 메뉴 */}
         {isMenuOpen && (
@@ -110,9 +91,7 @@ export default function Header({}: HeaderProps) {
         <ProfileToolbar
           isOpen={isProfileToolbarOpen}
           user={session?.user}
-          // loginHandler={() =>
-          //   router.push(`/signIn/${window.document.location.href}`)
-          // }
+          setIsProfileToolbarOpen={setIsProfileToolbarOpen}
         ></ProfileToolbar>
       </nav>
     </header>

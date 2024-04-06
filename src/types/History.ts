@@ -7,5 +7,6 @@ export interface HistoryType {
   elapsedTimeValue: number;
   contentValue: string;
   filePathValue: string | null;
-  createdTimeValue : string;
+  createdTimeValue: string;
+  starValue?: boolean;
 }

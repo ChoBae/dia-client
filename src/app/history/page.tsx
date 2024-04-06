@@ -14,13 +14,9 @@ export default async function Home() {
   const headersList = headers();
   let result;
   if (session) {
-    result = await fetch(
-      `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/history/getUserHistory`,
-      {
-        method: "GET",
-        headers: headersList,
-      }
-    ).then((res) => res.json());
+    result = await getUserHistorys(session.accessToken, {
+      "user-agent": headersList.get("user-agent") as string,
+    });
   }
   return <HistoryMain historyList={result as HistoryType[]}></HistoryMain>;
 }

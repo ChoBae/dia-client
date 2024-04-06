@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-export default function LoginAction({ createSession } :any) {
+export default function LoginAction({ createSession }: any) {
   const createSessionRef = useRef(createSession);
 
   useEffect(() => {

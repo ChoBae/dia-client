@@ -6,6 +6,7 @@ import { Question } from "@/types/Question";
 import { HistoryType } from "@/types/History";
 import { getSession } from "../../../../../authLib";
 import { headers } from "next/headers";
+import { getQuestionHistory } from "@/app/api/getQuestionHistory";
 export const dynamic = "force-dynamic";
 
 export const generateMetadata = async ({ params }: any): Promise<Metadata> => {
@@ -15,27 +16,6 @@ export const generateMetadata = async ({ params }: any): Promise<Metadata> => {
     // description: data.description,
   };
 };
-const dummyResults = [
-  {
-    pkValue: 1,
-    typeValue: "SINGLE",
-    elapsedTimeValue: 30,
-    contentValue: "첫번째 대답",
-    createdTimeValue: "2021-10-10T00:00:00",
-  },
-  {
-    pkValue: 2,
-    typeValue: "SINGLE",
-    elapsedTimeValue: 60,
-    contentValue: "2번째 대답",
-    createdTimeValue: "2021-10-10T00:00:00",
-  },
-];
-
-const dummyQuestion = {
-  pkValue: 1,
-  korTitleValue: "테스트 질문",
-};
 
 export default async function Home({ params }: { params: { id: number } }) {
   const session = await getSession();
@@ -44,36 +24,25 @@ export default async function Home({ params }: { params: { id: number } }) {
   let result;
   let question;
   if (session) {
-    question = await fetch(
-      `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/question/getQuestion/?pkValue=${params.id}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: session.accessToken,
-          "user-agent": userAgentString as string,
-        },
-      }
-    ).then((res) => res.json());
-    result = await await fetch(
-      `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/question/getHistoryList/?pkValue=${params.id}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: session.accessToken,
-          "user-agent": userAgentString as string,
-        },
-      }
-    ).then((res) => res.json());
+    question = await getQuestionDetails({
+      id: params.id,
+      accessToken: session?.accessToken,
+      headers: {
+        "user-agent": userAgentString as string,
+      },
+    });
+    result = await getQuestionHistory(params.id, session.accessToken, {
+      "user-agent": userAgentString as string,
+    });
   } else {
     result = await getQuestionDetails({ id: params.id });
   }
   return (
     <main className="flex flex-col mx-auto py-20 h-[100dvh] max-w-[500px] max-h-[1000px] overflow-y-hidden bg-white no-scrollbar">
       <HistoryResult
-        question={question as Question}
+        question={question.data as Question}
         historyList={result as HistoryType[]}
+        session={session}
       ></HistoryResult>
     </main>
   );

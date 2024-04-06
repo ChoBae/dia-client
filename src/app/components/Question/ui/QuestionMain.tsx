@@ -8,7 +8,7 @@ import type { Session } from "@/types/Session";
 import { useRouter } from "next/navigation";
 import { deleteBookmarkQuestion } from "@/app/api/deleteBookmarkQuestion";
 type Props = {
-  question: QuestionType;
+  question?: QuestionType;
   isBookmarkOn?: boolean;
   session?: Session;
   isDetail?: boolean;
@@ -27,6 +27,7 @@ export const QuestionMain = ({
   const router = useRouter();
   const handleAddBookmark = async (event: React.MouseEvent<SVGSVGElement>) => {
     if (!session) alert("로그인 후 이용하실 수 있습니다");
+    if (!question) return;
     await addBookmarkQuestion({
       pkValue: question.pkValue,
       accessToken: session?.accessToken as string,
@@ -35,7 +36,7 @@ export const QuestionMain = ({
   };
   const handleDeleteBookmark = async (e: React.MouseEvent<SVGSVGElement>) => {
     if (!session) alert("로그인 후 이용하실 수 있습니다");
-
+    if (!question) return;
     await deleteBookmarkQuestion({
       pkValue: question.pkValue,
       accessToken: session?.accessToken as string,
@@ -47,7 +48,7 @@ export const QuestionMain = ({
     <div className="flex relative flex-col bg-primary-gray-50 rounded-[5px] px-4 py-[18px]">
       {isBookmarkOn && (
         <>
-          {question.bookmark ? (
+          {question && question.bookmark ? (
             <BookMarkFillIcon
               onClick={(e: React.MouseEvent<SVGSVGElement>) => {
                 e.preventDefault();

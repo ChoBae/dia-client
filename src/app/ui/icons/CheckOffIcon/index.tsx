@@ -1,5 +1,6 @@
 type Props = {
   className?: string;
+  onClick?: () => void;
 };
 
 export default function CheckOffIcon(props: Props) {
@@ -11,6 +12,7 @@ export default function CheckOffIcon(props: Props) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={props.className}
+      onClick={props.onClick}
     >
       <circle
         cx="8"

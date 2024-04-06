@@ -33,7 +33,7 @@ export const HistoryMain = ({ historyList }: Props) => {
           <div className="flex flex-col relative gap-3">
             {historyByDate[date].map((history: HistoryType, index: number) => (
               <Link
-                href={`/history/${history.pkValue}`}
+                href={`/solve/problem/history/${history.pkValue}`}
                 key={history.pkValue}
                 className="relative hover:opacity-70"
               >

@@ -10,6 +10,7 @@ import { getQuestionList } from "@/app/api/getQuestionList";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { Session } from "@/types/Session";
+import { Practice } from "@/types/Practice";
 interface Props {
   practiceList: any[];
   query: string;
@@ -23,22 +24,19 @@ export default function PracticeList({
 }: Props) {
   return (
     <section className="grid gap-3">
-      {practiceList.map((question: QuestionType, index: number) => (
+      {practiceList.map((practice: Practice, index: number) => (
         <Link
-          href={`/practice/problem/${question.pkValue}`}
-          key={question.pkValue}
+          href={`/practice/problem/${practice.pkValue}`}
+          key={practice.pkValue}
         >
           <Question
-            key={question.pkValue}
-            id={question.pkValue}
-            title={question.korTitleValue}
-            onClick={() => practiceClick(question.pkValue)}
-            // description={qusetion.description || ""}
-            // tags={qusetion.tags}
+            key={practice.pkValue}
+            id={practice.pkValue}
+            title={practice.titleValue}
+            onClick={() => practiceClick(practice.pkValue)}
           />
         </Link>
       ))}
-      {/* <Pagination contentNum={questionList.length}></Pagination> */}
     </section>
   );
 }

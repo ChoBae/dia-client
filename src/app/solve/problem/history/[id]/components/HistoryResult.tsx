@@ -15,12 +15,17 @@ import CheckOnIcon from "@/app/ui/icons/CheckOnIcon";
 type Props = {
   question: QuestionType;
   historyList: HistoryType[];
-  session? : Session
+  session?: Session;
 };
 
-export default function HistoryResult({ question, historyList, session }: Props) {
-
+export default function HistoryResult({
+  question,
+  historyList,
+  session,
+}: Props) {
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const staredHistoryList =
+    historyList && historyList.filter((history) => history.starValue === true);
   return (
     <>
       <Header title="답변 히스토리" className="mb-5"></Header>
@@ -37,6 +42,7 @@ export default function HistoryResult({ question, historyList, session }: Props)
               id={question.pkValue}
               className={historyList.length > 0 ? "h-2/5" : "h-full"}
               writeScript={false}
+              session={session}
             ></ScriptSection>
             <div
               onClick={() => setIsFavorite(!isFavorite)}
@@ -48,14 +54,23 @@ export default function HistoryResult({ question, historyList, session }: Props)
               </h2>
             </div>
             <div className="flex flex-row max-w-full h-full overflow-x-auto gap-3 no-scrollbar">
-              {historyList.map((history, index) => (
-                <HistorySection
-                  key={index}
-                  history={history}
-                  session={session}
-                  className="min-w-[90%] sm:min-w-[50%]"
-                ></HistorySection>
-              ))}
+              {isFavorite
+                ? staredHistoryList.map((history, index) => (
+                    <HistorySection
+                      key={index}
+                      history={history}
+                      session={session}
+                      className="min-w-[90%] sm:min-w-[50%]"
+                    ></HistorySection>
+                  ))
+                : historyList.map((history, index) => (
+                    <HistorySection
+                      key={index}
+                      history={history}
+                      session={session}
+                      className="min-w-[90%] sm:min-w-[50%]"
+                    ></HistorySection>
+                  ))}
             </div>
           </>
         )}
