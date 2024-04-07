@@ -4,8 +4,6 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const accessToken = searchParams.get("accessToken");
   const userAgentString = request.headers.get("user-agent");
-  // console.log("userAgentString", userAgentString);
-  // console.log("이렇게 변경중", code, request.headers.get("user-agent"));
 
   const apiUrl = `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/v0/members/me`;
   const requestOptions: RequestInit = {

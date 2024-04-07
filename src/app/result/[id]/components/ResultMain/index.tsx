@@ -9,26 +9,27 @@ import ResultSession from "../ResultSession";
 interface Props {
   pkValue: number;
   question: QuestionType;
-  session? : Session
+  session?: Session
+  historyList: HistoryType[] | null;
 }
 
-export default function ResultMain({ pkValue, question, session }: Props) {
+export default function ResultMain({ pkValue, question, session,historyList }: Props) {
   const [isView, setIsView] = useState<number>(0); // 0: 현재 답변, 1: 히스토리
-  const [historyList, setHistoryList] = useState<HistoryType[]>([]);
+  // const [historyList, setHistoryList] = useState<HistoryType[]>([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (session) {
-        const getHistory = await getQuestionHistory(
-          pkValue,
-          session.accessToken
-        );
-        if (getHistory) setHistoryList(getHistory);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     if (session) {
+  //       const getHistory = await getQuestionHistory(
+  //         pkValue,
+  //         session.accessToken
+  //       );
+  //       if (getHistory) setHistoryList(getHistory);
+  //     }
+  //   };
 
-    fetchData();
-  }, [pkValue, session, session]);
+  //   fetchData();
+  // }, [pkValue, session, session]);
 
   return (
     <>

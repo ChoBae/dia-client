@@ -32,42 +32,11 @@ export default function ScriptSection({
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
-
   useEffect(() => {
-    // const fetchData = async () => {
-    //   if (session) {
-    //     const getScript = await getQuestionScript(
-    //       id,
-    //       typedSession?.user.access_token
-    //     );
-    //     if (getScript) setScript(getScript);
-    //   } else {
-    //     const savedScriptString = localStorage.getItem(`script=${id}`);
-    //     const savedScriptObj = savedScriptString
-    //       ? JSON.parse(savedScriptString)
-    //       : { contentValue: "" };
-    //     setScript(savedScriptObj);
-    //   }
-    // };
     const fetchData = async () => {
       if (session) {
-        await fetch(
-          `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/question/getScript/?pkValue=${id}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              authorization: session.accessToken,
-            },
-          }
-        )
-          .then((res) => res.json())
-          .then((data) => {
-            if (!data) {
-              return;
-            }
-            setScript(data as Script);
-          });
+        const getScript = await getQuestionScript(id, session.accessToken);
+        if (getScript) setScript(getScript);
       } else {
         const savedScriptString = localStorage.getItem(`script=${id}`);
         const savedScriptObj = savedScriptString
@@ -78,7 +47,7 @@ export default function ScriptSection({
     };
     fetchData();
     setIsLoading(false);
-  }, [id]);
+  }, [id, session]);
   useEffect(() => {
     if (isEditing) {
       textAreaRef.current?.focus();
@@ -108,7 +77,6 @@ export default function ScriptSection({
   };
 
   const handleSectionClick = () => {
-    // console.log(isEditing, script);
     if (isEditing || script?.contentValue || !writeScript) return;
     setIsEditing(true);
   };
@@ -182,7 +150,9 @@ export default function ScriptSection({
       {script && (
         <div className="absolute bottom-2 right-4 ">
           <p className="text-xs leading-7 font-medium text-primary-gray-400">
-            <span className="text-primary-gray-600">{script.contentValue.length}</span>
+            <span className="text-primary-gray-600">
+              {script.contentValue.length}
+            </span>
             {` / ${maxCharacterCount}`}
           </p>
         </div>

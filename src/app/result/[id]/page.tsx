@@ -6,6 +6,8 @@ import ResultMainGuest from "./components/ResultMainGuest";
 import Header from "@/app/mockinterview/[id]/components/Header";
 import { getSession } from "../../../authLib";
 import { headers } from "next/headers";
+import { getQuestionDetails } from "@/app/api/getQuestionDetails";
+import { getQuestionHistory } from "@/app/api/getQuestionHistory";
 export const dynamic = "force-dynamic";
 
 export const generateMetadata = async ({ params }: any): Promise<Metadata> => {
@@ -26,17 +28,19 @@ export default async function Home({
   const headersList = headers();
   const userAgentString = headersList.get("user-agent");
 
-  const result = await fetch(
-    `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/question/getQuestion/?pkValue=${params.id}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: session.accessToken ? session.accessToken : "",
-        "user-agent": userAgentString as string,
-      },
-    }
-  ).then((res) => res.json());
+  const result = await getQuestionDetails({
+    id: params.id,
+    accessToken: session?.accessToken,
+    headers: {
+      "user-agent": userAgentString as string,
+      ...(session && session.accessToken
+        ? { authorization: session.accessToken }
+        : {}),
+    },
+  });
+  const historyList = await getQuestionHistory(params.id, session.accessToken, {
+    "user-agent": userAgentString as string,
+  });
   const isGuest = searchParams.contentValue ? true : false;
   return (
     <main className="flex flex-col mx-auto pt-20 pb-8  max-w-[500px] h-[100dvh] sm:max-h-[1000px] overflow-y-hidden bg-white no-scrollbar">
@@ -46,8 +50,9 @@ export default async function Home({
       ) : (
         <ResultMain
           pkValue={params.id}
-          question={result}
+          question={result.data}
           session={session}
+          historyList={historyList}
         ></ResultMain>
       )}
     </main>

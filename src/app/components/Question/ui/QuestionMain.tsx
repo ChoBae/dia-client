@@ -43,7 +43,6 @@ export const QuestionMain = ({
     });
     router.refresh();
   };
-  // console.log(question)
   return (
     <div className="flex relative flex-col bg-primary-gray-50 rounded-[5px] px-4 py-[18px]">
       {isBookmarkOn && (

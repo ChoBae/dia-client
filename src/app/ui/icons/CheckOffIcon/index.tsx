@@ -19,13 +19,13 @@ export default function CheckOffIcon(props: Props) {
         cy="8"
         r="6.25"
         stroke="#E0E0E0"
-        stroke-width="1.5"
+        strokeWidth="1.5"
         className="group-hover:fill-primary-600 group-hover:stroke-primary-600"
       />
       <path
         d="M5 7.77778L7.07946 10L9.2705 7.77778L11 6"
         stroke="#E0E0E0"
-        stroke-width="1.5"
+        strokeWidth="1.5"
       />
     </svg>
   );

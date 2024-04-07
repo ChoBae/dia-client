@@ -4,8 +4,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const code = searchParams.get("code");
   const userAgentString = request.headers.get("user-agent");
-  // console.log("userAgentString", userAgentString);
-  // console.log("이렇게 변경중", code, request.headers.get("user-agent"));
+
   if (!code) {
     throw new Error("code is required");
   }

@@ -12,7 +12,7 @@ type Props = {
   pkValue: number;
   latestHistory: HistoryType;
   question: QuestionType;
-  session? : Session
+  session?: Session;
 };
 
 export default function ResultSession(props: Props) {
@@ -29,6 +29,7 @@ export default function ResultSession(props: Props) {
       <ScriptSection
         id={pkValue}
         className="flex-grow-3 h-[150px] sm:h-[200px]"
+        session={session}
       ></ScriptSection>
       <HistorySection
         id={pkValue}

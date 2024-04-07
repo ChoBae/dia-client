@@ -17,7 +17,6 @@ export default function QuestionMain({ questionsData, query, session }: Props) {
   const [firstCheck, setFirstCheck] = useState<boolean>(false);
   const [questionList, setQuestionList] = useState<QuestionType[]>([]);
   // const [session, setSession] = useState<Session | null>(null);
-  // console.log('여기서 확인', questionList)
   useEffect(() => {
     if (!session) {
       handleFirstCheck();

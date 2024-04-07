@@ -18,7 +18,7 @@ export default function CheckOnIcon(props: Props) {
       <path
         d="M5 7.77778L7.07946 10L9.2705 7.77778L11 6"
         stroke="white"
-        stroke-width="1.5"
+        strokeWidth="1.5"
       />
     </svg>
   );
