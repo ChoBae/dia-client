@@ -52,7 +52,7 @@ export default async function Home({
           pkValue={params.id}
           question={result.data}
           session={session}
-          historyList={historyList}
+          historyList={historyList as HistoryType[]}
         ></ResultMain>
       )}
     </main>

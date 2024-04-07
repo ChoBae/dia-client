@@ -9,11 +9,16 @@ import ResultSession from "../ResultSession";
 interface Props {
   pkValue: number;
   question: QuestionType;
-  session?: Session
-  historyList: HistoryType[] | null;
+  session?: Session;
+  historyList: HistoryType[];
 }
 
-export default function ResultMain({ pkValue, question, session,historyList }: Props) {
+export default function ResultMain({
+  pkValue,
+  question,
+  session,
+  historyList,
+}: Props) {
   const [isView, setIsView] = useState<number>(0); // 0: 현재 답변, 1: 히스토리
   // const [historyList, setHistoryList] = useState<HistoryType[]>([]);
 
