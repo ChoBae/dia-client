@@ -10,15 +10,19 @@ import ResultSession from "../ResultSession";
 import type { PracticeResult } from "@/types/PracticeResult";
 import type { Question } from "@/types/Question";
 import { Session } from "@/types/Session";
-import { PracticeDetail } from "@/types/Practice";
+import { PracticeDetail, QuestionAndScript } from "@/types/Practice";
 
 interface Props {
   practice: PracticeDetail;
-  session?: Session
+  session?: Session;
 }
-export default function MockPracticeMain({ practice,session }: Props) {
+export default function MockPracticeMain({ practice, session }: Props) {
   const [isView, setIsView] = useState<number | null>(0); // 0: 안내 페이지, 1: 실전연습 중인 페이지 2: 결과 페이지
   const [resultList, setResultList] = useState<PracticeResult[]>([]);
+  const randomQuestionList = practice.questionAndScripts.sort(
+    () => Math.random() - 0.5
+  );
+
   const ViewPage = () => {
     switch (isView) {
       case 0:
@@ -26,7 +30,8 @@ export default function MockPracticeMain({ practice,session }: Props) {
       case 1:
         return (
           <MockPracticeSession
-            questionList={practice.questionAndScripts}
+            questionList={randomQuestionList as QuestionAndScript[]}
+            practice={practice}
             setIsView={setIsView}
             setResultList={setResultList}
             session={session}

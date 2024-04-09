@@ -13,7 +13,6 @@ export const getQuestionScript = async (
     return null;
   }
 
-  // const apiUrl = `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/v0/interview/scripts?questionPkValue=${id}`;
   const apiUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v0/interview/scripts?questionPkValue=${id}`;
   const requestOptions: RequestInit = {
     method: "GET",
@@ -26,6 +25,7 @@ export const getQuestionScript = async (
   try {
     const response = await fetch(apiUrl, requestOptions);
     const data = await response.json();
+    // console.log(data);
     if (data.status !== 200) {
       switch (response.status) {
         case 401:
@@ -43,7 +43,7 @@ export const getQuestionScript = async (
 
     return data.data;
   } catch (error) {
-    console.error("Error fetching question script:", error);
-    throw error; // Rethrow the error to be handled by the caller if necessary
+    // console.error("Error fetching question script:", error);
+    // throw error; // Rethrow the error to be handled by the caller if necessary
   }
 };

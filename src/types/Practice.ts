@@ -13,6 +13,7 @@ export interface PracticeDetail extends Practice {
     script: {
       pk: number;
       questionPk: number;
+      owner: number;
       createdTime: string;
       lastModifiedTime: string;
       lastReadTime: string;
@@ -26,6 +27,7 @@ export interface QuestionAndScript {
   script: {
     pk: number;
     questionPk: number;
+    owner: number;
     createdTime: string;
     lastModifiedTime: string;
     lastReadTime: string;

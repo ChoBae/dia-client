@@ -11,23 +11,27 @@ import ScriptSection from "@/app/components/ScriptSection";
 import HistorySection from "@/app/components/HistorySection";
 import Header from "@/app/mockinterview/[id]/components/Header";
 import { useRouter } from "next/navigation";
+import type { QuestionAndScript } from "@/types/Practice";
 
 interface Props {
-  pkValue: number;
-  questionList: QuestionType[];
-  session? : Session
+  pkValue: string;
+  questionList: QuestionAndScript[];
+  session?: Session;
 }
 
-export default function PracticeResultMain({ pkValue, questionList, session }: Props) {
+export default function PracticeResultMain({
+  pkValue,
+  questionList,
+  session,
+}: Props) {
   const router = useRouter();
   const [questionIdx, setQuestionIdx] = useState(1);
   const [History, setHistory] = useState<HistoryType | null>(null);
-
   useEffect(() => {
     const fetchData = async () => {
       if (session) {
         const getHistory = await getQuestionHistory(
-          questionList[questionIdx - 1].pkValue,
+          questionList[questionIdx - 1].question.pkValue,
           session.accessToken
         );
         if (getHistory) setHistory(getHistory[0]);
@@ -47,7 +51,7 @@ export default function PracticeResultMain({ pkValue, questionList, session }: P
         <div className="flex gap-[6px] flex-row w-full overflow-x-auto no-scrollbar mb-4">
           {questionList.map((question, index) => (
             <NumberButton
-              key={question.pkValue}
+              key={question.question.pkValue}
               isSelected={questionIdx === index + 1}
               onClick={() => setQuestionIdx(index + 1)} // 숫자 버튼 클릭 시 questionIdx 변경
             >
@@ -57,22 +61,23 @@ export default function PracticeResultMain({ pkValue, questionList, session }: P
         </div>
         <div className="flex flex-col gap-3">
           <Question
-            question={questionList[questionIdx - 1]}
+            question={questionList[questionIdx - 1].question}
             isBookmarkOn={session ? true : false}
           >
             <Question.SubTitle className="text-[#FDDA23]">
               Question
             </Question.SubTitle>
             <Question.Title>
-              {questionList[questionIdx - 1].korTitleValue}
+              {questionList[questionIdx - 1].question.korTitleValue}
             </Question.Title>
           </Question>
           <ScriptSection
-            id={questionList[questionIdx - 1].pkValue}
+            id={questionList[questionIdx - 1].question.pkValue}
             className="h-[151px] sm:h-[250px]"
+            preloadScript={questionList[questionIdx - 1].script}
           />
           <HistorySection
-            id={pkValue}
+            id={questionList[questionIdx - 1].question.pkValue}
             history={History as HistoryType}
             session={session}
             className="h-[369px]"

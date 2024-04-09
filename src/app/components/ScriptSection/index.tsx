@@ -16,6 +16,15 @@ export interface Props {
   placeholder?: string;
   writeScript?: boolean;
   session?: Session;
+  preloadScript?: {
+    pk: number;
+    owner: number;
+    questionPk: number;
+    content: string;
+    createdTime: string;
+    lastModifiedTime: string;
+    lastReadTime: string;
+  };
 }
 
 const maxCharacterCount = 3000;
@@ -26,6 +35,7 @@ export default function ScriptSection({
   placeholder,
   writeScript = true,
   session,
+  preloadScript,
 }: Props) {
   const [script, setScript] = useState<Script | undefined>(undefined);
   const [prevScript, setPrevScript] = useState<Script | undefined>(undefined);
@@ -34,6 +44,19 @@ export default function ScriptSection({
   const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
   useEffect(() => {
     const fetchData = async () => {
+      if (preloadScript) {
+        const typeScript: Script = {
+          pkValue: preloadScript.pk,
+          ownerPkValue: preloadScript.owner,
+          contentValue: preloadScript.content,
+          createdTimeValue: preloadScript.createdTime,
+          lastModifiedTimeValue: preloadScript.lastModifiedTime,
+          lastReadTimeValue: preloadScript.lastReadTime,
+        } as Script;
+        setScript(typeScript);
+        setIsLoading(false);
+        return;
+      }
       if (session) {
         const getScript = await getQuestionScript(id, session.accessToken);
         if (getScript) setScript(getScript);

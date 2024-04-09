@@ -1,7 +1,6 @@
-"use client";
+'use client'
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-// import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import ChevronLeftIcon from "@/app/ui/icons/ChevronLeftIcon";
 import { Question } from "../../../../../components/Question";
 import ScriptSection from "@/app/components/ScriptSection";
@@ -9,7 +8,6 @@ import type { Question as QuestionType } from "@/types/Question";
 import { Modal } from "@/app/components/Modal";
 import Button from "@/app/components/Button";
 import ShareIcon from "@/app/ui/icons/ShareIcon";
-import { useSession } from "next-auth/react";
 import copyToClipboard from "@/utils/copyToClipBoard";
 import type { Session } from "@/types/Session";
 import HistorySection from "@/app/components/HistorySection";
@@ -21,15 +19,6 @@ interface Props {
   questionData: QuestionType;
   session?: any;
 }
-const dummyhistorys = [
-  {
-    pkValue: 1,
-    typeValue: "SINGLE",
-    elapsedTimeValue: 30,
-    contentValue: "첫번째 대답",
-    createdTimeValue: "2021-10-10T00:00:00",
-  },
-];
 
 export default function QuestionMain({
   questionData,
@@ -161,6 +150,7 @@ Props) {
         />
         <Modal.Button onClick={solveQuestion}>시작하기</Modal.Button>
       </Modal>
+      
     </section>
   );
 }

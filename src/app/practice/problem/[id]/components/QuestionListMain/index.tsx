@@ -13,6 +13,7 @@ import PolygonIcon from "@/app/ui/icons/PolygonIcon";
 import QuestionDropdown from "../QuestionDropdown";
 import { PracticeDetail } from "@/types/Practice";
 import { Script } from "@/types/Script";
+import Link from "next/link";
 
 interface Props {
   practice: PracticeDetail;

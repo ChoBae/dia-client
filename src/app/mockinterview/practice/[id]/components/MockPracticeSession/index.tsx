@@ -1,15 +1,12 @@
 import EqualizerIcon from "@/app/ui/icons/EqualizerIcon";
 import TTSPlayer from "../../../../components/TTSPlayer";
-import ShrinkingIcon from "../ShrinkingIcon";
-import useSpeechToText, { ResultType } from "react-hook-speech-to-text";
+
 import { useEffect, useState, useRef, useCallback } from "react";
-import type { Question } from "@/types/Question";
 import type { PracticeResult } from "@/types/PracticeResult";
 import type { VoiceType } from "@/types/Voice";
 import { Modal } from "@/app/components/Modal";
 import Image from "next/image";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
 import { savePractice } from "@/app/api/savePractice";
 import type { Session } from "@/types/Session";
 import RetryIcon from "@/app/ui/icons/RetryCircleIcon";
@@ -18,17 +15,17 @@ import { MicroCircleIcon } from "@/app/ui/icons/MicroCircleIcon";
 import LayerLogoYellowIcon from "@/app/ui/icons/LayerLogoYellowIcon";
 import Header from "@/app/mockinterview/[id]/components/Header";
 import Typed from "typed.js";
-import type { QuestionAndScript } from "@/types/Practice";
+import type { PracticeDetail, QuestionAndScript } from "@/types/Practice";
 type Props = {
-  questionList: QuestionAndScript[];
+  practice: PracticeDetail;
   setIsView: (isView: number) => void;
   setResultList: (resultList: PracticeResult[]) => void;
   session?: Session;
+  questionList: QuestionAndScript[];
 };
 
 export default function MockPraceticeSession(props: Props) {
-
-  const { questionList, setIsView, setResultList,session } = props;
+  const { setIsView, setResultList, session, practice, questionList } = props;
   const [questionIdx, setQuestionIdx] = useState<number>(0);
   const [practiceResultList, setPracticeResultList] = useState<
     PracticeResult[]
@@ -43,6 +40,7 @@ export default function MockPraceticeSession(props: Props) {
   const [isCancelModalOpen, setIsCancelModalOpen] = useState<boolean>(false);
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [isRestart, setIsRestart] = useState<boolean>(false);
+
   const el = useRef(null);
   // Create reference to store the Typed instance itself
   const typed = useRef<Typed | null>(null);
@@ -99,8 +97,8 @@ export default function MockPraceticeSession(props: Props) {
         if (session) {
           await savePractice({
             practiceResult: {
-              interviewQuestionPkValue: questionList[questionIdx]
-                .question.pkValue as number,
+              interviewQuestionPkValue: questionList[questionIdx].question
+                .pkValue as number,
               contentValue: interimResult as string,
               typeValue: "MULTI",
               elapsedTimeValue: time,
@@ -113,8 +111,8 @@ export default function MockPraceticeSession(props: Props) {
             return [
               ...prev,
               {
-                interviewQuestionPkValue: questionList[questionIdx]
-                  .question.pkValue as number,
+                interviewQuestionPkValue: questionList[questionIdx].question
+                  .pkValue as number,
                 contentValue: interimResult as string,
                 typeValue: "MULTI",
                 elapsedTimeValue: time,
@@ -241,8 +239,13 @@ export default function MockPraceticeSession(props: Props) {
           />
           <Link
             href={{
-              pathname: `/result/practice/1`,
-              query: !session ? (practiceResultList as any) : {},
+              pathname: `/result/practice/${practice.pkValue}`,
+              query: {
+                orderList: questionList.map(
+                  (questionAndScript: QuestionAndScript) =>
+                    questionAndScript.question.pkValue
+                ),
+              },
             }}
           >
             <Modal.Button className="rounded-md w-[100px] px-[81px] py-[10px]">
