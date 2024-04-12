@@ -80,14 +80,7 @@ Props) {
                 session={session}
                 key={questionAndScripts.question.pkValue}
                 script={
-                  {
-                    contentValue: questionAndScripts.script?.content,
-                    pkValue: questionAndScripts.script?.pk,
-                    createdTimeValue: questionAndScripts.script?.createdTime,
-                    lastModifiedTimeValue:
-                      questionAndScripts.script?.lastModifiedTime,
-                    lastReadTimeValue: questionAndScripts.script?.lastReadTime,
-                  } as Script
+                  questionAndScripts.script
                 }
               ></QuestionDropdown>
             )
