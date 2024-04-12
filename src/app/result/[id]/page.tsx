@@ -27,27 +27,34 @@ export default async function Home({
   const session = await getSession();
   const headersList = headers();
   const userAgentString = headersList.get("user-agent");
-
-  const result = await getQuestionDetails({
-    id: params.id,
-    accessToken: session?.accessToken,
-    headers: {
+  let result;
+  let historyList;
+  if (session) {
+    result = await getQuestionDetails({
+      id: params.id,
+      accessToken: session?.accessToken,
+      headers: {
+        "user-agent": userAgentString as string,
+        ...(session && session.accessToken
+          ? { authorization: session.accessToken }
+          : {}),
+      },
+    });
+    historyList = await getQuestionHistory(params.id, session.accessToken, {
       "user-agent": userAgentString as string,
-      ...(session && session.accessToken
-        ? { authorization: session.accessToken }
-        : {}),
-    },
-  });
-  const historyList = await getQuestionHistory(params.id, session.accessToken, {
-    "user-agent": userAgentString as string,
-  });
+    });
+  } else {
+    result = await getQuestionDetails({
+      id: params.id,
+    });
+  }
   const isGuest = searchParams.contentValue ? true : false;
 
   return (
     <main className="flex flex-col mx-auto pt-20 pb-8  max-w-[500px] h-[100dvh] sm:max-h-[1000px] overflow-y-hidden bg-white no-scrollbar">
       <Header title="답변확인" className="mb-5" />
       {isGuest ? (
-        <ResultMainGuest question={result} resultData={searchParams} />
+        <ResultMainGuest question={result.data} resultData={searchParams} />
       ) : (
         <ResultMain
           pkValue={params.id}

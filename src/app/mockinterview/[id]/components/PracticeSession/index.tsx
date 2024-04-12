@@ -213,7 +213,7 @@ export default function PraceticeSession(props: Props) {
           <Link
             href={{
               pathname: `/result/${question.pkValue}`,
-              query: !session ? (practiceResult as any) : {},
+              query: !session ? practiceResult as any : {},
             }}
             className="w-full"
           >
