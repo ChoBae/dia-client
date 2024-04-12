@@ -25,7 +25,6 @@ export const getQuestionScript = async (
   try {
     const response = await fetch(apiUrl, requestOptions);
     const data = await response.json();
-    // console.log(data);
     if (data.status !== 200) {
       switch (response.status) {
         case 401:

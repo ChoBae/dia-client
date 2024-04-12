@@ -1,14 +1,10 @@
 // import QuestionList from "./components/QuestionList";
 import { Metadata } from "next";
-import { getQuestionList } from "@/app/api/getQuestionList";
 import PracticeResultMain from "./components/PracticeResultMain";
-import { Session } from "@/types/Session";
-import { Question } from "@/types/Question";
 import { getSession } from "../../../../authLib";
 import { headers } from "next/headers";
-import { useRouter } from "next/navigation";
-import { getMultiPracticeDetails } from "@/app/api/getMultiPracticeDetails";
-import type { PracticeDetail, QuestionAndScript } from "@/types/Practice";
+import { getUserHistoryBySize } from "@/app/api/getUserHistoryBySize";
+import { HistoryType } from "@/types/History";
 export const dynamic = "force-dynamic";
 
 export const generateMetadata = async ({ params }: any): Promise<Metadata> => {
@@ -23,45 +19,35 @@ export default async function Home({
   params,
 }: {
   searchParams: {
-    orderList: string[];
+    orderList: string;
   };
   params: {
     id: string;
   };
 }) {
-  // const session = await getServerSession(authOptions);
-  // const result = await getQuestionList('backend');
   const session = await getSession();
   const headersList = headers();
   const userAgentString = headersList.get("user-agent");
-
-  let practice: PracticeDetail;
+  const orderList = JSON.parse(searchParams.orderList);
+  let historys: HistoryType[] | undefined;
   if (session) {
     if (!params.id) return;
-    practice = await getMultiPracticeDetails(params.id, session.accessToken, {
-      "user-agent": userAgentString as string,
-    });
+    historys = await getUserHistoryBySize(
+      session.accessToken,
+      {
+        "user-agent": userAgentString as string,
+      },
+      orderList.length
+    );
   } else {
     if (!params.id) return;
-    practice = await getMultiPracticeDetails(params.id);
+    // practice = await getMultiPracticeDetails(params.id);
+    alert("로그인이 필요한 서비스입니다.");
   }
-  const sortQuestionList = (
-    questionList: QuestionAndScript[],
-    orderList: string[]
-  ) => {
-    const sortedQuestionList = orderList.map((id) =>
-      questionList.find((question) => question.question.pkValue === Number(id))
-    );
-    return sortedQuestionList;
-  };
-  const sliceQuestionList = sortQuestionList(
-    practice.questionAndScripts,
-    searchParams.orderList
-  );
   return (
     <PracticeResultMain
       pkValue={params.id}
-      questionList={sliceQuestionList as QuestionAndScript[]}
+      historys={historys?.reverse() as HistoryType[]}
       session={session}
     />
   );

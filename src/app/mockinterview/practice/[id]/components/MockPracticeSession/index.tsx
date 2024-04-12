@@ -92,8 +92,6 @@ export default function MockPraceticeSession(props: Props) {
           return;
         }
         setIsEndModalOpen(true);
-        if (!interimResult) return;
-        // 결과 리스트 업데이트
         if (session) {
           await savePractice({
             practiceResult: {
@@ -241,9 +239,11 @@ export default function MockPraceticeSession(props: Props) {
             href={{
               pathname: `/result/practice/${practice.pkValue}`,
               query: {
-                orderList: questionList.map(
-                  (questionAndScript: QuestionAndScript) =>
-                    questionAndScript.question.pkValue
+                orderList: JSON.stringify(
+                  questionList.map(
+                    (questionAndScript: QuestionAndScript) =>
+                      questionAndScript.question.pkValue
+                  )
                 ),
               },
             }}

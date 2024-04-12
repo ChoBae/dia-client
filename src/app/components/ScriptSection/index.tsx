@@ -16,15 +16,7 @@ export interface Props {
   placeholder?: string;
   writeScript?: boolean;
   session?: Session;
-  preloadScript?: {
-    pk: number;
-    owner: number;
-    questionPk: number;
-    content: string;
-    createdTime: string;
-    lastModifiedTime: string;
-    lastReadTime: string;
-  };
+  preloadScript?: Script;
 }
 
 const maxCharacterCount = 3000;
@@ -45,15 +37,7 @@ export default function ScriptSection({
   useEffect(() => {
     const fetchData = async () => {
       if (preloadScript) {
-        const typeScript: Script = {
-          pkValue: preloadScript.pk,
-          ownerPkValue: preloadScript.owner,
-          contentValue: preloadScript.content,
-          createdTimeValue: preloadScript.createdTime,
-          lastModifiedTimeValue: preloadScript.lastModifiedTime,
-          lastReadTimeValue: preloadScript.lastReadTime,
-        } as Script;
-        setScript(typeScript);
+        setScript(preloadScript);
         setIsLoading(false);
         return;
       }

@@ -27,7 +27,6 @@ export default async function Main({ params }: { params: { id: number } }) {
         : {}),
     },
   });
-  
   return (
     <main className="flex flex-col mx-auto px-4 sm:px-6 pt-20 pb-8 h-[100dvh] sm:max-h-[800px] sm:w-1/2 2xl:w-1/3 no-scrollbar overflow-y-hidden">
       <QuestionMain questionData={result.data} session={session}></QuestionMain>
