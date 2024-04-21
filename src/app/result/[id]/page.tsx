@@ -45,7 +45,7 @@ export default async function Home({
     });
   } else {
     result = await getQuestionDetails({
-      id: params.id,
+      id: Number(params.id),
     });
   }
   const isGuest = searchParams.contentValue ? true : false;

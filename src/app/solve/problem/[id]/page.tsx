@@ -5,7 +5,10 @@ import { getSession } from "../../../../authLib";
 import { headers } from "next/headers";
 export const revalidate = 0;
 export const generateMetadata = async ({ params }: any): Promise<Metadata> => {
-  const data = await getQuestionDetails({ id: params.id });
+  let data = {} as any;
+  if (params.id) {
+    let data = await getQuestionDetails({ id: params.id });
+  }
   return {
     title: data.data.korTitleValue,
     description: "개발자들이 실제로 경험한 면접 문제들을 풀어보세요!",
