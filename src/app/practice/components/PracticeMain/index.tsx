@@ -22,7 +22,7 @@ export const PracticeMain = (props: Props) => {
       setPracticePk(id);
   };
   return (
-    <main className="flex flex-col gap-4 mx-auto px-4 sm:px-6 py-16 sm:w-1/2 ">
+    <main className="flex flex-col mx-auto w-full px-4 sm:px-6 py-16 sm:w-1/2 max-w-3xl no-scrollbar relative">
       <PracticeHeader query={props.query}></PracticeHeader>
       <PracticeList
         practiceList={props.practiceList}
