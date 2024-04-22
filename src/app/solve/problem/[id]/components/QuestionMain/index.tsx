@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import ChevronLeftIcon from "@/app/ui/icons/ChevronLeftIcon";
@@ -64,6 +64,7 @@ Props) {
       setIsModalOpen(true);
     }
   };
+
   return (
     <section className="flex flex-col w-full h-full max-h-[1000px]">
       <div className="flex items-center mb-[32px] pl-2">
@@ -100,13 +101,15 @@ Props) {
             <h1 className="text-[16px] leading-[19px] font-bold text-primary-600 ">
               답변 히스토리
             </h1>
-            <Link
-              href={`/solve/problem/history/${questionData.pkValue}`}
-              className="flex flex-row gap-1 text-[14px] leading-[16.71px] font-semibold text-primary-gray-600 pl-4 cursor-pointer hover:opacity-70"
-            >
-              모두 보기
-              <PlusIcon className=""></PlusIcon>
-            </Link>
+            {session && (
+              <Link
+                href={`/solve/problem/history/${questionData.pkValue}`}
+                className="flex flex-row gap-1 text-[14px] leading-[16.71px] font-semibold text-primary-gray-600 pl-4 cursor-pointer hover:opacity-70"
+              >
+                모두 보기
+                <PlusIcon className=""></PlusIcon>
+              </Link>
+            )}
           </div>
           {historyList.length > 0 ? (
             <div className="flex flex-row max-w-full h-full overflow-x-auto gap-3 no-scrollbar">
@@ -150,7 +153,6 @@ Props) {
         />
         <Modal.Button onClick={solveQuestion}>시작하기</Modal.Button>
       </Modal>
-      
     </section>
   );
 }
