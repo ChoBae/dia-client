@@ -36,8 +36,12 @@ export default function Header({}: HeaderProps) {
       setIsMenuOpen(true);
     }
   };
-  const handleDesktopMenuClick = () => {
-    setIsProfileToolbarOpen((prev) => !prev);
+  const handleDesktopMenuClick = (boolean: boolean) => {
+    if (boolean === isProfileToolbarOpen) {
+      setIsProfileToolbarOpen(false);
+      return;
+    }
+    setIsProfileToolbarOpen(boolean);
   };
 
   const hideMenu = async () => {
