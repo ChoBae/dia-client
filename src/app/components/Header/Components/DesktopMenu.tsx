@@ -23,6 +23,7 @@ export default function DesktopMenu({ session,handleProfileOnClick }: Props) {
         <Link
           href="/solve/backend"
           className="text-slate-700 hover:text-primary-600 px-3 py-5 rounded-md text-sm font-semibold"
+          onClick={handleProfileOnClick}
         >
           문제 풀기
         </Link>
