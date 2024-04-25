@@ -10,8 +10,9 @@ const createJestConfig = nextJest({
 // Add any custom config to be passed to Jest
 // Add any custom config to be passed to Jest
 const customJestConfig = {
+  setupFiles: ["<rootDir>/setup.jest.js"],
   // setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-  preset: "ts-jest",
+  preset: "ts-jest/presets/js-with-ts",
   moduleDirectories: ["node_modules", "<rootDir>/"],
   testEnvironment: "jest-environment-jsdom",
   bail: true,
@@ -26,8 +27,14 @@ const customJestConfig = {
     "^.+\\.(ts|tsx)$": "ts-jest",
     "^.+\\.(js|jsx)$": "babel-jest",
   },
-  transformIgnorePatterns: ["/authLib", "<rootDir>/node_modules/"],
-  moduleNameMapper,
+  // transformIgnorePatterns: ["/authLib", "<rootDir>/node_modules/"],
+  moduleNameMapper: {
+    "^jose": require.resolve("jose"),
+    "^@panva/hkdf": require.resolve("@panva/hkdf"),
+    "^preact-render-to-string": require.resolve("preact-render-to-string"),
+    "^preact": require.resolve("preact"),
+    "^uuid": require.resolve("uuid"),
+  },
 };
 
 const asyncConfig = createJestConfig(customJestConfig);
@@ -35,6 +42,6 @@ const asyncConfig = createJestConfig(customJestConfig);
 // and wrap it...
 module.exports = async () => {
   const config = await asyncConfig();
-  config.transformIgnorePatterns = ["/authLib", "<rootDir>/node_modules/"];
+  // config.transformIgnorePatterns = ["/authLib", "node_modules/(?!jose)"];
   return config;
 };

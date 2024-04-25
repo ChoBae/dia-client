@@ -7,6 +7,8 @@ import type { Question as QuestionType } from "@/types/Question";
 import type { Session } from "@/types/Session";
 import { useRouter } from "next/navigation";
 import { deleteBookmarkQuestion } from "@/app/api/deleteBookmarkQuestion";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 type Props = {
   question?: QuestionType;
   isBookmarkOn?: boolean;
@@ -26,7 +28,21 @@ export const QuestionMain = ({
 }: Props) => {
   const router = useRouter();
   const handleAddBookmark = async (event: React.MouseEvent<SVGSVGElement>) => {
-    if (!session) alert("로그인 후 이용하실 수 있습니다");
+    if (!session) {
+      const notify = () =>
+        toast("로그인이 필요한 서비스입니다", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      notify();
+      return;
+    }
     if (!question) return;
     await addBookmarkQuestion({
       pkValue: question.pkValue,
@@ -35,7 +51,21 @@ export const QuestionMain = ({
     router.refresh();
   };
   const handleDeleteBookmark = async (e: React.MouseEvent<SVGSVGElement>) => {
-    if (!session) alert("로그인 후 이용하실 수 있습니다");
+    if (!session) {
+      const notify = () =>
+        toast("로그인이 필요한 서비스입니다", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      notify();
+      return;
+    }
     if (!question) return;
     await deleteBookmarkQuestion({
       pkValue: question.pkValue,
@@ -86,6 +116,21 @@ export const QuestionMain = ({
           </div>
         </>
       )}
+
+      {/* 토스트 메세지 섹션 */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        toastClassName="bg-primary-600 p-3"
+      />
     </div>
   );
 };

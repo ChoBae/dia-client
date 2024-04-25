@@ -7,10 +7,10 @@ export const revalidate = 0;
 export const generateMetadata = async ({ params }: any): Promise<Metadata> => {
   let data = {} as any;
   if (params.id) {
-    let data = await getQuestionDetails({ id: params.id });
+    data = await getQuestionDetails({ id: params.id });
   }
   return {
-    title: data.korTitleValue,
+    title: data.data.korTitleValue,
     description: "개발자들이 실제로 경험한 면접 문제들을 풀어보세요!",
   };
 };
