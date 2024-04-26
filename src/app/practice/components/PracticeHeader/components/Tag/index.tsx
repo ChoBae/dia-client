@@ -34,11 +34,11 @@ export default function Tag(props: TagProps) {
 
   return (
     <Link
-      className={`flex items-center rounded-[5px] py-2 px-[19px] ${tagStyle}`}
+      className={`flex items-center rounded-[5px] py-2 px-5 h-[30px]    ${tagStyle}`}
       // onClick={() => props.setCurrentTag && props.setCurrentTag(props.children as string)}
       href={`/practice/${mapTagToPurpose(props.children as string)}`}
     >
-      <p className="text-xs sm:text-lg text-center font-semibold whitespace-nowrap leading-3">
+      <p className="text-[12px] leading-[14.4px]  text-center font-semibold whitespace-nowrap">
         {props.children}
       </p>
     </Link>
