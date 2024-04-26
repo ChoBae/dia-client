@@ -20,21 +20,6 @@ export default function ResultMain({
   historyList,
 }: Props) {
   const [isView, setIsView] = useState<number>(0); // 0: 현재 답변, 1: 히스토리
-  // const [historyList, setHistoryList] = useState<HistoryType[]>([]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     if (session) {
-  //       const getHistory = await getQuestionHistory(
-  //         pkValue,
-  //         session.accessToken
-  //       );
-  //       if (getHistory) setHistoryList(getHistory);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [pkValue, session, session]);
 
   return (
     <>

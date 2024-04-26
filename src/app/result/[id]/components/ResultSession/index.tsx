@@ -20,7 +20,11 @@ export default function ResultSession(props: Props) {
   const router = useRouter();
   return (
     <section className="flex flex-col gap-3 h-full px-4">
-      <Question question={question} isBookmarkOn={session ? true : false}>
+      <Question
+        question={question}
+        isBookmarkOn={session ? true : false}
+        session={session}
+      >
         <Question.SubTitle className="text-primary-600">
           개별연습
         </Question.SubTitle>
