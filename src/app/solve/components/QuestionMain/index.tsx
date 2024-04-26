@@ -5,8 +5,10 @@ import type { Question as QuestionType } from "@/types/Question";
 import Link from "next/link";
 import { ToolTips } from "../ToolTips";
 import { Question } from "@/app/components/Question";
-import { Session } from "@/types/Session";
 import { TagBar } from "./components/TagBar";
+import { useRouter } from "next/navigation";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 interface Props {
   questionsData: QuestionType[];
   query: string;
@@ -16,6 +18,7 @@ export default function QuestionMain({ questionsData, query, session }: Props) {
   const [currentTag, setCurrentTag] = useState(query);
   const [firstCheck, setFirstCheck] = useState<boolean>(false);
   const [questionList, setQuestionList] = useState<QuestionType[]>([]);
+  const router = useRouter();
   // const [session, setSession] = useState<Session | null>(null);
   useEffect(() => {
     if (!session) {
@@ -35,6 +38,25 @@ export default function QuestionMain({ questionsData, query, session }: Props) {
       setFirstCheck(true);
     }
   };
+
+  const handleMultiSolve = () => {
+    if (!session) {
+      const notify = () =>
+        toast("로그인이 필요한 서비스입니다", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      notify();
+      return;
+    }
+    router.push(`/practice/${currentTag}`);
+  };
   return (
     <main className="flex flex-col mx-auto w-full px-4 sm:px-6 py-16 sm:w-1/2 max-w-3xl no-scrollbar relative">
       <div className="sticky top-16 bg-white z-10">
@@ -42,9 +64,9 @@ export default function QuestionMain({ questionsData, query, session }: Props) {
           <Link href={`/solve/${currentTag}`} className="flex-1">
             <CategoryButton selected={true}>개별연습</CategoryButton>
           </Link>
-          <Link href={`/practice/${currentTag}`} className="flex-1">
+          <a className="flex-1" onClick={handleMultiSolve}>
             <CategoryButton>실전연습</CategoryButton>
-          </Link>
+          </a>
         </div>
         <TagBar
           currentTag={currentTag}
@@ -76,6 +98,21 @@ export default function QuestionMain({ questionsData, query, session }: Props) {
       {firstCheck && !session && (
         <ToolTips onClick={() => setFirstCheck(false)} />
       )}
+
+      {/* 토스트 메세지 섹션 */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        toastClassName="bg-primary-600 p-3"
+      />
     </main>
   );
 }
