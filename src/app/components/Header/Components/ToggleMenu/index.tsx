@@ -85,10 +85,12 @@ export default function ToggleMenu({
             <SolveFillSmallIcon />
             문제풀기
           </Button>
-          <Button href="/history">
-            <HistoryFillSmallIcon />
-            히스토리
-          </Button>
+          {session && (
+            <Button href="/history">
+              <HistoryFillSmallIcon />
+              히스토리
+            </Button>
+          )}
         </nav>
         {session ? (
           <button
@@ -103,16 +105,15 @@ export default function ToggleMenu({
           <Link
             className="flex w-full items-center justify-center mx-4 mt-auto py-1.5 bg-primary-gray-900 rounded-[5px] cursor-pointer max-w-[calc(100%-2rem)] "
             href="/signIn"
-            >
-              <Image
-                width={40}
-                height={40}
-                src="/images/github_logo.png"
-                alt="github logo"
-                className="-ml-6 mr-4"
-                priority={true}
-              >
-            </Image>
+          >
+            <Image
+              width={40}
+              height={40}
+              src="/images/github_logo.png"
+              alt="github logo"
+              className="-ml-6 mr-4"
+              priority={true}
+            ></Image>
             <p className="text-[16px] leading-[19.2px] text-white font-bold">
               Github 로그인
             </p>
