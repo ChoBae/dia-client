@@ -92,6 +92,7 @@ export default function MockPraceticeSession(props: Props) {
           return;
         }
         setIsEndModalOpen(true);
+        // 비었을때 빈문자열 보내게 수정
         if (session) {
           await savePractice({
             practiceResult: {
