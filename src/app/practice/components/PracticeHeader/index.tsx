@@ -12,7 +12,7 @@ export const PracticeHeader = (props: Props) => {
   const [currentTag, setCurrentTag] = useState(props.query);
 
   return (
-    <header className="sticky top-16 bg-white z-10">
+    <header className="sticky top-16 bg-white z-10 mb-3">
       <div className="flex flex-row w-full mb-3">
         <Link href={`/solve/${currentTag}`} className="flex-1">
           <CategoryButton>개별연습</CategoryButton>
@@ -21,7 +21,7 @@ export const PracticeHeader = (props: Props) => {
           <CategoryButton selected={true}>실전연습</CategoryButton>
         </Link>
       </div>
-      <div className="flex flex-row gap-2 overflow-x-auto w-full">
+      <div className="flex flex-row gap-1.5 z-0 w-full pr-8  overflow-x-auto no-scrollbar">
         {tags.map((tag, index) => (
           <Tag key={index} selected={currentTag}>
             {tag.name}

@@ -29,6 +29,9 @@ export default async function Main({ params }: { params: { id: string } }) {
     if (!params.id) return;
     practice = await getMultiPracticeDetails(params.id);
   }
+  // for (let i = 0; i < practice.questionAndScripts.length; i++) {
+  //   console.log(practice.questionAndScripts[i].question);
+  // }
   return (
     <MockPracticeMain
       practice={practice}

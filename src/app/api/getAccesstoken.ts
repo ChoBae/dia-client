@@ -16,7 +16,6 @@ export const getAccesstoken = async (
     headers: headers,
     body: JSON.stringify({ code: code }),
   };
-  // console.log('api url', apiUrl,headers)
   try {
     const response = await fetch(apiUrl, requestOptions);
     const data = await response.json();

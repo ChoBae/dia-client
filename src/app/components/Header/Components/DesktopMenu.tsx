@@ -5,9 +5,9 @@ import LoginButton from "./LoginButton";
 import Image from "next/image";
 type Props = {
   session?: Session;
-  handleProfileOnClick : () => void;
+  handleProfileOnClick: (boolean: boolean) => void;
 };
-export default function DesktopMenu({ session,handleProfileOnClick }: Props) {
+export default function DesktopMenu({ session, handleProfileOnClick }: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const handleLogoClick = () => {
@@ -23,6 +23,7 @@ export default function DesktopMenu({ session,handleProfileOnClick }: Props) {
         <Link
           href="/solve/backend"
           className="text-slate-700 hover:text-primary-600 px-3 py-5 rounded-md text-sm font-semibold"
+          onClick={() => handleProfileOnClick(false)}
         >
           문제 풀기
         </Link>
@@ -34,11 +35,11 @@ export default function DesktopMenu({ session,handleProfileOnClick }: Props) {
               height={20}
               src={session.user?.imageUrlValue || "/images/default-profile.png"}
               alt=""
-              onClick={handleProfileOnClick}
+              onClick={() => handleProfileOnClick(true)}
             />
           </>
         ) : (
-          <LoginButton onClick={handleProfileOnClick}></LoginButton>
+          <LoginButton onClick={() => handleProfileOnClick(true)}></LoginButton>
         )}
       </div>
     </div>

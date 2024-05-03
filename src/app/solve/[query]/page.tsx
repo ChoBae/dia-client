@@ -32,5 +32,6 @@ export default async function Home({ params }: { params: { query: string } }) {
       query={params.query}
       session={session}
     ></QuestionMain>
+
   );
 }

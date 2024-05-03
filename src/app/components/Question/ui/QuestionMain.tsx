@@ -7,6 +7,8 @@ import type { Question as QuestionType } from "@/types/Question";
 import type { Session } from "@/types/Session";
 import { useRouter } from "next/navigation";
 import { deleteBookmarkQuestion } from "@/app/api/deleteBookmarkQuestion";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 type Props = {
   question?: QuestionType;
   isBookmarkOn?: boolean;
@@ -14,6 +16,7 @@ type Props = {
   isDetail?: boolean;
   subTitle?: string;
   children: React.ReactNode;
+  toastOptionFunc?: () => void;
 };
 
 export const QuestionMain = ({
@@ -23,10 +26,14 @@ export const QuestionMain = ({
   isDetail = false,
   subTitle,
   children,
+  toastOptionFunc,
 }: Props) => {
   const router = useRouter();
   const handleAddBookmark = async (event: React.MouseEvent<SVGSVGElement>) => {
-    if (!session) alert("로그인 후 이용하실 수 있습니다");
+    if (!session) {
+      toastOptionFunc && toastOptionFunc();
+      return;
+    }
     if (!question) return;
     await addBookmarkQuestion({
       pkValue: question.pkValue,
@@ -35,7 +42,10 @@ export const QuestionMain = ({
     router.refresh();
   };
   const handleDeleteBookmark = async (e: React.MouseEvent<SVGSVGElement>) => {
-    if (!session) alert("로그인 후 이용하실 수 있습니다");
+    if (!session) {
+      toastOptionFunc && toastOptionFunc();
+      return;
+    }
     if (!question) return;
     await deleteBookmarkQuestion({
       pkValue: question.pkValue,
@@ -43,7 +53,6 @@ export const QuestionMain = ({
     });
     router.refresh();
   };
-  // console.log(question)
   return (
     <div className="flex relative flex-col bg-primary-gray-50 rounded-[5px] px-4 py-[18px]">
       {isBookmarkOn && (

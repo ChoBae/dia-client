@@ -10,25 +10,11 @@ export interface Practice {
 export interface PracticeDetail extends Practice {
   questionAndScripts: {
     question: Question;
-    script: {
-      pk: number;
-      questionPk: number;
-      createdTime: string;
-      lastModifiedTime: string;
-      lastReadTime: string;
-      content: string;
-    };
+    script: Script;
   }[];
 }
 
 export interface QuestionAndScript {
   question: Question;
-  script: {
-    pk: number;
-    questionPk: number;
-    createdTime: string;
-    lastModifiedTime: string;
-    lastReadTime: string;
-    content: string;
-  };
+  script: Script;
 }

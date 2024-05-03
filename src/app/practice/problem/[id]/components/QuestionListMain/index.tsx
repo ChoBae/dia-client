@@ -13,6 +13,7 @@ import PolygonIcon from "@/app/ui/icons/PolygonIcon";
 import QuestionDropdown from "../QuestionDropdown";
 import { PracticeDetail } from "@/types/Practice";
 import { Script } from "@/types/Script";
+import Link from "next/link";
 
 interface Props {
   practice: PracticeDetail;
@@ -68,7 +69,7 @@ Props) {
         <div className="flex flex-row gap-1 mb-2 pl-4">
           <PolygonIcon className="mt-1" />
           <h3 className="text-primary-gray-600 text-[14px] leading-[16.8px] font-normal">
-            아래의 문제들이 랜덤으로 출제됩니다.
+            아래의 문제들 중 10개가 랜덤으로 출제됩니다.
           </h3>
         </div>
         <div className="flex flex-col h-full relative gap-3 overflow-y-auto no-scrollbar">
@@ -79,14 +80,7 @@ Props) {
                 session={session}
                 key={questionAndScripts.question.pkValue}
                 script={
-                  {
-                    contentValue: questionAndScripts.script?.content,
-                    pkValue: questionAndScripts.script?.pk,
-                    createdTimeValue: questionAndScripts.script?.createdTime,
-                    lastModifiedTimeValue:
-                      questionAndScripts.script?.lastModifiedTime,
-                    lastReadTimeValue: questionAndScripts.script?.lastReadTime,
-                  } as Script
+                  questionAndScripts.script
                 }
               ></QuestionDropdown>
             )

@@ -21,6 +21,7 @@ export default function Header({}: HeaderProps) {
   const [animationClass, setAnimationClass] = useState("");
   const [session, setSession] = useState<any>();
   const handleLogoClick = () => {
+    setIsProfileToolbarOpen(false);
     if (pathname === "/") {
       location.reload(); // Reload the current page if already on the main page
     } else {
@@ -35,9 +36,12 @@ export default function Header({}: HeaderProps) {
       setIsMenuOpen(true);
     }
   };
-  const handleDesktopMenuClick = () => {
-  
-    setIsProfileToolbarOpen((prev) => !prev);
+  const handleDesktopMenuClick = (boolean: boolean) => {
+    if (boolean === isProfileToolbarOpen) {
+      setIsProfileToolbarOpen(false);
+      return;
+    }
+    setIsProfileToolbarOpen(boolean);
   };
 
   const hideMenu = async () => {

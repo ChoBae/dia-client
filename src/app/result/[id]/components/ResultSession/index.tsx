@@ -12,7 +12,7 @@ type Props = {
   pkValue: number;
   latestHistory: HistoryType;
   question: QuestionType;
-  session? : Session
+  session?: Session;
 };
 
 export default function ResultSession(props: Props) {
@@ -20,7 +20,11 @@ export default function ResultSession(props: Props) {
   const router = useRouter();
   return (
     <section className="flex flex-col gap-3 h-full px-4">
-      <Question question={question} isBookmarkOn={session ? true : false}>
+      <Question
+        question={question}
+        isBookmarkOn={session ? true : false}
+        session={session}
+      >
         <Question.SubTitle className="text-primary-600">
           개별연습
         </Question.SubTitle>
@@ -29,6 +33,7 @@ export default function ResultSession(props: Props) {
       <ScriptSection
         id={pkValue}
         className="flex-grow-3 h-[150px] sm:h-[200px]"
+        session={session}
       ></ScriptSection>
       <HistorySection
         id={pkValue}

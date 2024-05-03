@@ -3,7 +3,6 @@ import Link from "next/link";
 import ServiceIntro from "./components/ServiceIntro";
 import Tag from "../Tag";
 export default function Intro() {
-
   return (
     <>
       <section className="flex flex-col items-center justify-center py-24 w-screen bg-gray-100 ">
@@ -23,6 +22,14 @@ export default function Intro() {
         >
           바로 시작하기
         </Link>
+        {/* <Link
+          href={{
+            pathname: "/result/practice/1",
+            query: { orderList: JSON.stringify([1, 2, 3]) },
+          }}
+        >
+          test
+        </Link> */}
       </section>
 
       <section className="w-full py-12 md:py-24 lg:py-32">

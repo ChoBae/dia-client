@@ -113,7 +113,7 @@ export default function HistorySection({
           ></DeleteCircleIcon>
         </>
       )}
-      {session ? (
+      {session && history ? (
         history.starValue ? (
           <StarFillIcon
             className="absolute top-1 right-1 cursor-pointer"

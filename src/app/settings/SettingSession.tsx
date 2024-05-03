@@ -26,7 +26,7 @@ export default function SettingSession({}: Props) {
     >
       <Header handleBack={() => router.back()} title="환경설정" />
       <section className="flex flex-col px-4 w-full h-screen">
-        <div className="flex flex-col w-full ml-4 mb-3"> 
+        <div className="flex flex-col w-full ml-4 mb-3">
           <h1 className="text-lg text-primary-gray-900 font-semibold">
             음량 테스트
           </h1>
@@ -34,10 +34,10 @@ export default function SettingSession({}: Props) {
             테스트 음성을 재생시켜 기기의 볼륨을 조절해주세요
           </p>
         </div>
-        <TestVoicePlayer src="https://dnia6texl8y7f.cloudfront.net/[경석]%20http와%20https.mp3" />
-        <div
-          className={`flex flex-col ml-4 mb-3 mt-3`}
-        >
+        <TestVoicePlayer
+          src={`${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/[민기] 다이아는 개발자 모의 면접 플랫폼입니다.mp3`}
+        />
+        <div className={`flex flex-col ml-4 mb-3 mt-3`}>
           <h1 className="text-lg text-primary-gray-900 font-semibold">
             마이크 테스트
           </h1>

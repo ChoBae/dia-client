@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-// import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import ChevronLeftIcon from "@/app/ui/icons/ChevronLeftIcon";
 import { Question } from "../../../../../components/Question";
 import ScriptSection from "@/app/components/ScriptSection";
@@ -9,7 +8,6 @@ import type { Question as QuestionType } from "@/types/Question";
 import { Modal } from "@/app/components/Modal";
 import Button from "@/app/components/Button";
 import ShareIcon from "@/app/ui/icons/ShareIcon";
-import { useSession } from "next-auth/react";
 import copyToClipboard from "@/utils/copyToClipBoard";
 import type { Session } from "@/types/Session";
 import HistorySection from "@/app/components/HistorySection";
@@ -17,19 +15,12 @@ import { getQuestionHistory } from "@/app/api/getQuestionHistory";
 import type { HistoryType } from "@/types/History";
 import PlusIcon from "@/app/ui/icons/PlusIcon";
 import Link from "next/link";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 interface Props {
   questionData: QuestionType;
   session?: any;
 }
-const dummyhistorys = [
-  {
-    pkValue: 1,
-    typeValue: "SINGLE",
-    elapsedTimeValue: 30,
-    contentValue: "첫번째 대답",
-    createdTimeValue: "2021-10-10T00:00:00",
-  },
-];
 
 export default function QuestionMain({
   questionData,
@@ -75,6 +66,24 @@ Props) {
       setIsModalOpen(true);
     }
   };
+  const handleMore = () => {
+    if (!session) {
+      const notify = () =>
+        toast("로그인이 필요한 서비스입니다", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      notify();
+      return;
+    }
+    router.push(`/solve/problem/history/${questionData.pkValue}`);
+  };
   return (
     <section className="flex flex-col w-full h-full max-h-[1000px]">
       <div className="flex items-center mb-[32px] pl-2">
@@ -111,13 +120,11 @@ Props) {
             <h1 className="text-[16px] leading-[19px] font-bold text-primary-600 ">
               답변 히스토리
             </h1>
-            <Link
-              href={`/solve/problem/history/${questionData.pkValue}`}
-              className="flex flex-row gap-1 text-[14px] leading-[16.71px] font-semibold text-primary-gray-600 pl-4 cursor-pointer hover:opacity-70"
-            >
+
+            <p onClick={handleMore} className="flex flex-row gap-1 text-[14px] leading-[16.71px] font-semibold text-primary-gray-600 pl-4 cursor-pointer hover:opacity-70">
               모두 보기
               <PlusIcon className=""></PlusIcon>
-            </Link>
+            </p>
           </div>
           {historyList.length > 0 ? (
             <div className="flex flex-row max-w-full h-full overflow-x-auto gap-3 no-scrollbar">
@@ -161,6 +168,21 @@ Props) {
         />
         <Modal.Button onClick={solveQuestion}>시작하기</Modal.Button>
       </Modal>
+
+      {/* 토스트 메세지 섹션 */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        toastClassName="bg-primary-600 p-3"
+      />
     </section>
   );
 }
