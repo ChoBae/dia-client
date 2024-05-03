@@ -20,6 +20,18 @@ export default function QuestionMain({ questionsData, query, session }: Props) {
   const [questionList, setQuestionList] = useState<QuestionType[]>([]);
   const router = useRouter();
   // const [session, setSession] = useState<Session | null>(null);
+
+  const notify = () =>
+    toast("로그인이 필요한 서비스입니다", {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
   useEffect(() => {
     if (!session) {
       handleFirstCheck();
@@ -41,17 +53,6 @@ export default function QuestionMain({ questionsData, query, session }: Props) {
 
   const handleMultiSolve = () => {
     if (!session) {
-      const notify = () =>
-        toast("로그인이 필요한 서비스입니다", {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
       notify();
       return;
     }
@@ -60,17 +61,6 @@ export default function QuestionMain({ questionsData, query, session }: Props) {
 
   const handleQuestionClick = (pkValue: number) => {
     if (!session) {
-      const notify = () =>
-        toast("로그인이 필요한 서비스입니다", {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
       notify();
       return;
     }
@@ -104,6 +94,7 @@ export default function QuestionMain({ questionsData, query, session }: Props) {
               key={index}
               isDetail={true}
               session={session}
+              toastOptionFunc={notify}
             >
               <Question.SubTitle className="text-primary-600">
                 개별연습

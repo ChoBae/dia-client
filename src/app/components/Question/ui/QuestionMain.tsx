@@ -16,6 +16,7 @@ type Props = {
   isDetail?: boolean;
   subTitle?: string;
   children: React.ReactNode;
+  toastOptionFunc?: () => void;
 };
 
 export const QuestionMain = ({
@@ -25,22 +26,12 @@ export const QuestionMain = ({
   isDetail = false,
   subTitle,
   children,
+  toastOptionFunc,
 }: Props) => {
   const router = useRouter();
   const handleAddBookmark = async (event: React.MouseEvent<SVGSVGElement>) => {
     if (!session) {
-      const notify = () =>
-        toast("로그인이 필요한 서비스입니다", {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      notify();
+      toastOptionFunc && toastOptionFunc();
       return;
     }
     if (!question) return;
@@ -52,18 +43,7 @@ export const QuestionMain = ({
   };
   const handleDeleteBookmark = async (e: React.MouseEvent<SVGSVGElement>) => {
     if (!session) {
-      const notify = () =>
-        toast("로그인이 필요한 서비스입니다", {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      notify();
+      toastOptionFunc && toastOptionFunc();
       return;
     }
     if (!question) return;
@@ -116,21 +96,6 @@ export const QuestionMain = ({
           </div>
         </>
       )}
-
-      {/* 토스트 메세지 섹션 */}
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        toastClassName="bg-primary-600 p-3"
-      />
     </div>
   );
 };
