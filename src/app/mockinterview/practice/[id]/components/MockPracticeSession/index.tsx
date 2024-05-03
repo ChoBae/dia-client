@@ -16,6 +16,7 @@ import LayerLogoYellowIcon from "@/app/ui/icons/LayerLogoYellowIcon";
 import Header from "@/app/mockinterview/[id]/components/Header";
 import Typed from "typed.js";
 import type { PracticeDetail, QuestionAndScript } from "@/types/Practice";
+import { useRouter } from "next/navigation";
 type Props = {
   practice: PracticeDetail;
   setIsView: (isView: number) => void;
@@ -40,7 +41,7 @@ export default function MockPraceticeSession(props: Props) {
   const [isCancelModalOpen, setIsCancelModalOpen] = useState<boolean>(false);
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [isRestart, setIsRestart] = useState<boolean>(false);
-
+  const router = useRouter();
   const el = useRef(null);
   // Create reference to store the Typed instance itself
   const typed = useRef<Typed | null>(null);
@@ -119,6 +120,20 @@ export default function MockPraceticeSession(props: Props) {
               },
             ] as PracticeResult[];
           });
+          localStorage.setItem(
+            "practiceResultList",
+            JSON.stringify([
+              ...practiceResultList,
+              {
+                interviewQuestionPkValue: questionList[questionIdx].question
+                  .pkValue as number,
+                contentValue: interimResult as string,
+                typeValue: "MULTI",
+                elapsedTimeValue: time,
+                filePathValue: null,
+              },
+            ])
+          );
         }
       }
       if (questionIdx + 1 < questionList.length) {
@@ -148,6 +163,7 @@ export default function MockPraceticeSession(props: Props) {
     setIsCancel(true);
     setIsStart(false);
   };
+
   return (
     <>
       <Header handleBack={handleBack} title="모의연습" />

@@ -12,7 +12,7 @@ export const PracticeHeader = (props: Props) => {
   const [currentTag, setCurrentTag] = useState(props.query);
 
   return (
-    <header className="sticky top-16 bg-white z-10">
+    <header className="sticky top-16 bg-white z-10 mb-3">
       <div className="flex flex-row w-full mb-3">
         <Link href={`/solve/${currentTag}`} className="flex-1">
           <CategoryButton>개별연습</CategoryButton>

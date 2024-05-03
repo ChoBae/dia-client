@@ -21,7 +21,6 @@ export default async function Main({ params }: { params: { id: number } }) {
   const session = await getSession();
   const headersList = headers();
   const userAgentString = headersList.get("user-agent");
-  console.log("메인 체크", params.id);
 
   const result = await getQuestionDetails({
     id: params.id,

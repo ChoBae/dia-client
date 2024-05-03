@@ -52,10 +52,10 @@ export default function QuestionMain({ questionsData, query, session }: Props) {
   };
 
   const handleMultiSolve = () => {
-    if (!session) {
-      notify();
-      return;
-    }
+    // if (!session) {
+    //   notify();
+    //   return;
+    // }
     router.push(`/practice/${currentTag}`);
   };
 
