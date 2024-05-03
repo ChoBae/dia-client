@@ -4,21 +4,24 @@ import { Metadata } from "next";
 import { getSession } from "../../../../authLib";
 import { headers } from "next/headers";
 export const revalidate = 0;
-export const generateMetadata = async ({ params }: any): Promise<Metadata> => {
-  let data = {} as any;
-  if (params.id) {
-    data = await getQuestionDetails({ id: params.id });
-  }
-  return {
-    title: data.data.korTitleValue,
-    description: "개발자들이 실제로 경험한 면접 문제들을 풀어보세요!",
-  };
-};
+// export const generateMetadata = async ({ params }: any): Promise<Metadata> => {
+//   let data = {} as any;
+//   if (params.id) {
+//     console.log('메타 체크',  params.id)
+//     data = await getQuestionDetails({ id: params.id });
+//   }
+//   return {
+//     title: data.data.korTitleValue,
+//     description: "개발자들이 실제로 경험한 면접 문제들을 풀어보세요!",
+//   };
+// };
+
 
 export default async function Main({ params }: { params: { id: number } }) {
   const session = await getSession();
   const headersList = headers();
   const userAgentString = headersList.get("user-agent");
+  console.log("메인 체크", params.id);
 
   const result = await getQuestionDetails({
     id: params.id,

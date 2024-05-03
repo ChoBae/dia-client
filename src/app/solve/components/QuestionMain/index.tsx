@@ -57,6 +57,25 @@ export default function QuestionMain({ questionsData, query, session }: Props) {
     }
     router.push(`/practice/${currentTag}`);
   };
+
+  const handleQuestionClick = (pkValue: number) => {
+    if (!session) {
+      const notify = () =>
+        toast("로그인이 필요한 서비스입니다", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      notify();
+      return;
+    }
+    router.push(`/solve/problem/${pkValue}`);
+  };
   return (
     <main className="flex flex-col mx-auto w-full px-4 sm:px-6 py-16 sm:w-1/2 max-w-3xl no-scrollbar relative">
       <div className="sticky top-16 bg-white z-10">

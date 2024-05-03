@@ -5,10 +5,13 @@ type Params = {
 };
 export const getQuestionDetails = async (params: Params) => {
   const { id, accessToken } = params;
-
+  if (!id) return;
+  // console.log(Number(id));
   const res = await fetch(
     // `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/v0/interview/questions/${id}`,
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v0/interview/questions/${id}`,
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v0/interview/questions/${Number(
+      id
+    )}`,
     {
       method: "GET",
       headers: {
