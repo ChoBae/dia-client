@@ -23,7 +23,10 @@ export default function MockPracticeMain({ practice, session }: Props) {
     () => Math.random() - 0.5
   );
   // 스테이징서버용 설정
-  const stagingQuestionList = randomQuestionList.slice(0, 10);
+  const stagingQuestionList = randomQuestionList.slice(
+    0,
+    Number(process.env.NEXT_PRACTICE_SIZE)
+  );
   const ViewPage = () => {
     switch (isView) {
       case 0:
