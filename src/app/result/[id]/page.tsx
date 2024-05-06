@@ -48,12 +48,11 @@ export default async function Home({
       id: Number(params.id),
     });
   }
-  const isGuest = searchParams.contentValue ? true : false;
 
   return (
     <main className="flex flex-col mx-auto pt-20 pb-8  max-w-[500px] h-[100dvh] sm:max-h-[1000px] overflow-y-hidden bg-white no-scrollbar">
       <Header title="답변확인" className="mb-5" />
-      {isGuest ? (
+      {!session ? (
         <ResultMainGuest question={result.data} resultData={searchParams} />
       ) : (
         <ResultMain
