@@ -25,7 +25,7 @@ export default function MockPracticeMain({ practice, session }: Props) {
   // 스테이징서버용 설정
   const stagingQuestionList = randomQuestionList.slice(
     0,
-    Number(process.env.NEXT_PRACTICE_SIZE)
+    Number(process.env.NEXT_PUBLIC_PRACTICE_SIZE)
   );
   const ViewPage = () => {
     switch (isView) {
