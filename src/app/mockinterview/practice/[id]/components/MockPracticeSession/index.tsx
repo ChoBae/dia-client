@@ -99,7 +99,7 @@ export default function MockPraceticeSession(props: Props) {
             practiceResult: {
               interviewQuestionPkValue: questionList[questionIdx].question
                 .pkValue as number,
-              contentValue: interimResult as string,
+              contentValue: interimResult || "",
               typeValue: "MULTI",
               elapsedTimeValue: time,
               filePathValue: null,

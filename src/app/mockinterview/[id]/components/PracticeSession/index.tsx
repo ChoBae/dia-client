@@ -71,12 +71,11 @@ export default function PraceticeSession(props: Props) {
       }
       setIsEndModalOpen(true);
       // 결과물이 있을때만 저장
-      if (!interimResult) return;
       if (session) {
         savePractice({
           practiceResult: {
             interviewQuestionPkValue: question.pkValue as number,
-            contentValue: interimResult as string,
+            contentValue: interimResult || "",
             typeValue: "SINGLE",
             elapsedTimeValue: time,
             filePathValue: null,
@@ -213,7 +212,7 @@ export default function PraceticeSession(props: Props) {
           <Link
             href={{
               pathname: `/result/${question.pkValue}`,
-              query: !session ? practiceResult as any : {},
+              query: !session ? (practiceResult as any) : {},
             }}
             className="w-full"
           >
