@@ -14,7 +14,7 @@ export default function ChevronRightIcon(props: Props) {
       className={props.className}
       onClick={props.onClick}
     >
-      <g clip-path="url(#clip0_548_6288)">
+      <g clipPath="url(#clip0_548_6288)">
         <path d="M9 6L15 12L9 18" stroke="#9E9E9E" strokeWidth="2" />
       </g>
       <defs>
