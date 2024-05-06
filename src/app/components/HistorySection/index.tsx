@@ -89,13 +89,13 @@ export default function HistorySection({
         {history ? (
           <div className="flex justify-center items-center bg-white  rounded-[100px] px-[6px] py-[3px] cursor-pointer hover:opacity-70">
             <p className="text-primary-gray-600 text-[8px] leading-[9.6px] font-semibold">
-              🎙️{" " + convertToHourMinute(history.elapsedTimeValue)}
+              🎙️{history.contentValue.length > 0 ? " " + convertToHourMinute(history.elapsedTimeValue) : '00:00'}
             </p>
           </div>
         ) : null}
       </div>
       <div className="whitespace-pre-wrap flex overflow-y-auto no-scrollbar my-3">
-        {history ? (
+        {history && history.contentValue.length > 0 ? (
           <p className="text-[14px] text-[#424242] leading-[22px] sm:text-lg font-medium">
             {history.contentValue}
           </p>

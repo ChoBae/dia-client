@@ -45,10 +45,16 @@ export default async function Home({
   } else {
     if (!params.id) return;
     const getData = await getMultiPracticeDetails(params.id);
-    practice = getData.questionAndScripts
-      .filter((item: any) => orderList.includes(item.question.pkValue))
-      .map((item: any) => item.question);
+    const questionAndScripts = getData.questionAndScripts;
 
+    practice = orderList
+      .map((order: any) => {
+        const foundQuestion = questionAndScripts.find(
+          (item: any) => item.question.pkValue === order
+        );
+        return foundQuestion ? foundQuestion.question : null;
+      })
+      .filter(Boolean);
   }
   return (
     <>

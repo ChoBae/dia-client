@@ -38,7 +38,7 @@ export default function PracticeResultMainGuest({ pkValue, practice }: Props) {
     const fetchHistory = async () => {
       const historys = localStorage.getItem("practiceResultList");
       if (historys) {
-        setHistorys(JSON.parse(historys).reverse());
+        setHistorys(JSON.parse(historys));
       }
       // localStorage.removeItem("practiceResultList");
     };

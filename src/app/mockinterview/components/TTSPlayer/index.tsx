@@ -26,6 +26,7 @@ export default function TTSPlayer({
   const audio2Ref = useRef<HTMLAudioElement | null>(null);
   const [isAudio1Playing, setIsAudio1Playing] = useState<boolean>(false);
   const [time, setTime] = useState<number>(0);
+  const [timer, setTimer] = useState<any>(null);
 
   if (typeof window !== "undefined") {
   }
@@ -71,16 +72,17 @@ export default function TTSPlayer({
     setResults([]);
     stopAudio();
     stopSpeechToText();
+    setTime(0);
     if (isStart) {
       setTimeout(() => {
         playAudio1();
       }, 1000);
-      timer = setInterval(() => {
-        setTime((prevTime) => prevTime + 1);
-      }, 1000);
+      // timer = setInterval(() => {
+      //   setTime((prevTime) => prevTime + 1);
+      // }, 1000);
     }
     return () => {
-      clearInterval(timer);
+      // clearInterval(timer);
       stopSpeechToText();
     };
   }, [isStart, voice, isRestart]);
@@ -89,6 +91,7 @@ export default function TTSPlayer({
     if (handleStop && !isStart && !isEnd) {
       stopAudio();
       stopSpeechToText();
+      setIsRecording && setIsRecording(false);
       let resultString = "";
       if (results.length > 0) {
         results.forEach((result: any) => {
@@ -100,9 +103,11 @@ export default function TTSPlayer({
         return;
       }
       handleStop(interimResult as any, time);
+      setTime(0);
     }
     return () => {
       stopSpeechToText();
+      stopTimer();
     };
   }, [isStart, handleStop]);
 
@@ -122,6 +127,30 @@ export default function TTSPlayer({
     setIsRecording && setIsRecording(true);
     startSpeechToText();
   };
+
+  const startTimer = () => {
+    const interval = setInterval(() => {
+      setTime((prevTime: number) => prevTime + 1);
+    }, 1000); // 1초마다 증가
+    setTimer(interval);
+  };
+
+  const stopTimer = () => {
+    clearInterval(timer);
+    setTimer(null);
+  };
+  useEffect(() => {
+    if (isRecording) {
+      startTimer();
+    } else {
+      stopTimer();
+    }
+
+    return () => {
+      stopTimer();
+    };
+  }, [isRecording]);
+
   if (error) return <p>Web Speech API is not available in this device 🤷‍</p>;
   return (
     <div>

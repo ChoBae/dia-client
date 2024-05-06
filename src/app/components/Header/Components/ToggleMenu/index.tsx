@@ -9,6 +9,7 @@ import HistoryFillSmallIcon from "@/app/ui/icons/HistoryFillSmallIcon";
 import UserFillIcon from "@/app/ui/icons/UserFillIcon";
 import GuestLargeIcon from "@/app/ui/icons/GuestLargeIcon";
 import GithubIcon from "@/app/ui/icons/GithubIcon";
+import { useRouter } from "next/navigation";
 type ToggleMenuProps = {
   isToggleMenuOpen: boolean;
   animationClass: string;
@@ -21,11 +22,13 @@ export default function ToggleMenu({
   onClick,
   animationClass,
 }: ToggleMenuProps) {
+  const router = useRouter();
   const deleteSession = async () => {
     await fetch("/auth/deleteSession", {
       method: "DELETE",
     });
-    window.location.reload();
+    // window.location.reload();
+    router.push("/");
   };
 
   return (
