@@ -71,15 +71,19 @@ export default function MockPraceticeSession(props: Props) {
 
   useEffect(() => {
     let timer: any;
-    if (isStart && isRecording) {
+    if (isRecording) {
       timer = setInterval(() => {
         setElapsedTime((prevTime) => prevTime + 1);
       }, 1000);
     }
+    else {
+      setElapsedTime(0);
+      clearInterval(timer);
+    }
     return () => {
       clearInterval(timer);
     };
-  }, [isStart, isRecording]);
+  }, [isRecording]);
 
   const handleStop = useCallback(
     async (interimResult: string, time: number) => {
@@ -117,6 +121,7 @@ export default function MockPraceticeSession(props: Props) {
                 typeValue: "MULTI",
                 elapsedTimeValue: time,
                 filePathValue: null,
+                createdTimeValue : new Date().toISOString()
               },
             ] as PracticeResult[];
           });
@@ -131,6 +136,7 @@ export default function MockPraceticeSession(props: Props) {
                 typeValue: "MULTI",
                 elapsedTimeValue: time,
                 filePathValue: null,
+                createdTimeValue : new Date().toISOString(),
               },
             ])
           );
@@ -146,6 +152,7 @@ export default function MockPraceticeSession(props: Props) {
     [questionIdx, questionList, session, isCancel]
   );
   const handleNext = () => {
+    if (!isRecording) return;
     setIsStart(false);
     setElapsedTime(0);
     // if (questionIdx + 1 < questionList.length) {
@@ -218,7 +225,9 @@ export default function MockPraceticeSession(props: Props) {
               priority={true}
             />
             <div
-              className="absolute flex mx-auto my-auto justify-center items-center rounded-full z-50  hover:opacity-75"
+              className={`absolute flex mx-auto my-auto justify-center items-center rounded-full z-50  hover:opacity-75 ${
+                !isRecording ? "opacity-75" : ""
+              }`}
               onClick={handleNext}
             >
               <div

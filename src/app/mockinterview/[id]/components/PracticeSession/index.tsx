@@ -119,6 +119,12 @@ export default function PraceticeSession(props: Props) {
     setIsRecording(false);
     setElapsedTime(0);
   };
+
+  const handleEnd = () => {
+    if (!isRecording) return;
+    if (isStart) setIsStart(false);
+    else setIsStart(true);
+  };
   return (
     <>
       <Header handleBack={handleBack} title="모의연습" />
@@ -173,10 +179,10 @@ export default function PraceticeSession(props: Props) {
               priority={true}
             />
             <div
-              className="absolute flex mx-auto my-auto justify-center items-center rounded-full z-50  hover:opacity-75"
-              onClick={
-                isStart ? () => setIsStart(false) : () => setIsStart(true)
-              }
+              className={`absolute flex mx-auto my-auto justify-center items-center rounded-full z-50  hover:opacity-75 ${
+                !isRecording ? "opacity-75" : ""
+              }`}
+              onClick={handleEnd}
             >
               <div
                 className={`w-full h-full absolute ring-8 ring-primary-200 rounded-full ${
