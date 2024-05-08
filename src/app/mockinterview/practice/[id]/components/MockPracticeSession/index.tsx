@@ -34,6 +34,7 @@ export default function MockPraceticeSession(props: Props) {
   const [duration, setDuration] = useState<number>(0);
   const [isStart, setIsStart] = useState<boolean>(true);
   const [isCancel, setIsCancel] = useState<boolean>(false);
+  const [isAbleToSave, setIsAbleToSave] = useState<boolean>(false);
 
   const [elapsedTime, setElapsedTime] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -75,6 +76,9 @@ export default function MockPraceticeSession(props: Props) {
       timer = setInterval(() => {
         setElapsedTime((prevTime) => prevTime + 1);
       }, 1000);
+            setTimeout(() => {
+              setIsAbleToSave(true);
+            }, 1200);
     }
     else {
       setElapsedTime(0);
@@ -226,13 +230,13 @@ export default function MockPraceticeSession(props: Props) {
             />
             <div
               className={`absolute flex mx-auto my-auto justify-center items-center rounded-full z-50  hover:opacity-75 ${
-                !isRecording ? "opacity-75" : ""
+                !isAbleToSave ? "opacity-75" : ""
               }`}
               onClick={handleNext}
             >
               <div
                 className={`w-full h-full absolute ring-8 ring-primary-200 rounded-full ${
-                  isStart ? "animate-ping" : ""
+                  isAbleToSave ? "animate-ping" : ""
                 }`}
               ></div>
               <h1 className="text-center font-semibold text-primary-600 absolute mx-auto my-auto -top-8 mr-1">
