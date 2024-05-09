@@ -156,7 +156,7 @@ export default function MockPraceticeSession(props: Props) {
     [questionIdx, questionList, session, isCancel]
   );
   const handleNext = () => {
-    if (!isRecording) return;
+    if (!isAbleToSave) return;
     setIsStart(false);
     setElapsedTime(0);
     // if (questionIdx + 1 < questionList.length) {

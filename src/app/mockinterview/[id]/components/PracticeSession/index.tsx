@@ -126,7 +126,7 @@ export default function PraceticeSession(props: Props) {
   };
 
   const handleEnd = () => {
-    if (!isRecording) return;
+    if (!isAbleToSave) return;
     if (isStart) setIsStart(false);
     else setIsStart(true);
   };
