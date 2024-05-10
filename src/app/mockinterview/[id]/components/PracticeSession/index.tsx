@@ -36,6 +36,7 @@ export default function PraceticeSession(props: Props) {
   );
   const [elapsedTime, setElapsedTime] = useState<number>(0);
   const [isRecording, setIsRecording] = useState<boolean>(false);
+  const [isAbleToSave, setIsAbleToSave] = useState<boolean>(false);
   const [isRestart, setIsRestart] = useState<boolean>(false);
   const el = useRef(null);
   // Create reference to store the Typed instance itself
@@ -108,6 +109,10 @@ export default function PraceticeSession(props: Props) {
       timer = setInterval(() => {
         setElapsedTime((prevTime) => prevTime + 1);
       }, 1000);
+      setTimeout(() => {
+        setIsAbleToSave(true);
+      }
+      , 1200);
     }
     return () => {
       clearInterval(timer);
@@ -121,10 +126,12 @@ export default function PraceticeSession(props: Props) {
   };
 
   const handleEnd = () => {
-    if (!isRecording) return;
+    if (!isAbleToSave) return;
     if (isStart) setIsStart(false);
     else setIsStart(true);
   };
+
+  
   return (
     <>
       <Header handleBack={handleBack} title="모의연습" />
@@ -180,13 +187,13 @@ export default function PraceticeSession(props: Props) {
             />
             <div
               className={`absolute flex mx-auto my-auto justify-center items-center rounded-full z-50  hover:opacity-75 ${
-                !isRecording ? "opacity-75" : ""
+                !isAbleToSave ? "opacity-75" : ""
               }`}
               onClick={handleEnd}
             >
               <div
                 className={`w-full h-full absolute ring-8 ring-primary-200 rounded-full ${
-                  isStart ? "animate-ping" : ""
+                  isAbleToSave ? "animate-ping" : ""
                 }`}
               ></div>
               <h1 className="text-center font-semibold text-primary-600 absolute mx-auto my-auto -top-8 mr-1">

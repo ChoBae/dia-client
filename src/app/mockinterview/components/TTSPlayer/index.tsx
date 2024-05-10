@@ -124,7 +124,7 @@ export default function TTSPlayer({
   };
   const handleAudio2Ended = () => {
     stopAudio();
-    setIsRecording && setIsRecording(true);
+    setIsRecording && setTimeout(() => setIsRecording(true), 1000);
     startSpeechToText();
   };
 
