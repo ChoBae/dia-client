@@ -12,7 +12,7 @@ import HistorySection from "@/app/components/HistorySection";
 import Header from "@/app/mockinterview/[id]/components/Header";
 import { useRouter } from "next/navigation";
 import type { QuestionAndScript } from "@/types/Practice";
-
+import Button from "@/app/components/Button";
 interface Props {
   pkValue: string;
   session?: Session;
@@ -72,6 +72,17 @@ export default function PracticeResultMain({
             className="h-[369px]"
             theme="multi"
           />
+          <div className="flex flex-row gap-3">
+            <Button
+              onClick={() => router.push(`/mockinterview/practice/${pkValue}`)}
+              className="bg-primary-gray-50 border-primary-600 border-[1.5px] text-primary-600"
+            >
+              다시풀기
+            </Button>
+            <Button onClick={() => router.push(`/practice/backend`)}>
+              답변완료
+            </Button>
+          </div>
         </div>
       </section>
     </main>

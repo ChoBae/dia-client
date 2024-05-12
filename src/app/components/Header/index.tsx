@@ -87,6 +87,7 @@ export default function Header({}: HeaderProps) {
         {isMenuOpen && (
           <ToggleMenu
             isToggleMenuOpen={isMenuOpen}
+            setIsToggleMenuOpen={setIsMenuOpen}
             animationClass={animationClass}
             onClick={hideMenu}
             session={session}

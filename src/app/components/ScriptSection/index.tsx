@@ -91,7 +91,7 @@ export default function ScriptSection({
     <div
       className={twMerge(
         `flex flex-col relative bg-[#FAFAFA] rounded-[5px] w-full ${
-          (!isEditing || !script?.contentValue) && writeScript
+          !script?.contentValue
             ? "cursor-pointer"
             : ""
         }`,
