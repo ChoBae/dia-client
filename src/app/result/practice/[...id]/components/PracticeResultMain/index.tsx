@@ -75,7 +75,7 @@ export default function PracticeResultMain({
           <div className="flex flex-row gap-3">
             <Button
               onClick={() => router.push(`/mockinterview/practice/${pkValue}`)}
-              className="bg-primary-gray-50 border border-primary-gray-300 text-primary-gray-500"
+              className="bg-primary-gray-50 border-primary-600 border-[1.5px] text-primary-600"
             >
               다시풀기
             </Button>
