@@ -157,6 +157,7 @@ export default function MockPraceticeSession(props: Props) {
   );
   const handleNext = () => {
     if (!isAbleToSave) return;
+    setIsAbleToSave(false);
     setIsStart(false);
     setElapsedTime(0);
     // if (questionIdx + 1 < questionList.length) {
