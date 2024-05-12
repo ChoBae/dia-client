@@ -15,12 +15,14 @@ type ToggleMenuProps = {
   animationClass: string;
   onClick: () => void;
   session: Session;
+  setIsToggleMenuOpen: (boolean: boolean) => void;
 };
 
 export default function ToggleMenu({
   session,
   onClick,
   animationClass,
+  setIsToggleMenuOpen,
 }: ToggleMenuProps) {
   const router = useRouter();
   const deleteSession = async () => {
@@ -81,15 +83,18 @@ export default function ToggleMenu({
           )}
         </div>
         <nav className="bg-white mt-6 mx-4 grid grid-cols-1 divide-y border border-[#F4F4F4]">
-          <Button href="/">
+          <Button href="/" onClick={() => setIsToggleMenuOpen(false)}>
             <HomeFillSmallIcon />홈
           </Button>
-          <Button href="/solve/backend">
+          <Button
+            href="/solve/backend"
+            onClick={() => setIsToggleMenuOpen(false)}
+          >
             <SolveFillSmallIcon />
             문제풀기
           </Button>
           {session && (
-            <Button href="/history">
+            <Button href="/history" onClick={() => setIsToggleMenuOpen(false)}>
               <HistoryFillSmallIcon />
               히스토리
             </Button>
