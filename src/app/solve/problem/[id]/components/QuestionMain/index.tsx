@@ -111,7 +111,7 @@ Props) {
           </Question>
           <ScriptSection
             id={questionData.pkValue}
-            className={"h-full"}
+            className="h-1/2"
             placeholder="모의연습 전 스크립트를 먼저 작성해보세요.이후 음성 답변과 스크립트를 비교할 수 있습니다."
             session={session}
           ></ScriptSection>
