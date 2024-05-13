@@ -65,13 +65,13 @@ export default function ScriptSection({
       if (prevScript) {
         await editQuestionScript({
           scriptPkValue: id,
-          contentValue: script?.contentValue as string,
+          contentValue: script?.contentValue.trim() as string,
           accessToken: session?.accessToken,
         });
       } else {
         await saveQuestionScript({
           questionPkValue: id,
-          contentValue: script?.contentValue as string,
+          contentValue: script?.contentValue.trim() as string,
           accessToken: session?.accessToken,
         });
       }
@@ -90,7 +90,7 @@ export default function ScriptSection({
   return (
     <div
       className={twMerge(
-        `flex flex-col relative bg-[#FAFAFA] rounded-[5px] w-full ${
+        `flex flex-col relative bg-[#FAFAFA] rounded-[5px] w-full pt-3 pb-10 ${
           !script?.contentValue
             ? "cursor-pointer"
             : ""
@@ -99,7 +99,7 @@ export default function ScriptSection({
       )}
       onClick={handleSectionClick}
     >
-      <div className="flex-1 overflow-y-auto px-4 py-3 no-scrollbar">
+      <div className="flex-1 overflow-y-auto px-4 no-scrollbar">
         {isLoading ? (
           <Spinner />
         ) : isEditing ? (
@@ -117,7 +117,7 @@ export default function ScriptSection({
                   (prevScript) =>
                     ({
                       ...prevScript,
-                      contentValue: e.target.value,
+                      contentValue: e.target.value.trim(),
                     } as Script)
                 )
               }
@@ -133,12 +133,12 @@ export default function ScriptSection({
               ></XCircleIcon>
               <CheckCircleIcon
                 onClick={() => handleSaveScript()}
-                className="w-5 h-5 text--600 cursor-pointer hover:opacity-50"
+                className="w-5 h-5 text-primary-600 cursor-pointer hover:opacity-50"
               ></CheckCircleIcon>
             </div>
           </>
         ) : (
-          <div className="whitespace-pre-wrap flex w-full">
+          <div className="whitespace-pre-wrap overflow-y-auto flex w-full">
             {script && script.contentValue ? (
               <p className="text-[14px] text-primary-gray-800  leading-[22px] sm:text-lg font-normal">
                 {script.contentValue}
