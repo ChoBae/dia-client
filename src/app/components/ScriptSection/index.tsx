@@ -64,7 +64,7 @@ export default function ScriptSection({
     if (session && session.user) {
       if (prevScript) {
         await editQuestionScript({
-          scriptPkValue: id,
+          scriptPkValue: script?.pkValue as number,
           contentValue: script?.contentValue.trim() as string,
           accessToken: session?.accessToken,
         });
