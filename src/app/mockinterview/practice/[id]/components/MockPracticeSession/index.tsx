@@ -107,7 +107,7 @@ export default function MockPraceticeSession(props: Props) {
             practiceResult: {
               interviewQuestionPkValue: questionList[questionIdx].question
                 .pkValue as number,
-              contentValue: interimResult || "",
+              contentValue: interimResult.trim() || "",
               typeValue: "MULTI",
               elapsedTimeValue: time,
               filePathValue: null,
@@ -136,7 +136,7 @@ export default function MockPraceticeSession(props: Props) {
               {
                 interviewQuestionPkValue: questionList[questionIdx].question
                   .pkValue as number,
-                contentValue: interimResult as string,
+                contentValue: interimResult.trim() || "" as string,
                 typeValue: "MULTI",
                 elapsedTimeValue: time,
                 filePathValue: null,
