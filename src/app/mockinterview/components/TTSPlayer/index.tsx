@@ -39,7 +39,7 @@ export default function TTSPlayer({
     startSpeechToText,
     stopSpeechToText,
   } = useSpeechToText({
-    continuous: true,
+    continuous: false,
     useLegacyResults: false,
   });
 
