@@ -11,6 +11,7 @@ interface TTSPlayerProps {
   isEnd?: boolean;
   setIsRecording?: (isRecording: boolean) => void;
   isRestart: boolean;
+  isTarget: boolean;
 }
 
 export default function TTSPlayer({
@@ -21,6 +22,7 @@ export default function TTSPlayer({
   isEnd,
   setIsRecording,
   isRestart,
+  isTarget,
 }: TTSPlayerProps) {
   const audio1Ref = useRef<HTMLAudioElement | null>(null);
   const audio2Ref = useRef<HTMLAudioElement | null>(null);
@@ -71,9 +73,9 @@ export default function TTSPlayer({
     // 초기상태 초기화
     setResults([]);
     stopAudio();
-    stopSpeechToText();
+    // stopSpeechToText();
     setTime(0);
-    if (isStart) {
+    if (isTarget) {
       setTimeout(() => {
         playAudio1();
       }, 1000);
@@ -85,10 +87,10 @@ export default function TTSPlayer({
       // clearInterval(timer);
       stopSpeechToText();
     };
-  }, [isStart, voice, isRestart]);
+  }, [isTarget, voice, isRestart]);
 
   useEffect(() => {
-    if (handleStop && !isStart && !isEnd) {
+    if (handleStop && !isStart && !isEnd && isTarget) {
       stopAudio();
       setIsRecording && setIsRecording(false);
       let resultString = "";
@@ -103,7 +105,9 @@ export default function TTSPlayer({
       }
       handleStop(interimResult as any, time);
     }
-    stopSpeechToText();
+    setTimeout(() => {
+      stopSpeechToText();
+    }, 2000);
     setTime(0);
     return () => {
       stopSpeechToText();
