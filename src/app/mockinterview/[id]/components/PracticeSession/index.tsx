@@ -76,7 +76,7 @@ export default function PraceticeSession(props: Props) {
         savePractice({
           practiceResult: {
             interviewQuestionPkValue: question.pkValue as number,
-            contentValue: interimResult || "",
+            contentValue: interimResult.trim() || "",
             typeValue: "SINGLE",
             elapsedTimeValue: time,
             filePathValue: null,
@@ -87,7 +87,7 @@ export default function PraceticeSession(props: Props) {
         const practiceResult: HistoryType = {
           pkValue: question.pkValue as number,
           question: question,
-          contentValue: interimResult as string,
+          contentValue: interimResult.trim() || "" as string,
           typeValue: "SINGLE",
           createdTimeValue: new Date().toISOString(),
           elapsedTimeValue: time,

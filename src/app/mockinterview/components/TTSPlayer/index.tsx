@@ -39,8 +39,14 @@ export default function TTSPlayer({
     startSpeechToText,
     stopSpeechToText,
   } = useSpeechToText({
-    continuous: false,
+    continuous: true,
     useLegacyResults: false,
+    // crossBrowser: true,
+    speechRecognitionProperties: {
+      interimResults: true,
+      lang: "ko-KR",
+    },
+
   });
 
   const playAudio1 = () => {
@@ -91,11 +97,17 @@ export default function TTSPlayer({
     if (handleStop && !isStart && !isEnd) {
       stopAudio();
       setIsRecording && setIsRecording(false);
+      console.log('----------------end---------------')
+      console.log("results", results);
+      console.log("interimResult", interimResult);
       let resultString = "";
       if (results.length > 0) {
         results.forEach((result: any) => {
-          resultString = resultString + " " + result.transcript;
+          resultString = resultString + result.transcript + ". ";
         });
+        if (interimResult) {
+          resultString = resultString  + interimResult + ". ";
+        }
       }
       if (resultString) {
         handleStop(resultString, time);
