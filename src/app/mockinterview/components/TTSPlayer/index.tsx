@@ -97,9 +97,9 @@ export default function TTSPlayer({
     if (handleStop && !isStart && !isEnd) {
       stopAudio();
       setIsRecording && setIsRecording(false);
-      console.log('----------------end---------------')
-      console.log("results", results);
-      console.log("interimResult", interimResult);
+      // console.log('----------------end---------------')
+      // console.log("results", results);
+      // console.log("interimResult", interimResult);
       let resultString = "";
       if (results.length > 0) {
         results.forEach((result: any) => {
