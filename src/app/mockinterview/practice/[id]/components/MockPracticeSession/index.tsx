@@ -1,6 +1,4 @@
 import EqualizerIcon from "@/app/ui/icons/EqualizerIcon";
-import TTSPlayer from "../../../../components/TTSPlayer";
-
 import { useEffect, useState, useRef, useCallback } from "react";
 import type { PracticeResult } from "@/types/PracticeResult";
 import type { VoiceType } from "@/types/Voice";
@@ -17,6 +15,7 @@ import Header from "@/app/mockinterview/[id]/components/Header";
 import Typed from "typed.js";
 import type { PracticeDetail, QuestionAndScript } from "@/types/Practice";
 import { useRouter } from "next/navigation";
+import TTSPlayer from "../TTSPlayer";
 type Props = {
   practice: PracticeDetail;
   setIsView: (isView: number) => void;
@@ -248,6 +247,24 @@ export default function MockPraceticeSession(props: Props) {
           </div>
         </div>
         {questionList && questionIdx !== null && questionIdx !== undefined && (
+          questionList.map((questionAndScript: QuestionAndScript, index: number) => {
+            return (
+              <TTSPlayer
+                key={index}
+                isStart={isStart}
+                voice={questionAndScript.question.voices[0] as VoiceType}
+                handleStop={handleStop}
+                setDuration={setDuration}
+                isEnd={isModalOpen}
+                isRestart={isRestart}
+                setIsRecording={setIsRecording}
+                isTarget={index === questionIdx}
+              ></TTSPlayer>
+            );
+          }
+          )
+          )}
+        {/* {questionList && questionIdx !== null && questionIdx !== undefined && (
           <TTSPlayer
             isStart={isStart}
             voice={questionList[questionIdx].question.voices[0] as VoiceType}
@@ -257,7 +274,7 @@ export default function MockPraceticeSession(props: Props) {
             isRestart={isRestart}
             setIsRecording={setIsRecording}
           ></TTSPlayer>
-        )}
+        )} */}
         {/* 모달 섹션 */}
         <Modal modalPosition="center" isOpen={isModalOpen}>
           <Modal.Body
