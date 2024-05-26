@@ -24,8 +24,8 @@ export default function ProfileToolbar({
     });
 
     // router.refresh();
-    // window.location.reload();
-    router.push("/")
+    window.location.reload();
+    // router.push("/")
   };
 
   return (
