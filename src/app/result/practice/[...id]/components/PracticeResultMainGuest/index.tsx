@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import type { QuestionAndScript } from "@/types/Practice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Button from "@/app/components/Button";
 interface Props {
   pkValue: string;
   practice: QuestionType[];
@@ -45,14 +46,9 @@ export default function PracticeResultMainGuest({ pkValue, practice }: Props) {
     fetchHistory();
   }, []);
   return (
-    <main className="flex flex-col mx-auto pt-20 pb-8 h-[100dvh] max-w-[500px] max-h-[1000px] overflow-y-hidden bg-white no-scrollbar">
-      <Header
-        title="답변확인"
-        className="mb-5"
-        handleBack={() => router.push(`/mockinterview/practice/${pkValue}`)}
-      />
-      <section className="flex flex-col px-5">
-        <div className="flex gap-[6px] flex-row w-full overflow-x-auto no-scrollbar mb-4">
+    <>
+      <section className="flex flex-col gap-3 h-full px-5">
+        <div className="flex gap-[6px] h-8 flex-row w-full overflow-x-auto no-scrollbar">
           {practice.map((question, index) => (
             <NumberButton
               key={question.pkValue}
@@ -63,28 +59,34 @@ export default function PracticeResultMainGuest({ pkValue, practice }: Props) {
             </NumberButton>
           ))}
         </div>
-        <div className="flex flex-col gap-3">
-          <Question
-            question={practice[questionIdx - 1]}
-            toastOptionFunc={notify}
+        <Question question={practice[questionIdx - 1]} toastOptionFunc={notify}>
+          <Question.SubTitle className="text-[#FDDA23]">
+            Question
+          </Question.SubTitle>
+          <Question.Title>
+            {practice[questionIdx - 1].korTitleValue}
+          </Question.Title>
+        </Question>
+        <ScriptSection
+          id={practice[questionIdx - 1].pkValue}
+          className="flex-grow-3 h-[150px] sm:h-[200px]"
+        />
+        <HistorySection
+          id={practice[questionIdx - 1].pkValue}
+          history={historys[questionIdx - 1]}
+          className="flex-grow h-0"
+          theme="multi"
+        />
+        <div className="flex flex-row gap-3">
+          <Button
+            onClick={() => router.push(`/mockinterview/practice/${pkValue}`)}
+            className="bg-primary-gray-50 border-primary-600 border-[1.5px] text-primary-600"
           >
-            <Question.SubTitle className="text-[#FDDA23]">
-              Question
-            </Question.SubTitle>
-            <Question.Title>
-              {practice[questionIdx - 1].korTitleValue}
-            </Question.Title>
-          </Question>
-          <ScriptSection
-            id={practice[questionIdx - 1].pkValue}
-            className="h-[151px] sm:h-[250px]"
-          />
-          <HistorySection
-            id={practice[questionIdx - 1].pkValue}
-            history={historys[questionIdx - 1]}
-            className="h-[369px]"
-            theme="multi"
-          />
+            다시풀기
+          </Button>
+          <Button onClick={() => router.push(`/practice/backend`)}>
+            답변완료
+          </Button>
         </div>
       </section>
       {/* 토스트 메세지 섹션 */}
@@ -101,6 +103,9 @@ export default function PracticeResultMainGuest({ pkValue, practice }: Props) {
         theme="light"
         toastClassName="bg-primary-600 p-3"
       />
-    </main>
+    </>
+    // <main className="flex flex-col mx-auto pt-20 pb-8 h-[100dvh] max-w-[500px] max-h-[1000px] overflow-y-hidden bg-white no-scrollbar">
+
+    // </main>
   );
 }
