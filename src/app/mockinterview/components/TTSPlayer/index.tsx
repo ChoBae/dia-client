@@ -73,20 +73,6 @@ export default function TTSPlayer({
     if (handleStop && !isStart && !isEnd) {
       stopAudio();
       setIsRecording && setTimeout(() => setIsRecording(false), 1000);
-      // let resultString = "";
-      // if (results.length > 0) {
-      //   results.forEach((result: any) => {
-      //     resultString = resultString + result.transcript + ". ";
-      //   });
-      //   if (interimResult) {
-      //     resultString = resultString + interimResult + ". ";
-      //   }
-      // }
-      // if (resultString) {
-      //   handleStop(resultString, time);
-      //   return;
-      // }
-      // handleStop(interimResult as any, time);
     }
     setTime(0);
     return () => {
@@ -148,7 +134,12 @@ export default function TTSPlayer({
         onEnded={handleAudio2Ended}
         src="/sounds/beep.mp3"
       ></audio>
-      {handleStop && <VoiceTranscription isStart={isRecording} time={time} handleStop={handleStop} />}
+      {handleStop && (
+        <VoiceTranscription
+          isStart={isRecording}
+          handleStop={handleStop}
+        />
+      )}
     </div>
   );
 }

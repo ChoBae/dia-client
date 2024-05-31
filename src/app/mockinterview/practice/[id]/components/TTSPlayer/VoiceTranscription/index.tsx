@@ -5,6 +5,7 @@ import React, { useState, useEffect } from "react";
 interface Props {
   isStart: boolean;
   handleStop: (interimResult: string, time: number) => void;
+  // isTarget: boolean;
 }
 
 export default function VoiceTranscription({ isStart, handleStop }: Props) {
@@ -24,7 +25,6 @@ export default function VoiceTranscription({ isStart, handleStop }: Props) {
       );
       return;
     }
-    setTime(0);
     const recognition = new window.webkitSpeechRecognition();
     recognition.continuous = true;
     // recognition.interimResults = true;
@@ -70,6 +70,7 @@ export default function VoiceTranscription({ isStart, handleStop }: Props) {
       setWasListening(true);
     } else if (wasListening && !isStart) {
       stopListening();
+
       let resultString = "";
       if (transcripts.length > 0) {
         transcripts.forEach((result: any) => {
@@ -78,6 +79,8 @@ export default function VoiceTranscription({ isStart, handleStop }: Props) {
       }
       handleStop(resultString, time);
       setWasListening(false);
+      setTime(0);
+      setTranscripts([]);
     }
     return () => {
       stopListening();

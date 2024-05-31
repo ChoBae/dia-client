@@ -112,7 +112,7 @@ export default function PraceticeSession(props: Props) {
       setTimeout(() => {
         setIsAbleToSave(true);
       }
-      , 1200);
+      , 1000);
     }
     return () => {
       clearInterval(timer);
