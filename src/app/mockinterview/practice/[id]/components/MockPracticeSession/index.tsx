@@ -246,7 +246,7 @@ export default function MockPraceticeSession(props: Props) {
             </div>
           </div>
         </div>
-        {questionList && questionIdx !== null && questionIdx !== undefined && (
+        {/* {questionList && questionIdx !== null && questionIdx !== undefined && (
           questionList.map((questionAndScript: QuestionAndScript, index: number) => {
             return (
               <TTSPlayer
@@ -257,14 +257,15 @@ export default function MockPraceticeSession(props: Props) {
                 setDuration={setDuration}
                 isEnd={isModalOpen}
                 isRestart={isRestart}
+                isRecording={isRecording}
                 setIsRecording={setIsRecording}
                 isTarget={index === questionIdx}
               ></TTSPlayer>
             );
           }
           )
-          )}
-        {/* {questionList && questionIdx !== null && questionIdx !== undefined && (
+          )} */}
+        {questionList && questionIdx !== null && questionIdx !== undefined && (
           <TTSPlayer
             isStart={isStart}
             voice={questionList[questionIdx].question.voices[0] as VoiceType}
@@ -273,8 +274,9 @@ export default function MockPraceticeSession(props: Props) {
             isEnd={isModalOpen}
             isRestart={isRestart}
             setIsRecording={setIsRecording}
+            isRecording={isRecording}
           ></TTSPlayer>
-        )} */}
+        )}
         {/* 모달 섹션 */}
         <Modal modalPosition="center" isOpen={isModalOpen}>
           <Modal.Body

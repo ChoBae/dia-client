@@ -27,64 +27,53 @@ export default function PracticeResultMain({
   const router = useRouter();
   const [questionIdx, setQuestionIdx] = useState(1);
 
-  
-
   return (
-    <main className="flex flex-col mx-auto pt-20 pb-8 h-[100dvh] max-w-[500px] max-h-[1000px] overflow-y-hidden bg-white no-scrollbar">
-      <Header
-        title="답변확인"
-        className="mb-5"
-        handleBack={() => router.push(`/mockinterview/practice/${pkValue}`)}
-      />
-      <section className="flex flex-col px-5">
-        <div className="flex gap-[6px] flex-row w-full overflow-x-auto no-scrollbar mb-4">
-          {historys.map((question, index) => (
-            <NumberButton
-              key={question.question.pkValue}
-              isSelected={questionIdx === index + 1}
-              onClick={() => setQuestionIdx(index + 1)} // 숫자 버튼 클릭 시 questionIdx 변경
-            >
-              {index + 1}
-            </NumberButton>
-          ))}
-        </div>
-        <div className="flex flex-col gap-3">
-          <Question
-            question={historys[questionIdx - 1].question}
-            isBookmarkOn={session ? true : false}
+    <section className="flex flex-col h-full gap-3 px-4">
+      <div className="flex gap-[6px] flex-row w-full overflow-x-auto no-scrollbar mb-4">
+        {historys.map((question, index) => (
+          <NumberButton
+            key={question.question.pkValue}
+            isSelected={questionIdx === index + 1}
+            onClick={() => setQuestionIdx(index + 1)} // 숫자 버튼 클릭 시 questionIdx 변경
           >
-            <Question.SubTitle className="text-[#FDDA23]">
-              Question
-            </Question.SubTitle>
-            <Question.Title>
-              {historys[questionIdx - 1].question.korTitleValue}
-            </Question.Title>
-          </Question>
-          <ScriptSection
-            id={historys[questionIdx - 1].question.pkValue}
-            className="h-[151px] sm:h-[250px]"
-            session={session}
-          />
-          <HistorySection
-            id={historys[questionIdx - 1].pkValue}
-            history={historys[questionIdx - 1]}
-            session={session}
-            className="h-[369px]"
-            theme="multi"
-          />
-          <div className="flex flex-row gap-3">
-            <Button
-              onClick={() => router.push(`/mockinterview/practice/${pkValue}`)}
-              className="bg-primary-gray-50 border-primary-600 border-[1.5px] text-primary-600"
-            >
-              다시풀기
-            </Button>
-            <Button onClick={() => router.push(`/practice/backend`)}>
-              답변완료
-            </Button>
-          </div>
-        </div>
-      </section>
-    </main>
+            {index + 1}
+          </NumberButton>
+        ))}
+      </div>
+      <Question
+        question={historys[questionIdx - 1].question}
+        isBookmarkOn={session ? true : false}
+      >
+        <Question.SubTitle className="text-[#FDDA23]">
+          Question
+        </Question.SubTitle>
+        <Question.Title>
+          {historys[questionIdx - 1].question.korTitleValue}
+        </Question.Title>
+      </Question>
+      <ScriptSection
+        id={historys[questionIdx - 1].question.pkValue}
+        className="flex-grow-3 h-[150px] sm:h-[200px]"
+        session={session}
+      />
+      <HistorySection
+        id={historys[questionIdx - 1].pkValue}
+        history={historys[questionIdx - 1]}
+        session={session}
+        className="flex-grow h-0"
+        theme="multi"
+      />
+      <div className="flex flex-row gap-3">
+        <Button
+          onClick={() => router.push(`/mockinterview/practice/${pkValue}`)}
+          className="bg-primary-gray-50 border-primary-600 border-[1.5px] text-primary-600"
+        >
+          다시풀기
+        </Button>
+        <Button onClick={() => router.push(`/practice/backend`)}>
+          답변완료
+        </Button>
+      </div>
+    </section>
   );
 }

@@ -8,7 +8,7 @@ import { HistoryType } from "@/types/History";
 import PracticeResultMainGuest from "./components/PracticeResultMainGuest";
 import { getMultiPracticeDetails } from "@/app/api/getMultiPracticeDetails";
 export const dynamic = "force-dynamic";
-
+import Header from "@/app/mockinterview/[id]/components/Header";
 export const generateMetadata = async ({ params }: any): Promise<Metadata> => {
   // const data = await getQuestionDetails(params.id);
   return {
@@ -58,7 +58,19 @@ export default async function Home({
   }
   return (
     <>
-      {session ? (
+      <main className="flex flex-col mx-auto pt-20 pb-8 max-w-[500px] h-[100dvh] sm:max-h-[1000px] overflow-y-hidden bg-white no-scrollbar">
+        <Header title="답변확인" className="mb-5" />
+        {session ? (
+          <PracticeResultMain
+            pkValue={params.id}
+            historys={historys?.reverse() as HistoryType[]}
+            session={session}
+          />
+        ) : (
+          <PracticeResultMainGuest pkValue={params.id} practice={practice} />
+        )}
+      </main>
+      {/* {session ? (
         <PracticeResultMain
           pkValue={params.id}
           historys={historys?.reverse() as HistoryType[]}
@@ -66,7 +78,7 @@ export default async function Home({
         />
       ) : (
         <PracticeResultMainGuest pkValue={params.id} practice={practice} />
-      )}
+      )} */}
     </>
   );
 }

@@ -112,7 +112,7 @@ export default function PraceticeSession(props: Props) {
       setTimeout(() => {
         setIsAbleToSave(true);
       }
-      , 1200);
+      , 1000);
     }
     return () => {
       clearInterval(timer);
@@ -209,6 +209,7 @@ export default function PraceticeSession(props: Props) {
             handleStop={handleStop}
             setDuration={setDuration}
             voice={question.voices[0]}
+            isRecording={isRecording}
             setIsRecording={setIsRecording}
             isRestart={isRestart}
           ></TTSPlayer>
