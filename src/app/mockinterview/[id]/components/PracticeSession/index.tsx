@@ -38,6 +38,7 @@ export default function PraceticeSession(props: Props) {
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [isAbleToSave, setIsAbleToSave] = useState<boolean>(false);
   const [isRestart, setIsRestart] = useState<boolean>(false);
+  const [isEnd, setIsEnd] = useState<boolean>(false);
   const el = useRef(null);
   // Create reference to store the Typed instance itself
   const typed = useRef<Typed | null>(null);
@@ -70,8 +71,7 @@ export default function PraceticeSession(props: Props) {
         setIsCancelModalOpen(true);
         return;
       }
-      setIsEndModalOpen(true);
-      // 결과물이 있을때만 저장
+      // setIsEndModalOpen(true);
       if (session) {
         savePractice({
           practiceResult: {
@@ -87,7 +87,7 @@ export default function PraceticeSession(props: Props) {
         const practiceResult: HistoryType = {
           pkValue: question.pkValue as number,
           question: question,
-          contentValue: interimResult.trim() || "" as string,
+          contentValue: interimResult.trim() || ("" as string),
           typeValue: "SINGLE",
           createdTimeValue: new Date().toISOString(),
           elapsedTimeValue: time,
@@ -95,6 +95,7 @@ export default function PraceticeSession(props: Props) {
         };
         setPracticeResult(practiceResult);
       }
+      setIsEnd(true);
     },
     [question, session, isCancel]
   );
@@ -105,33 +106,33 @@ export default function PraceticeSession(props: Props) {
   };
   useEffect(() => {
     let timer: any;
-    if (isStart && isRecording) {
+    if ((isStart && isRecording) || (isRestart && isRecording)) {
       timer = setInterval(() => {
         setElapsedTime((prevTime) => prevTime + 1);
       }, 1000);
       setTimeout(() => {
         setIsAbleToSave(true);
-      }
-      , 1000);
+      }, 1000);
     }
     return () => {
       clearInterval(timer);
     };
-  }, [isStart, isRecording]);
+  }, [isStart, isRecording, isRestart]);
 
   const handleRetry = () => {
     setIsRestart(true);
-    setIsRecording(false);
+    // setIsRecording(false);
+    setIsAbleToSave(false);
     setElapsedTime(0);
   };
 
   const handleEnd = () => {
+    if (isRestart) return;
     if (!isAbleToSave) return;
     if (isStart) setIsStart(false);
     else setIsStart(true);
   };
 
-  
   return (
     <>
       <Header handleBack={handleBack} title="모의연습" />
@@ -139,7 +140,7 @@ export default function PraceticeSession(props: Props) {
         {isRecording && (
           <RetryIcon
             onClick={handleRetry}
-            className="absolute right-4 hover:opacity-70 cursor-pointer mb-2"
+            className="absolute right-4 hover:opacity-70 cursor-pointer mb-2 z-50"
           />
         )}
         <div className="flex flex-col px-4 mt-10 h-full w-full">
@@ -173,7 +174,7 @@ export default function PraceticeSession(props: Props) {
             </div>
           </div>
         </div>
-        <div className="w-full absolute bottom-12 text-center my-auto">
+        {/* <div className="w-full absolute bottom-12 text-center my-auto">
           <div className="absolute inset-0 flex justify-center items-center w-full">
             <Image
               src="/images/equalizer.png"
@@ -202,7 +203,7 @@ export default function PraceticeSession(props: Props) {
               <MicroCircleIcon />
             </div>
           </div>
-        </div>
+        </div> */}
         {question && (
           <TTSPlayer
             isStart={isStart}
@@ -212,10 +213,16 @@ export default function PraceticeSession(props: Props) {
             isRecording={isRecording}
             setIsRecording={setIsRecording}
             isRestart={isRestart}
+            setIsModalOpen={setIsEndModalOpen}
+            setIsEnd={setIsEnd}
           ></TTSPlayer>
         )}
         {/* 저장 모달 섹션 */}
-        <Modal modalPosition="center" isOpen={isEndModalOpen}>
+        <Modal
+          modalPosition="center"
+          isOpen={isEndModalOpen}
+          isLoading={isEnd}
+        >
           <Modal.Header closeModal={() => setIsEndModalOpen(false)} />
           <Modal.Body
             title="수고하셨습니다"

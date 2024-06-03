@@ -13,6 +13,8 @@ interface TTSPlayerProps {
   isRecording: boolean;
   setIsRecording?: (isRecording: boolean) => void;
   isRestart: boolean;
+  setIsModalOpen: (isModalOpen: boolean) => void;
+  setIsEnd: (isEnd: boolean) => void;
 }
 
 export default function TTSPlayer({
@@ -24,11 +26,11 @@ export default function TTSPlayer({
   isRecording,
   setIsRecording,
   isRestart,
+  setIsModalOpen,
+  setIsEnd,
 }: TTSPlayerProps) {
   const audio1Ref = useRef<HTMLAudioElement | null>(null);
   const audio2Ref = useRef<HTMLAudioElement | null>(null);
-  const [time, setTime] = useState<number>(0);
-  const [timer, setTimer] = useState<any>(null);
 
   const playAudio1 = () => {
     if (audio1Ref.current) {
@@ -57,28 +59,23 @@ export default function TTSPlayer({
     let timer: any;
     // 초기상태 초기화
     stopAudio();
-    setTime(0);
-    if (isStart) {
+    setIsRecording && setIsRecording(false);
+    if (isStart || isRestart) {
       setTimeout(() => {
         playAudio1();
       }, 1000);
-      // timer = setInterval(() => {
-      //   setTime((prevTime) => prevTime + 1);
-      // }, 1000);
     }
     return () => {};
   }, [isStart, voice, isRestart]);
 
   useEffect(() => {
-    if (handleStop && !isStart && !isEnd) {
+    if (handleStop && !isStart) {
       stopAudio();
-      setIsRecording && setTimeout(() => setIsRecording(false), 1000);
+      // console.log('여기 오지?', isRestart)
+      // if (!isRestart) return;
+      setIsRecording && setTimeout(() => setIsRecording(false), 4000);
     }
-    setTime(0);
-    return () => {
-      stopTimer();
-    };
-  }, [isStart, handleStop, isEnd]);
+  }, [isStart, handleStop]);
 
   const handleAudio1Ended = () => {
     setTimeout(() => {
@@ -93,30 +90,8 @@ export default function TTSPlayer({
   };
   const handleAudio2Ended = () => {
     stopAudio();
-    setIsRecording && setTimeout(() => setIsRecording(true), 1000);
+    setIsRecording && setTimeout(() => setIsRecording(true), 1500);
   };
-  const startTimer = () => {
-    const interval = setInterval(() => {
-      setTime((prevTime: number) => prevTime + 1);
-    }, 1000); // 1초마다 증가
-    setTimer(interval);
-  };
-
-  const stopTimer = () => {
-    clearInterval(timer);
-    setTimer(null);
-  };
-  useEffect(() => {
-    if (isRecording) {
-      startTimer();
-    } else {
-      stopTimer();
-    }
-
-    return () => {
-      stopTimer();
-    };
-  }, [isRecording]);
 
   return (
     <div>
@@ -138,6 +113,10 @@ export default function TTSPlayer({
         <VoiceTranscription
           isStart={isRecording}
           handleStop={handleStop}
+          isRestart={isRestart}
+          setIsModalOpen={setIsModalOpen}
+          setIsEnd={setIsEnd}
+
         />
       )}
     </div>

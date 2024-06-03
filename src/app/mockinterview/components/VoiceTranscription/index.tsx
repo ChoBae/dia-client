@@ -1,13 +1,26 @@
 "use client";
 import { VoiceType } from "@/types/Voice";
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import { MicroCircleIcon } from "@/app/ui/icons/MicroCircleIcon";
+import convertToHourMinute from "@/utils/convertToHourMinute";
 
 interface Props {
   isStart: boolean;
   handleStop: (interimResult: string, time: number) => void;
+  isRestart: boolean;
+  setIsEnd: (isEnd: boolean) => void;
+  setIsModalOpen: (isModalOpen: boolean) => void;
 }
 
-export default function VoiceTranscription({ isStart, handleStop }: Props) {
+export default function VoiceTranscription({
+  isStart,
+  handleStop,
+  isRestart,
+  setIsEnd,
+  setIsModalOpen,
+}: Props) {
+  // console.log("VoiceTranscription", isStart, isRestart);
   const [isListening, setIsListening] = useState(false);
   const [transcripts, setTranscripts] = useState<string[]>([]);
   const [recognition, setRecognition] = useState<SpeechRecognition | null>(
@@ -53,7 +66,9 @@ export default function VoiceTranscription({ isStart, handleStop }: Props) {
     };
 
     recognition.onend = () => {
+      console.log("onend");
       setIsListening(false);
+      console.log("transcripts", transcripts);
     };
 
     setRecognition(recognition);
@@ -61,28 +76,42 @@ export default function VoiceTranscription({ isStart, handleStop }: Props) {
       stopTimer();
       recognition.stop();
     };
-  }, []);
+  }, [isStart, isRestart]);
 
   // 음성인식 시작 코드
   useEffect(() => {
-    if (isStart) {
-      startListening();
-      setWasListening(true);
-    } else if (wasListening && !isStart) {
-      stopListening();
-      let resultString = "";
-      if (transcripts.length > 0) {
-        transcripts.forEach((result: any) => {
-          resultString = resultString + result + ". ";
-        });
+    const handleListening = async () => {
+      if (isStart) {
+        startListening();
+        setWasListening(true);
+      } else if (wasListening && !isStart && !isRestart) {
+        stopListening();
+        let resultString = "";
+        if (transcripts.length > 0) {
+          transcripts.forEach((result) => {
+            if (result.trim() === "") return;
+            resultString += result + ". ";
+          });
+        }
+
+        handleStop(resultString, time || 1);
+        setWasListening(false);
       }
-      handleStop(resultString, time);
-      setWasListening(false);
-    }
+    };
+
+    handleListening();
+
     return () => {
       stopListening();
     };
   }, [isStart]);
+
+  useEffect(() => {
+    if (isRestart) {
+      setTranscripts([]);
+      setTime(0);
+    }
+  }, [isRestart]);
   useEffect(() => {
     if (isListening) {
       startTimer();
@@ -104,9 +133,7 @@ export default function VoiceTranscription({ isStart, handleStop }: Props) {
   const stopListening = () => {
     if (recognition) {
       // recognition.abort();
-      setTimeout(() => {
-        recognition.stop();
-      }, 3000);
+      recognition.stop();
     }
   };
 
@@ -121,5 +148,66 @@ export default function VoiceTranscription({ isStart, handleStop }: Props) {
     clearInterval(timer);
     setTimer(null);
   };
-  return <></>;
+
+  const handleSave = async () => {
+    // recognition?.stop();
+    // new Promise((resolve) => {
+    //   setTimeout(resolve, 2000);
+    // });
+    let resultString = "";
+    if (transcripts.length > 0) {
+      transcripts.forEach((result) => {
+        if (result.trim() === "") return;
+        resultString += result + ". ";
+      });
+    }
+    // console.log("resultString", resultString);
+    handleStop(resultString, time || 1);
+    setWasListening(false);
+  };
+
+  useEffect(() => {
+    if (!isListening && wasListening) {
+      handleSave();
+      stopListening();
+    }
+  }, [isListening]);
+
+  const handleEnd = () => {
+    setIsModalOpen(true);
+    stopTimer();
+    setTimeout(() => {
+      setIsListening(!isListening);
+    }, 3000);
+  };
+  return (
+    <div className="w-full absolute bottom-12 text-center my-auto">
+      <div className="absolute inset-0 flex justify-center items-center w-full">
+        <Image
+          src="/images/equalizer.png"
+          alt="이퀄라이저"
+          width={1408}
+          height={344}
+          className={`z-40 w-full sm:px-4 ${isStart ? "animate-pulse" : ""}`}
+          priority={true}
+        />
+        <div
+          className={`absolute flex mx-auto my-auto justify-center items-center rounded-full z-50  hover:opacity-75 ${
+            !isListening ? "opacity-75" : ""
+          }`}
+          onClick={handleEnd}
+        >
+          <div
+            className={`w-full h-full absolute ring-8 ring-primary-200 rounded-full ${
+              isListening ? "animate-ping" : ""
+            }`}
+          ></div>
+          <h1 className="text-center font-semibold text-primary-600 absolute mx-auto my-auto -top-8 mr-1">
+            {convertToHourMinute(time)}
+          </h1>
+          <MicroCircleIcon />
+        </div>
+      </div>
+    </div>
+  );
 }
