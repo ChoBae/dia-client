@@ -179,12 +179,12 @@ export default function MockPraceticeSession(props: Props) {
     <>
       <Header handleBack={handleBack} title="모의연습" />
       <section className="flex flex-col w-full h-full relative">
-        {isRecording && (
+        {/* {isRecording && (
           <RetryIcon
             onClick={handleRetry}
             className="absolute right-4 hover:opacity-70 cursor-pointer mb-2"
           />
-        )}
+        )} */}
         <div className="flex flex-col px-4 mt-10 h-full w-full">
           <div className="flex px-[16px] py-[17px] w-full  bg-white rounded-[10px] justify-center">
             <span

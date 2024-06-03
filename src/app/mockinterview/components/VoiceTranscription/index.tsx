@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { MicroCircleIcon } from "@/app/ui/icons/MicroCircleIcon";
 import convertToHourMinute from "@/utils/convertToHourMinute";
+import { init } from "next/dist/compiled/webpack/webpack";
 
 interface Props {
   isStart: boolean;
@@ -30,17 +31,15 @@ export default function VoiceTranscription({
   const [time, setTime] = useState<number>(0);
   const [timer, setTimer] = useState<any>(null);
 
-  useEffect(() => {
+  const initRecognition = () => {
     if (!("webkitSpeechRecognition" in window)) {
       alert(
         "음성인식이 동작하지 않는 브라우저입니다. 크롬 브라우저를 사용해주세요!"
       );
       return;
     }
-    setTime(0);
     const recognition = new window.webkitSpeechRecognition();
     recognition.continuous = true;
-    // recognition.interimResults = true;
     recognition.lang = "ko-KR";
 
     recognition.onstart = () => {
@@ -66,63 +65,41 @@ export default function VoiceTranscription({
     };
 
     recognition.onend = () => {
-      console.log("onend");
       setIsListening(false);
-      console.log("transcripts", transcripts);
     };
 
     setRecognition(recognition);
+  };
+
+  useEffect(() => {
+    initRecognition();
     return () => {
       stopTimer();
-      recognition.stop();
+      setRecognition(null);
+      recognition?.stop();
     };
-  }, [isStart, isRestart]);
+  }, []);
 
   // 음성인식 시작 코드
   useEffect(() => {
     const handleListening = async () => {
       if (isStart) {
         startListening();
+        startTimer();
         setWasListening(true);
-      } else if (wasListening && !isStart && !isRestart) {
-        stopListening();
-        let resultString = "";
-        if (transcripts.length > 0) {
-          transcripts.forEach((result) => {
-            if (result.trim() === "") return;
-            resultString += result + ". ";
-          });
-        }
-
-        handleStop(resultString, time || 1);
-        setWasListening(false);
       }
     };
-
     handleListening();
-
     return () => {
       stopListening();
     };
-  }, [isStart]);
+  }, [isStart, isRestart]);
 
-  useEffect(() => {
-    if (isRestart) {
-      setTranscripts([]);
-      setTime(0);
-    }
-  }, [isRestart]);
-  useEffect(() => {
-    if (isListening) {
-      startTimer();
-    } else {
-      stopTimer();
-    }
-
-    return () => {
-      stopTimer();
-    };
-  }, [isListening]);
+  // useEffect(() => {
+  //   if (isRestart) {
+  //     setIsListening(false);
+  //   }
+  // }, [isRestart]);
 
   const startListening = () => {
     if (recognition) {
@@ -150,10 +127,6 @@ export default function VoiceTranscription({
   };
 
   const handleSave = async () => {
-    // recognition?.stop();
-    // new Promise((resolve) => {
-    //   setTimeout(resolve, 2000);
-    // });
     let resultString = "";
     if (transcripts.length > 0) {
       transcripts.forEach((result) => {
@@ -161,7 +134,6 @@ export default function VoiceTranscription({
         resultString += result + ". ";
       });
     }
-    // console.log("resultString", resultString);
     handleStop(resultString, time || 1);
     setWasListening(false);
   };
@@ -177,7 +149,7 @@ export default function VoiceTranscription({
     setIsModalOpen(true);
     stopTimer();
     setTimeout(() => {
-      setIsListening(!isListening);
+      setIsListening(false);
     }, 3000);
   };
   return (

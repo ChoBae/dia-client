@@ -22,7 +22,7 @@ export const ModalMain = (props: Props) => {
     setIsOpen,
     animationClass,
     modalPosition = "bottom",
-    isLoading,
+    isLoading = true,
   } = props;
   const [mounted, setMounted] = useState<boolean>(false);
 

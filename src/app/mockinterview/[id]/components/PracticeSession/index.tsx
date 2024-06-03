@@ -104,45 +104,22 @@ export default function PraceticeSession(props: Props) {
     setIsCancel(true);
     setIsStart(false);
   };
-  useEffect(() => {
-    let timer: any;
-    if ((isStart && isRecording) || (isRestart && isRecording)) {
-      timer = setInterval(() => {
-        setElapsedTime((prevTime) => prevTime + 1);
-      }, 1000);
-      setTimeout(() => {
-        setIsAbleToSave(true);
-      }, 1000);
-    }
-    return () => {
-      clearInterval(timer);
-    };
-  }, [isStart, isRecording, isRestart]);
 
   const handleRetry = () => {
     setIsRestart(true);
-    // setIsRecording(false);
-    setIsAbleToSave(false);
-    setElapsedTime(0);
   };
 
-  const handleEnd = () => {
-    if (isRestart) return;
-    if (!isAbleToSave) return;
-    if (isStart) setIsStart(false);
-    else setIsStart(true);
-  };
 
   return (
     <>
       <Header handleBack={handleBack} title="모의연습" />
       <section className="flex flex-col w-full h-full relative">
-        {isRecording && (
+        {/* {isRecording && (
           <RetryIcon
             onClick={handleRetry}
             className="absolute right-4 hover:opacity-70 cursor-pointer mb-2 z-50"
           />
-        )}
+        )} */}
         <div className="flex flex-col px-4 mt-10 h-full w-full">
           <div className="flex px-[16px] py-[17px] w-full  bg-white rounded-[10px] justify-center">
             <span
@@ -174,36 +151,6 @@ export default function PraceticeSession(props: Props) {
             </div>
           </div>
         </div>
-        {/* <div className="w-full absolute bottom-12 text-center my-auto">
-          <div className="absolute inset-0 flex justify-center items-center w-full">
-            <Image
-              src="/images/equalizer.png"
-              alt="이퀄라이저"
-              width={1408}
-              height={344}
-              className={`z-40 w-full sm:px-4 ${
-                isStart ? "animate-pulse" : ""
-              }`}
-              priority={true}
-            />
-            <div
-              className={`absolute flex mx-auto my-auto justify-center items-center rounded-full z-50  hover:opacity-75 ${
-                !isAbleToSave ? "opacity-75" : ""
-              }`}
-              onClick={handleEnd}
-            >
-              <div
-                className={`w-full h-full absolute ring-8 ring-primary-200 rounded-full ${
-                  isAbleToSave ? "animate-ping" : ""
-                }`}
-              ></div>
-              <h1 className="text-center font-semibold text-primary-600 absolute mx-auto my-auto -top-8 mr-1">
-                {convertToHourMinute(elapsedTime)}
-              </h1>
-              <MicroCircleIcon />
-            </div>
-          </div>
-        </div> */}
         {question && (
           <TTSPlayer
             isStart={isStart}
@@ -218,11 +165,7 @@ export default function PraceticeSession(props: Props) {
           ></TTSPlayer>
         )}
         {/* 저장 모달 섹션 */}
-        <Modal
-          modalPosition="center"
-          isOpen={isEndModalOpen}
-          isLoading={isEnd}
-        >
+        <Modal modalPosition="center" isOpen={isEndModalOpen} isLoading={isEnd}>
           <Modal.Header closeModal={() => setIsEndModalOpen(false)} />
           <Modal.Body
             title="수고하셨습니다"

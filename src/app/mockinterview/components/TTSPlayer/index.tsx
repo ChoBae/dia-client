@@ -59,7 +59,7 @@ export default function TTSPlayer({
     let timer: any;
     // 초기상태 초기화
     stopAudio();
-    setIsRecording && setIsRecording(false);
+    // setIsRecording && setIsRecording(false);
     if (isStart || isRestart) {
       setTimeout(() => {
         playAudio1();
@@ -73,7 +73,7 @@ export default function TTSPlayer({
       stopAudio();
       // console.log('여기 오지?', isRestart)
       // if (!isRestart) return;
-      setIsRecording && setTimeout(() => setIsRecording(false), 4000);
+      // setIsRecording && setTimeout(() => setIsRecording(false), 4000);
     }
   }, [isStart, handleStop]);
 
@@ -90,7 +90,7 @@ export default function TTSPlayer({
   };
   const handleAudio2Ended = () => {
     stopAudio();
-    setIsRecording && setTimeout(() => setIsRecording(true), 1500);
+    setIsRecording && setTimeout(() => setIsRecording(true), 1000);
   };
 
   return (
