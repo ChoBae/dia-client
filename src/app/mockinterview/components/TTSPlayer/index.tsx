@@ -15,6 +15,7 @@ interface TTSPlayerProps {
   isRestart: boolean;
   setIsModalOpen: (isModalOpen: boolean) => void;
   setIsEnd: (isEnd: boolean) => void;
+  setIsRestart?: (isRestart: boolean) => void;
 }
 
 export default function TTSPlayer({
@@ -28,10 +29,11 @@ export default function TTSPlayer({
   isRestart,
   setIsModalOpen,
   setIsEnd,
+  setIsRestart,
 }: TTSPlayerProps) {
   const audio1Ref = useRef<HTMLAudioElement | null>(null);
   const audio2Ref = useRef<HTMLAudioElement | null>(null);
-
+  const [isReplay, setIsReplay] = useState<boolean>(false);
   const playAudio1 = () => {
     if (audio1Ref.current) {
       audio1Ref.current.play();
@@ -60,14 +62,27 @@ export default function TTSPlayer({
     // 초기상태 초기화
     stopAudio();
     // setIsRecording && setIsRecording(false);
-    if (isStart || isRestart) {
+    if (isStart) {
+      // if (isRestart) setIsRecording && setIsRecording(false);
       setTimeout(() => {
         playAudio1();
       }, 1000);
     }
     return () => {};
-  }, [isStart, voice, isRestart]);
+  }, [isStart, voice]);
 
+  useEffect(() => {
+    let timer: any;
+    // 초기상태 초기화
+    stopAudio();
+    if (isRestart) {
+      setIsRecording && setIsRecording(false);
+      setTimeout(() => {
+        playAudio1();
+      }, 1000);
+    }
+    return () => {};
+  }, [isRestart]);
   useEffect(() => {
     if (handleStop && !isStart) {
       stopAudio();
@@ -90,6 +105,10 @@ export default function TTSPlayer({
   };
   const handleAudio2Ended = () => {
     stopAudio();
+    if (isRestart) {
+      setIsReplay(true);
+    }
+    setIsRestart && setIsRestart(false);
     setIsRecording && setTimeout(() => setIsRecording(true), 1000);
   };
 
@@ -113,10 +132,11 @@ export default function TTSPlayer({
         <VoiceTranscription
           isStart={isRecording}
           handleStop={handleStop}
-          isRestart={isRestart}
+          isRestartFirst={isRestart}
+          isRestartSecond={isReplay}
+          // isRestart={isRestart}
           setIsModalOpen={setIsModalOpen}
           setIsEnd={setIsEnd}
-
         />
       )}
     </div>

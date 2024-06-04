@@ -4,20 +4,21 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { MicroCircleIcon } from "@/app/ui/icons/MicroCircleIcon";
 import convertToHourMinute from "@/utils/convertToHourMinute";
-import { init } from "next/dist/compiled/webpack/webpack";
 
 interface Props {
   isStart: boolean;
   handleStop: (interimResult: string, time: number) => void;
-  isRestart: boolean;
   setIsEnd: (isEnd: boolean) => void;
   setIsModalOpen: (isModalOpen: boolean) => void;
+  isRestartFirst: boolean;
+  isRestartSecond: boolean;
 }
 
 export default function VoiceTranscription({
   isStart,
   handleStop,
-  isRestart,
+  isRestartFirst,
+  isRestartSecond,
   setIsEnd,
   setIsModalOpen,
 }: Props) {
@@ -84,7 +85,13 @@ export default function VoiceTranscription({
   useEffect(() => {
     const handleListening = async () => {
       if (isStart) {
-        startListening();
+        if (!isRestartSecond) {
+          startListening();
+        } else {
+          setIsListening(true);
+          startListening();
+        }
+        setTranscripts([]);
         startTimer();
         setWasListening(true);
       }
@@ -93,13 +100,24 @@ export default function VoiceTranscription({
     return () => {
       stopListening();
     };
-  }, [isStart, isRestart]);
+  }, [isStart]);
 
+  // TTS 음성이 마친 순간.
   // useEffect(() => {
-  //   if (isRestart) {
-  //     setIsListening(false);
+  //   if (isRestartSecond) {
+  //     setTranscripts([]);
   //   }
-  // }, [isRestart]);
+  // }, [isRestartSecond]);
+  // 다시 듣기가 트리거 된 순간
+  useEffect(() => {
+    if (isRestartFirst) {
+      setWasListening(false);
+      setIsListening(false);
+      // stopListening();
+      setTime(0);
+      stopTimer();
+    }
+  }, [isRestartFirst]);
 
   const startListening = () => {
     if (recognition) {
@@ -109,8 +127,8 @@ export default function VoiceTranscription({
 
   const stopListening = () => {
     if (recognition) {
-      // recognition.abort();
       recognition.stop();
+      // setIsListening(false);
     }
   };
 
@@ -141,12 +159,13 @@ export default function VoiceTranscription({
   useEffect(() => {
     if (!isListening && wasListening) {
       handleSave();
-      stopListening();
+      // stopListening();
     }
   }, [isListening]);
 
   const handleEnd = () => {
     setIsModalOpen(true);
+    stopListening();
     stopTimer();
     setTimeout(() => {
       setIsListening(false);
