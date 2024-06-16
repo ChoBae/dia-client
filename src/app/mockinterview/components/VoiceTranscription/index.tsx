@@ -1,5 +1,4 @@
-"use client";
-import { VoiceType } from "@/types/Voice";
+ "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { MicroCircleIcon } from "@/app/ui/icons/MicroCircleIcon";
@@ -22,7 +21,6 @@ export default function VoiceTranscription({
   setIsEnd,
   setIsModalOpen,
 }: Props) {
-  // console.log("VoiceTranscription", isStart, isRestart);
   const [isListening, setIsListening] = useState(false);
   const [transcripts, setTranscripts] = useState<string[]>([]);
   const [recognition, setRecognition] = useState<SpeechRecognition | null>(
@@ -102,13 +100,7 @@ export default function VoiceTranscription({
     };
   }, [isStart]);
 
-  // TTS 음성이 마친 순간.
-  // useEffect(() => {
-  //   if (isRestartSecond) {
-  //     setTranscripts([]);
-  //   }
-  // }, [isRestartSecond]);
-  // 다시 듣기가 트리거 된 순간
+
   useEffect(() => {
     if (isRestartFirst) {
       setWasListening(false);

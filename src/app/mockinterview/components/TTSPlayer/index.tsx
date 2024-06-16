@@ -61,9 +61,7 @@ export default function TTSPlayer({
     let timer: any;
     // 초기상태 초기화
     stopAudio();
-    // setIsRecording && setIsRecording(false);
     if (isStart) {
-      // if (isRestart) setIsRecording && setIsRecording(false);
       setTimeout(() => {
         playAudio1();
       }, 1000);
@@ -83,6 +81,7 @@ export default function TTSPlayer({
     }
     return () => {};
   }, [isRestart]);
+
   useEffect(() => {
     if (handleStop && !isStart) {
       stopAudio();
