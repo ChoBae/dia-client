@@ -31,6 +31,7 @@ export default function PraceticeSession(props: Props) {
   const [isCancel, setIsCancel] = useState<boolean>(false);
   const [isEndModalOpen, setIsEndModalOpen] = useState<boolean>(false);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState<boolean>(false);
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState<boolean>(false);
   const [practiceResult, setPracticeResult] = useState<HistoryType | undefined>(
     undefined
   );

@@ -1,8 +1,9 @@
- "use client";
+"use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { MicroCircleIcon } from "@/app/ui/icons/MicroCircleIcon";
 import convertToHourMinute from "@/utils/convertToHourMinute";
+import { Modal } from "@/app/components/Modal";
 
 interface Props {
   isStart: boolean;
@@ -29,6 +30,7 @@ export default function VoiceTranscription({
   const [wasListening, setWasListening] = useState<boolean>(false);
   const [time, setTime] = useState<number>(0);
   const [timer, setTimer] = useState<any>(null);
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState<boolean>(false);
 
   const initRecognition = () => {
     if (!("webkitSpeechRecognition" in window)) {
@@ -60,7 +62,9 @@ export default function VoiceTranscription({
     };
 
     recognition.onerror = (event) => {
-      console.error(event.error);
+      if (event.error === "no-speech") {
+        setIsErrorModalOpen(true);
+      }
     };
 
     recognition.onend = () => {
@@ -99,7 +103,6 @@ export default function VoiceTranscription({
       stopListening();
     };
   }, [isStart]);
-
 
   useEffect(() => {
     if (isRestartFirst) {
@@ -191,6 +194,24 @@ export default function VoiceTranscription({
           <MicroCircleIcon />
         </div>
       </div>
+      {/* 오류 모달 섹션 */}
+      <Modal modalPosition="center" isOpen={isErrorModalOpen}>
+        <Modal.Header closeModal={() => setIsErrorModalOpen(false)} />
+        <Modal.Body
+          title="음성인식 오류"
+          titleClassName="text-primary-gray-600"
+          description="현재 녹음이 되지 않고 있습니다. 마이크를 입력을 확인해주세요"
+          descClassName="px-10 text-[16px] font-normal text-primary-gray-900 leading-[22px] text-center"
+          mainIcon="VoiceError"
+        />
+
+        <Modal.Button
+          className="rounded-md"
+          onClick={() => setIsErrorModalOpen(false)}
+        >
+          확인
+        </Modal.Button>
+      </Modal>
     </div>
   );
 }

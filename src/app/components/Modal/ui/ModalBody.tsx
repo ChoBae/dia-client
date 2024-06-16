@@ -1,13 +1,21 @@
 import { twMerge } from "tailwind-merge";
 import InfoIcon from "@/app/ui/icons/InfoIcon";
 import SuccessCircleIcon from "@/app/ui/icons/SuccessCircleIcon";
+import VoiceErrorIcon from "@/app/ui/icons/VoiceErrorIcon";
+import UnknownErrorIcon from "@/app/ui/icons/UnknownErrorIcon";
 type Props = {
   title: string;
   description?: string;
   className?: string;
   titleClassName?: string;
   descClassName?: string;
-  mainIcon?: "info" | "success" | "error" | "warning";
+  mainIcon?:
+    | "info"
+    | "success"
+    | "error"
+    | "warning"
+    | "VoiceError"
+    | "UnknownError";
 };
 
 export const ModalBody = ({ ...props }: Props) => {
@@ -25,10 +33,14 @@ export const ModalBody = ({ ...props }: Props) => {
         return "❌";
       case "warning":
         return "⚠️";
+      case "VoiceError":
+        return <VoiceErrorIcon />;
+      case "UnknownError":
+        return <UnknownErrorIcon />;
       default:
         return null;
     }
-  }
+  };
   return (
     <div className={mainStyled}>
       <h1 className="flex items-center justify-center mb-2.5 text-[22px]">
