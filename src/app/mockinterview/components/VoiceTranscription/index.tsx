@@ -159,6 +159,7 @@ export default function VoiceTranscription({
   }, [isListening]);
 
   const handleEnd = () => {
+    if (!isStart) return
     setIsModalOpen(true);
     stopListening();
     stopTimer();
