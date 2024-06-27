@@ -67,7 +67,6 @@ export default function MockPraceticeSession(props: Props) {
 
   const handleStop = useCallback(
     async (interimResult: string, time: number) => {
-
       if (
         questionIdx !== null &&
         questionIdx !== undefined &&
@@ -102,7 +101,7 @@ export default function MockPraceticeSession(props: Props) {
                 typeValue: "MULTI",
                 elapsedTimeValue: time,
                 filePathValue: null,
-                createdTimeValue : new Date().toISOString()
+                createdTimeValue: new Date().toISOString(),
               },
             ] as PracticeResult[];
           });
@@ -113,11 +112,11 @@ export default function MockPraceticeSession(props: Props) {
               {
                 interviewQuestionPkValue: questionList[questionIdx].question
                   .pkValue as number,
-                contentValue: interimResult.trim() || "" as string,
+                contentValue: interimResult.trim() || ("" as string),
                 typeValue: "MULTI",
                 elapsedTimeValue: time,
                 filePathValue: null,
-                createdTimeValue : new Date().toISOString(),
+                createdTimeValue: new Date().toISOString(),
               },
             ])
           );
@@ -126,7 +125,7 @@ export default function MockPraceticeSession(props: Props) {
       if (questionIdx + 1 < questionList.length) {
         setQuestionIdx((prev) => prev + 1);
         setIsStart(true); // 문제 음성이 나오는 시점
-        setIsRecording(false);  // 실제로 녹음 되는 시점
+        setIsRecording(false); // 실제로 녹음 되는 시점
       } else {
         setIsModalOpen(true);
       }
@@ -147,7 +146,7 @@ export default function MockPraceticeSession(props: Props) {
     setIsRestart(true);
   };
   const handleBack = () => {
-    setIsCancel(true);
+    setIsCancelModalOpen(true);
     setIsStart(false);
   };
 
@@ -254,7 +253,12 @@ export default function MockPraceticeSession(props: Props) {
         </Modal>
         {/* 저장 모달 섹션 */}
         <Modal modalPosition="center" isOpen={isCancelModalOpen}>
-          <Modal.Header closeModal={() => setIsCancelModalOpen(false)} />
+          <Modal.Header
+            closeModal={() => {
+              setIsCancelModalOpen(false);
+              handleRetry();
+            }}
+          />
           <Modal.Body
             title="종료하시겠습니까?"
             description="지금 연습을 종료하면 답변한 내용은 저장되지 않습니다 그래도 종료하시겠습니까?"

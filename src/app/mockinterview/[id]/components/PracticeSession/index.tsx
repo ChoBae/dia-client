@@ -102,14 +102,14 @@ export default function PraceticeSession(props: Props) {
   );
 
   const handleBack = () => {
-    setIsCancel(true);
+    // setIsCancel(true);
+    setIsCancelModalOpen(true);
     setIsStart(false);
   };
 
   const handleRetry = () => {
     setIsRestart(true);
   };
-
 
   return (
     <>
@@ -187,7 +187,12 @@ export default function PraceticeSession(props: Props) {
         </Modal>
         {/* 저장 모달 섹션 */}
         <Modal modalPosition="center" isOpen={isCancelModalOpen}>
-          <Modal.Header closeModal={() => setIsCancelModalOpen(false)} />
+          <Modal.Header
+            closeModal={() => {
+              setIsCancelModalOpen(false);
+              handleRetry();
+            }}
+          />
           <Modal.Body
             title="종료하시겠습니까?"
             description="지금 연습을 종료하면 답변한 내용은 저장되지 않습니다 그래도 종료하시겠습니까?"
