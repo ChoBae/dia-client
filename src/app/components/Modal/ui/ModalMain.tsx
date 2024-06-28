@@ -3,6 +3,7 @@ import OverlayClickHandler from "@/utils/OverlayClickHandler";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { twMerge } from "tailwind-merge";
+import { ModalLoading } from "./ModalLoading";
 type Props = {
   children: React.ReactNode;
   isOpen: boolean;
@@ -10,6 +11,7 @@ type Props = {
   animationClass?: string;
   isOverlayClickClose?: boolean;
   modalPosition?: "center" | "top" | "bottom";
+  isLoading?: boolean;
 };
 
 export const ModalMain = (props: Props) => {
@@ -20,6 +22,7 @@ export const ModalMain = (props: Props) => {
     setIsOpen,
     animationClass,
     modalPosition = "bottom",
+    isLoading = true,
   } = props;
   const [mounted, setMounted] = useState<boolean>(false);
 
@@ -70,7 +73,9 @@ export const ModalMain = (props: Props) => {
             modalStyleClass()
           )}
         >
-          {isOverlayClickClose ? (
+          {!isLoading ? (
+            <ModalLoading />
+          ) : isOverlayClickClose ? (
             <OverlayClickHandler onClick={() => setIsOpen(false)}>
               {children}
             </OverlayClickHandler>

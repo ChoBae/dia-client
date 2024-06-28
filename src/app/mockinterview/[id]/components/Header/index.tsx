@@ -21,7 +21,7 @@ export default function Header({
   return (
     <header className={twMerge("flex px-7 items-center mb-[40px]", className)}>
       <ChevronLeftIcon
-        className="h-3 w-3 text-[#212121] cursor-pointer hover:opacity-50"
+        className="h-3 w-3 text-[#212121] cursor-pointer hover:opacity-50 z-50"
         onClick={handleBack ? handleBack : () => router.back()}
       />
       <h1 className="text-lg sm:text-xl font-bold text-center text-primary-600 flex-grow">

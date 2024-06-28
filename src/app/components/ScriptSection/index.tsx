@@ -117,7 +117,7 @@ export default function ScriptSection({
                   (prevScript) =>
                     ({
                       ...prevScript,
-                      contentValue: e.target.value.trim(),
+                      contentValue: e.target.value,
                     } as Script)
                 )
               }

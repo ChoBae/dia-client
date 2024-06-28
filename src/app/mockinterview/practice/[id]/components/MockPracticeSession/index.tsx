@@ -1,4 +1,3 @@
-import EqualizerIcon from "@/app/ui/icons/EqualizerIcon";
 import { useEffect, useState, useRef, useCallback } from "react";
 import type { PracticeResult } from "@/types/PracticeResult";
 import type { VoiceType } from "@/types/Voice";
@@ -8,8 +7,6 @@ import Link from "next/link";
 import { savePractice } from "@/app/api/savePractice";
 import type { Session } from "@/types/Session";
 import RetryIcon from "@/app/ui/icons/RetryCircleIcon";
-import convertToHourMinute from "@/utils/convertToHourMinute";
-import { MicroCircleIcon } from "@/app/ui/icons/MicroCircleIcon";
 import LayerLogoYellowIcon from "@/app/ui/icons/LayerLogoYellowIcon";
 import Header from "@/app/mockinterview/[id]/components/Header";
 import Typed from "typed.js";
@@ -35,15 +32,14 @@ export default function MockPraceticeSession(props: Props) {
   const [isCancel, setIsCancel] = useState<boolean>(false);
   const [isAbleToSave, setIsAbleToSave] = useState<boolean>(false);
 
-  const [elapsedTime, setElapsedTime] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isEndModalOpen, setIsEndModalOpen] = useState<boolean>(false);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState<boolean>(false);
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [isRestart, setIsRestart] = useState<boolean>(false);
+  const [isEnd, setIsEnd] = useState<boolean>(false);
   const router = useRouter();
   const el = useRef(null);
-  // Create reference to store the Typed instance itself
   const typed = useRef<Typed | null>(null);
   useEffect(() => {
     const options = {
@@ -68,25 +64,6 @@ export default function MockPraceticeSession(props: Props) {
       typed.current?.destroy();
     };
   }, []);
-
-  useEffect(() => {
-    let timer: any;
-    if (isRecording) {
-      timer = setInterval(() => {
-        setElapsedTime((prevTime) => prevTime + 1);
-      }, 1000);
-            setTimeout(() => {
-              setIsAbleToSave(true);
-            }, 1200);
-    }
-    else {
-      setElapsedTime(0);
-      clearInterval(timer);
-    }
-    return () => {
-      clearInterval(timer);
-    };
-  }, [isRecording]);
 
   const handleStop = useCallback(
     async (interimResult: string, time: number) => {
@@ -124,7 +101,7 @@ export default function MockPraceticeSession(props: Props) {
                 typeValue: "MULTI",
                 elapsedTimeValue: time,
                 filePathValue: null,
-                createdTimeValue : new Date().toISOString()
+                createdTimeValue: new Date().toISOString(),
               },
             ] as PracticeResult[];
           });
@@ -135,11 +112,11 @@ export default function MockPraceticeSession(props: Props) {
               {
                 interviewQuestionPkValue: questionList[questionIdx].question
                   .pkValue as number,
-                contentValue: interimResult.trim() || "" as string,
+                contentValue: interimResult.trim() || ("" as string),
                 typeValue: "MULTI",
                 elapsedTimeValue: time,
                 filePathValue: null,
-                createdTimeValue : new Date().toISOString(),
+                createdTimeValue: new Date().toISOString(),
               },
             ])
           );
@@ -147,7 +124,8 @@ export default function MockPraceticeSession(props: Props) {
       }
       if (questionIdx + 1 < questionList.length) {
         setQuestionIdx((prev) => prev + 1);
-        setIsStart(true);
+        setIsStart(true); // 문제 음성이 나오는 시점
+        setIsRecording(false); // 실제로 녹음 되는 시점
       } else {
         setIsModalOpen(true);
       }
@@ -158,7 +136,6 @@ export default function MockPraceticeSession(props: Props) {
     if (!isAbleToSave) return;
     setIsAbleToSave(false);
     setIsStart(false);
-    setElapsedTime(0);
     // if (questionIdx + 1 < questionList.length) {
     //   setQuestionIdx((prev) => prev + 1);
     // } else {
@@ -167,11 +144,9 @@ export default function MockPraceticeSession(props: Props) {
   };
   const handleRetry = () => {
     setIsRestart(true);
-    setIsRecording(false);
-    setElapsedTime(0);
   };
   const handleBack = () => {
-    setIsCancel(true);
+    setIsCancelModalOpen(true);
     setIsStart(false);
   };
 
@@ -182,7 +157,7 @@ export default function MockPraceticeSession(props: Props) {
         {isRecording && (
           <RetryIcon
             onClick={handleRetry}
-            className="absolute right-4 hover:opacity-70 cursor-pointer mb-2"
+            className="absolute right-4 hover:opacity-70 cursor-pointer mb-2 z-50"
           />
         )}
         <div className="flex flex-col px-4 mt-10 h-full w-full">
@@ -216,36 +191,6 @@ export default function MockPraceticeSession(props: Props) {
             </div>
           </div>
         </div>
-        <div className="w-full absolute bottom-12 text-center my-auto">
-          <div className="absolute inset-0 flex justify-center items-center w-full">
-            <Image
-              src="/images/mockinterview/equalizer_y.png"
-              alt="이퀄라이저"
-              width={1408}
-              height={344}
-              className={`z-40 w-full sm:px-4 ${
-                isStart ? "animate-pulse" : ""
-              }`}
-              priority={true}
-            />
-            <div
-              className={`absolute flex mx-auto my-auto justify-center items-center rounded-full z-50  hover:opacity-75 ${
-                !isAbleToSave ? "opacity-75" : ""
-              }`}
-              onClick={handleNext}
-            >
-              <div
-                className={`w-full h-full absolute ring-8 ring-primary-200 rounded-full ${
-                  isAbleToSave ? "animate-ping" : ""
-                }`}
-              ></div>
-              <h1 className="text-center font-semibold text-primary-600 absolute mx-auto my-auto -top-8 mr-1">
-                {convertToHourMinute(elapsedTime)}
-              </h1>
-              <MicroCircleIcon />
-            </div>
-          </div>
-        </div>
         {/* {questionList && questionIdx !== null && questionIdx !== undefined && (
           questionList.map((questionAndScript: QuestionAndScript, index: number) => {
             return (
@@ -275,6 +220,9 @@ export default function MockPraceticeSession(props: Props) {
             isRestart={isRestart}
             setIsRecording={setIsRecording}
             isRecording={isRecording}
+            setIsModalOpen={setIsEndModalOpen}
+            setIsEnd={setIsEnd}
+            setIsRestart={setIsRestart}
           ></TTSPlayer>
         )}
         {/* 모달 섹션 */}
@@ -305,7 +253,12 @@ export default function MockPraceticeSession(props: Props) {
         </Modal>
         {/* 저장 모달 섹션 */}
         <Modal modalPosition="center" isOpen={isCancelModalOpen}>
-          <Modal.Header closeModal={() => setIsCancelModalOpen(false)} />
+          <Modal.Header
+            closeModal={() => {
+              setIsCancelModalOpen(false);
+              handleRetry();
+            }}
+          />
           <Modal.Body
             title="종료하시겠습니까?"
             description="지금 연습을 종료하면 답변한 내용은 저장되지 않습니다 그래도 종료하시겠습니까?"

@@ -1,14 +1,27 @@
 "use client";
-import { VoiceType } from "@/types/Voice";
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import { MicroCircleIcon } from "@/app/ui/icons/MicroCircleIcon";
+import convertToHourMinute from "@/utils/convertToHourMinute";
+import { Modal } from "@/app/components/Modal";
 
 interface Props {
   isStart: boolean;
   handleStop: (interimResult: string, time: number) => void;
-  // isTarget: boolean;
+  setIsEnd: (isEnd: boolean) => void;
+  setIsModalOpen: (isModalOpen: boolean) => void;
+  isRestartFirst: boolean;
+  isRestartSecond: boolean;
 }
 
-export default function VoiceTranscription({ isStart, handleStop }: Props) {
+export default function VoiceTranscription({
+  isStart,
+  handleStop,
+  isRestartFirst,
+  isRestartSecond,
+  setIsEnd,
+  setIsModalOpen,
+}: Props) {
   const [isListening, setIsListening] = useState(false);
   const [transcripts, setTranscripts] = useState<string[]>([]);
   const [recognition, setRecognition] = useState<SpeechRecognition | null>(
@@ -17,8 +30,9 @@ export default function VoiceTranscription({ isStart, handleStop }: Props) {
   const [wasListening, setWasListening] = useState<boolean>(false);
   const [time, setTime] = useState<number>(0);
   const [timer, setTimer] = useState<any>(null);
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState<boolean>(false);
 
-  useEffect(() => {
+  const initRecognition = () => {
     if (!("webkitSpeechRecognition" in window)) {
       alert(
         "음성인식이 동작하지 않는 브라우저입니다. 크롬 브라우저를 사용해주세요!"
@@ -27,7 +41,6 @@ export default function VoiceTranscription({ isStart, handleStop }: Props) {
     }
     const recognition = new window.webkitSpeechRecognition();
     recognition.continuous = true;
-    // recognition.interimResults = true;
     recognition.lang = "ko-KR";
 
     recognition.onstart = () => {
@@ -49,7 +62,9 @@ export default function VoiceTranscription({ isStart, handleStop }: Props) {
     };
 
     recognition.onerror = (event) => {
-      console.error(event.error);
+      if (event.error === "no-speech") {
+        setIsErrorModalOpen(true);
+      }
     };
 
     recognition.onend = () => {
@@ -57,47 +72,46 @@ export default function VoiceTranscription({ isStart, handleStop }: Props) {
     };
 
     setRecognition(recognition);
+  };
+
+  useEffect(() => {
+    initRecognition();
     return () => {
       stopTimer();
-      recognition.stop();
+      setRecognition(null);
+      recognition?.stop();
     };
   }, []);
 
-  // 음성인식 시작 코드
   useEffect(() => {
-    if (isStart) {
-      startListening();
-      setWasListening(true);
-    } else if (wasListening && !isStart) {
-      stopListening();
-
-      let resultString = "";
-      if (transcripts.length > 0) {
-        transcripts.forEach((result: any) => {
-          resultString = resultString + result + ". ";
-        });
+    const handleListening = async () => {
+      if (isStart) {
+        if (!isRestartSecond) {
+          startListening();
+        } else {
+          setIsListening(true);
+          startListening();
+        }
+        setTranscripts([]);
+        startTimer();
+        setWasListening(true);
       }
-      handleStop(resultString, time);
-      setWasListening(false);
-      setTime(0);
-      setTranscripts([]);
-    }
+    };
+    handleListening();
     return () => {
       stopListening();
     };
   }, [isStart]);
+
   useEffect(() => {
-    if (isListening) {
-      startTimer();
-    } else {
+    if (isRestartFirst) {
+      setWasListening(false);
+      setIsListening(false);
+      // stopListening();
+      setTime(0);
       stopTimer();
     }
-
-    return () => {
-      stopTimer();
-    };
-  }, [isListening]);
-
+  }, [isRestartFirst]);
   const startListening = () => {
     if (recognition) {
       recognition.start();
@@ -106,10 +120,7 @@ export default function VoiceTranscription({ isStart, handleStop }: Props) {
 
   const stopListening = () => {
     if (recognition) {
-      // recognition.abort();
-      setTimeout(() => {
-        recognition.stop();
-      }, 3000);
+      recognition.stop();
     }
   };
 
@@ -124,5 +135,83 @@ export default function VoiceTranscription({ isStart, handleStop }: Props) {
     clearInterval(timer);
     setTimer(null);
   };
-  return <></>;
+
+  const handleSave = async () => {
+    let resultString = "";
+    if (transcripts.length > 0) {
+      transcripts.forEach((result) => {
+        if (result.trim() === "") return;
+        resultString += result + ". ";
+      });
+    }
+    handleStop(resultString, time || 1);
+    setWasListening(false);
+    setTime(0);
+  };
+
+  useEffect(() => {
+    if (!isListening && wasListening) {
+      if (isRestartFirst) return;
+      handleSave();
+      // stopListening();
+    }
+  }, [isListening]);
+
+  const handleEnd = () => {
+    // setIsModalOpen(true);
+    if (!isStart) return;
+    stopListening();
+    stopTimer();
+    setTimeout(() => {
+      setIsListening(false);
+    }, 3000);
+  };
+  return (
+    <div className="w-full absolute bottom-12 text-center my-auto">
+      <div className="absolute inset-0 flex justify-center items-center w-full">
+        <Image
+          src="/images/equalizer.png"
+          alt="이퀄라이저"
+          width={1408}
+          height={344}
+          className={`z-40 w-full sm:px-4 ${isStart ? "animate-pulse" : ""}`}
+          priority={true}
+        />
+        <div
+          className={`absolute flex mx-auto my-auto justify-center items-center rounded-full z-50  hover:opacity-75 ${
+            !isListening ? "opacity-75" : ""
+          }`}
+          onClick={handleEnd}
+        >
+          <div
+            className={`w-full h-full absolute ring-8 ring-primary-200 rounded-full ${
+              isListening ? "animate-ping" : ""
+            }`}
+          ></div>
+          <h1 className="text-center font-semibold text-primary-600 absolute mx-auto my-auto -top-8 mr-1">
+            {convertToHourMinute(time)}
+          </h1>
+          <MicroCircleIcon />
+        </div>
+      </div>
+      {/* 오류 모달 섹션 */}
+      <Modal modalPosition="center" isOpen={isErrorModalOpen}>
+        <Modal.Header closeModal={() => setIsErrorModalOpen(false)} />
+        <Modal.Body
+          title="음성인식 오류"
+          titleClassName="text-primary-gray-600"
+          description="현재 녹음이 되지 않고 있습니다. 마이크를 입력을 확인해주세요"
+          descClassName="px-10 text-[16px] font-normal text-primary-gray-900 leading-[22px] text-center"
+          mainIcon="VoiceError"
+        />
+
+        <Modal.Button
+          className="rounded-md"
+          onClick={() => setIsErrorModalOpen(false)}
+        >
+          확인
+        </Modal.Button>
+      </Modal>
+    </div>
+  );
 }
