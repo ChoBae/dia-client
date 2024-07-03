@@ -26,7 +26,6 @@ export default function PracticeResultMain({
 }: Props) {
   const router = useRouter();
   const [questionIdx, setQuestionIdx] = useState(1);
-
   return (
     <section className="flex flex-col h-full gap-3 px-4">
       <div className="flex gap-[6px] flex-row w-full overflow-x-auto no-scrollbar mb-4">

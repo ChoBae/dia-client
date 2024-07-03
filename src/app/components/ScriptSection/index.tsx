@@ -35,6 +35,7 @@ export default function ScriptSection({
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
   useEffect(() => {
+    setScript(undefined);
     const fetchData = async () => {
       if (preloadScript) {
         setScript(preloadScript);
@@ -54,7 +55,7 @@ export default function ScriptSection({
     };
     fetchData();
     setIsLoading(false);
-  }, [id, session]);
+  }, [id]);
   useEffect(() => {
     if (isEditing) {
       textAreaRef.current?.focus();
@@ -91,9 +92,7 @@ export default function ScriptSection({
     <div
       className={twMerge(
         `flex flex-col relative bg-[#FAFAFA] rounded-[5px] w-full pt-3 pb-10 ${
-          !script?.contentValue
-            ? "cursor-pointer"
-            : ""
+          !script?.contentValue ? "cursor-pointer" : ""
         }`,
         className
       )}
