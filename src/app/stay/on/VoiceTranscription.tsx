@@ -20,7 +20,7 @@ export default function VoiceTranscription({}: Props) {
     }
 
     const recognition = new window.webkitSpeechRecognition();
-    recognition.continuous = false;
+    recognition.continuous = true;
     recognition.lang = "ko-KR";
 
     recognition.onstart = () => {
@@ -80,7 +80,7 @@ export default function VoiceTranscription({}: Props) {
 
   return (
     <div className="flex flex-col mx-auto pt-20 pb-8 w-screen h-[100dvh] sm:max-h-[1000px] sm:w-1/4 2xl:w-1/3">
-      <h1 className="flex text-center mx-auto">테스트 페이지</h1>
+      <h1 className="flex text-center mx-auto">continous on 테스트 페이지</h1>
       <div className="flex flex-row mx-auto gap-3">
         <h2
           className="flex bg-blue-500 p-2 rounded-sm cursor-pointer"
