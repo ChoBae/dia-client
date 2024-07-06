@@ -39,6 +39,7 @@ export default function VoiceTranscription({
       );
       return;
     }
+
     const recognition = new window.webkitSpeechRecognition();
     recognition.continuous = true;
     recognition.lang = "ko-KR";
