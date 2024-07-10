@@ -19,7 +19,7 @@ export default function VoiceTranscription({
   handleStop,
   isRestartFirst,
   isRestartSecond,
-  setIsEnd,
+  // setIsEnd,
   setIsModalOpen,
 }: Props) {
   const [isListening, setIsListening] = useState(false);
@@ -31,7 +31,7 @@ export default function VoiceTranscription({
   const [time, setTime] = useState<number>(0);
   const [timer, setTimer] = useState<any>(null);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState<boolean>(false);
-
+  const [isEnd, setIsEnd] = useState<boolean>(false);
   const initRecognition = () => {
     if (!("webkitSpeechRecognition" in window)) {
       alert(
@@ -39,13 +39,12 @@ export default function VoiceTranscription({
       );
       return;
     }
-
     const recognition = new window.webkitSpeechRecognition();
-    recognition.continuous = true;
+    recognition.continuous = false;
     recognition.lang = "ko-KR";
 
     recognition.onstart = () => {
-      setIsListening(true);
+      // setIsListening(true);
     };
 
     recognition.onresult = (event) => {
@@ -69,9 +68,11 @@ export default function VoiceTranscription({
     };
 
     recognition.onend = () => {
-      setIsListening(false);
+      if (!isStart) {
+        return;
+      }
+      recognition.start();
     };
-
     setRecognition(recognition);
   };
 
@@ -90,9 +91,10 @@ export default function VoiceTranscription({
       if (isStart) {
         if (!isRestartSecond) {
           startListening();
-        } else {
           setIsListening(true);
+        } else {
           startListening();
+          setIsListening(true);
         }
         setTranscripts([]);
         startTimer();
@@ -101,7 +103,7 @@ export default function VoiceTranscription({
     };
     handleListening();
     return () => {
-      stopListening();
+      // stopListening();
     };
   }, [isStart]);
 
@@ -117,14 +119,15 @@ export default function VoiceTranscription({
 
   const startListening = () => {
     if (recognition) {
+      // setIsListening(true);
       recognition.start();
     }
   };
 
   const stopListening = () => {
     if (recognition) {
-      recognition.stop();
       // setIsListening(false);
+      recognition.stop();
     }
   };
 
@@ -154,13 +157,21 @@ export default function VoiceTranscription({
 
   useEffect(() => {
     if (!isListening && wasListening) {
+      setIsEnd(true);
+      // recognition?.removeEventListener("end", recognition?.onend);
+
+      stopListening();
       handleSave();
-      // stopListening();
     }
+    return () => {
+      // stopListening();
+      // setRecognition(null);
+      // setIsEnd(true);
+    };
   }, [isListening]);
 
   const handleEnd = () => {
-    if (!isStart) return
+    if (!isStart) return;
     setIsModalOpen(true);
     stopListening();
     stopTimer();
@@ -168,6 +179,7 @@ export default function VoiceTranscription({
       setIsListening(false);
     }, 3000);
   };
+
   return (
     <div className="w-full absolute bottom-12 text-center my-auto">
       <div className="absolute inset-0 flex justify-center items-center w-full">

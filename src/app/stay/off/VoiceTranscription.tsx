@@ -49,7 +49,6 @@ export default function VoiceTranscription({}: Props) {
     };
 
     recognition.onend = () => {
-      console.log("음성인식 종료");
       setIsListening(false);
       recognition.start();
     };
