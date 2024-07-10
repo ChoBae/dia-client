@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { MicroCircleIcon } from "@/app/ui/icons/MicroCircleIcon";
 import convertToHourMinute from "@/utils/convertToHourMinute";
@@ -32,6 +32,7 @@ export default function VoiceTranscription({
   const [timer, setTimer] = useState<any>(null);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState<boolean>(false);
   const [isEnd, setIsEnd] = useState<boolean>(false);
+  const isStartRef = useRef(isStart);
   const initRecognition = () => {
     if (!("webkitSpeechRecognition" in window)) {
       alert(
@@ -42,7 +43,6 @@ export default function VoiceTranscription({
     const recognition = new window.webkitSpeechRecognition();
     recognition.continuous = false;
     recognition.lang = "ko-KR";
-
     recognition.onstart = () => {
       // setIsListening(true);
     };
@@ -68,13 +68,17 @@ export default function VoiceTranscription({
     };
 
     recognition.onend = () => {
-      if (!isStart) {
+      if (!isStartRef.current) {
         return;
       }
       recognition.start();
     };
     setRecognition(recognition);
   };
+
+  useEffect(() => {
+    isStartRef.current = isStart;
+  }, [isStart]);
 
   useEffect(() => {
     initRecognition();
@@ -179,7 +183,6 @@ export default function VoiceTranscription({
       setIsListening(false);
     }, 3000);
   };
-
   return (
     <div className="w-full absolute bottom-12 text-center my-auto">
       <div className="absolute inset-0 flex justify-center items-center w-full">
