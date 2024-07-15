@@ -33,6 +33,7 @@ export default function VoiceTranscription({
   const [isErrorModalOpen, setIsErrorModalOpen] = useState<boolean>(false);
   const [isEnd, setIsEnd] = useState<boolean>(false);
   const isStartRef = useRef(isStart);
+  const isListeningRef = useRef(isListening);
   const initRecognition = () => {
     if (!("webkitSpeechRecognition" in window)) {
       alert(
@@ -68,7 +69,7 @@ export default function VoiceTranscription({
     };
 
     recognition.onend = () => {
-      if (!isStartRef.current) {
+      if (!isStartRef.current || !isListeningRef.current) {
         return;
       }
       recognition.start();
@@ -79,6 +80,10 @@ export default function VoiceTranscription({
   useEffect(() => {
     isStartRef.current = isStart;
   }, [isStart]);
+
+  useEffect(() => {
+    isListeningRef.current = isListening;
+  }, [isListening]);
 
   useEffect(() => {
     initRecognition();
