@@ -1,9 +1,11 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { MicroCircleIcon } from "@/app/ui/icons/MicroCircleIcon";
 import convertToHourMinute from "@/utils/convertToHourMinute";
 import { Modal } from "@/app/components/Modal";
+import { setTimeout } from "timers";
 
 interface Props {
   isStart: boolean;
@@ -22,6 +24,7 @@ export default function VoiceTranscription({
   // setIsEnd,
   setIsModalOpen,
 }: Props) {
+  const router = useRouter();
   const [isListening, setIsListening] = useState(false);
   const [transcripts, setTranscripts] = useState<string[]>([]);
   const [recognition, setRecognition] = useState<SpeechRecognition | null>(
@@ -31,9 +34,12 @@ export default function VoiceTranscription({
   const [time, setTime] = useState<number>(0);
   const [timer, setTimer] = useState<any>(null);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState<boolean>(false);
+  const [isEndModalOpen, setIsEndModalOpen] = useState<boolean>(false);
   const [isEnd, setIsEnd] = useState<boolean>(false);
+  const [isNoSpeechCnt, setIsNoSpeechCnt] = useState<number>(0);
   const isStartRef = useRef(isStart);
   const isListeningRef = useRef(isListening);
+  const isNoSpeechCntRef = useRef(isNoSpeechCnt);
   const initRecognition = () => {
     if (!("webkitSpeechRecognition" in window)) {
       alert(
@@ -65,6 +71,17 @@ export default function VoiceTranscription({
     recognition.onerror = (event) => {
       if (event.error === "no-speech") {
         setIsErrorModalOpen(true);
+        setIsNoSpeechCnt((prev) => {
+          const newCount = prev + 1;
+          if (newCount > 2) {
+            setIsListening(false);
+            setIsEndModalOpen(true);
+            setTimeout(() => {
+              router.back();
+            }, 1500);
+          }
+          return newCount;
+        });
       }
     };
 
@@ -84,6 +101,10 @@ export default function VoiceTranscription({
   useEffect(() => {
     isListeningRef.current = isListening;
   }, [isListening]);
+
+  useEffect(() => {
+    isNoSpeechCntRef.current = isNoSpeechCnt;
+  }, [isNoSpeechCnt]);
 
   useEffect(() => {
     initRecognition();
@@ -223,6 +244,24 @@ export default function VoiceTranscription({
           title="음성인식 오류"
           titleClassName="text-primary-gray-600"
           description="현재 녹음이 되지 않고 있습니다. 마이크를 입력을 확인해주세요"
+          descClassName="px-10 text-[16px] font-normal text-primary-gray-900 leading-[22px] text-center"
+          mainIcon="VoiceError"
+        />
+
+        <Modal.Button
+          className="rounded-md"
+          onClick={() => setIsErrorModalOpen(false)}
+        >
+          확인
+        </Modal.Button>
+      </Modal>
+      {/* 종료 모달 섹션 */}
+      <Modal modalPosition="center" isOpen={isEndModalOpen}>
+        <Modal.Header closeModal={() => setIsEndModalOpen(false)} />
+        <Modal.Body
+          title="테스트 종료"
+          titleClassName="text-primary-gray-600"
+          description="장시간 녹음이 되지 않아 테스트가 종료되었습니다."
           descClassName="px-10 text-[16px] font-normal text-primary-gray-900 leading-[22px] text-center"
           mainIcon="VoiceError"
         />
